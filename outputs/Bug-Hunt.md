@@ -25,8 +25,3 @@ DISCOVER_IT: { specialRewards: { [Category.GROCERY]: 0.05 } }
 In `db.ts`, the switch relies on `process.env.NODE_ENV !== "production"`. 
 - **Caution**: Ensure that the iOS app's `APIClient.swift` correctly points to the ngrok/local IP during development, otherwise it might try to hit a production endpoint with test data, leading to a mismatch in expected DynamoDB tables.
 
-### 5. Typos in Merchant Names
-The `categorize` function in `categorizer.ts` notes:
-> "We'll let Google Places handle typos naturally."
-- **Bug**: If a user creates a local override for "mcdonalds", but Plaid imports a transaction as "macdnalds", the exact match local rule will fail, and Google Places might return a generic `Category.OTHER` instead of `Category.DINING`. 
-- **Fix**: Implement a lightweight fuzzy string matching algorithm (like Levenshtein distance) for the user's personal Overrides table before falling back to Google Places.

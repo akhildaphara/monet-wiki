@@ -1,14 +1,11 @@
 # API Efficiency & Scalability Suggestions
 
-The `croe` Node.js backend handles Plaid syncs, DynamoDB interactions, and Google Places API calls. Here is how we can scale it effectively:
+The `croe` Node.js backend handles DynamoDB interactions, and Google Places API calls. Here is how we can scale it effectively:
 
 ## 1. Caching Google Places API Calls
 The `categorizer.ts` uses Google Places API as a fallback when a business isn't locally mapped. To prevent massive Google API bills and speed up requests:
 - **Implement a Redis or DynamoDB Cache layer**: When Google Places returns a category for "Starbucks", save it centrally so subsequent queries by any user for "Starbucks" hit the database instead of the external API.
 
-## 2. Plaid Webhooks for Transactions
-Currently, it appears the app might sync transactions on demand. 
-- Implement **Plaid Webhooks** (`SYNC_UPDATES_AVAILABLE`). Instead of polling, Plaid will POST to an endpoint when new transactions are ready. The backend can then fetch, categorize, and store them asynchronously, keeping the iOS app feeling instant.
 
 ## 3. Serverless Deployment
 The Express app runs via `node dist/index.js`. 

@@ -15,7 +15,6 @@ The [[Monet-iOS-App]] is the frontend user interface for the [[Monet-App-Overvie
 - `CardWalletView.swift` & `CardDetailsView.swift`: UI components for users to add, remove, and view their currently held credit cards.
 - `CategoriesView.swift` & `CategoryDetailsView.swift`: Interfaces for viewing business categories and mapping specific businesses to preferred categories.
 - `InsightsView.swift`: Analytics and breakdowns of spending and rewards over time.
-- `PlaidLinkView.swift`: Integrates the Plaid SDK for linking bank accounts securely.
 
 ## Services
 The `Services` directory manages logic outside of the views, such as `APIClient.swift` for network requests, `GoogleSignInService.swift` for managing auth state, `CategorizerService.swift`, `BusinessSearchService.swift`, and `InsightsManager.swift`.

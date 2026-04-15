@@ -13,9 +13,7 @@ Stores information about the app's users, their preferences, and integration tok
 - **Attributes**:
   - `selectedCardIds` (String Array): The credit cards the user has added to their wallet.
   - `showGlobalBestCard` (Boolean): User preference toggle.
-  - `plaidAccessToken` (String, Optional): The access token to pull Plaid transactions.
-  - `plaidItemId` (String, Optional): The associated Plaid item identifier.
-
+  
 ### 2. Overrides Table
 Stores custom business categorization rules defined by the user. If a user manually overrides a merchant's category in the [[Monet-iOS-App]], it is saved here to bypass the default `categorizer.ts` logic.
 - **Primary Key**:
@@ -24,5 +22,3 @@ Stores custom business categorization rules defined by the user. If a user manua
 - **Attributes**:
   - `category` (String): The custom `Category` enum value the user assigned to the merchant.
 
-### 3. Transactions
-While transaction fetching logic is present in the Plaid layer, transactions and synced cursor data are also persisted (as seen with `getTransactions`, `putTransactions`, and `MonetTransaction` references in `dao.ts`) to avoid re-fetching historical data unnecessarily.
