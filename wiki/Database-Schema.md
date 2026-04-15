@@ -8,7 +8,7 @@ The database operates in two modes:
 ## Tables and Data Models
 
 ### 1. Users Table
-Stores information about the app's users, their preferences, and integration tokens.
+Stores information about the app's users, their preferences, and integration tokens. Updates to this table (e.g., toggling cards or preferences) are performed using atomic DynamoDB `UpdateCommand` expressions to prevent read-modify-write race conditions.
 - **Primary Key**: `id` (String) - Mapped to the user's Google Auth `sub` identifier.
 - **Attributes**:
   - `selectedCardIds` (String Array): The credit cards the user has added to their wallet.

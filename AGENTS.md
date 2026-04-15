@@ -17,6 +17,7 @@ A knowledge base about the app Monet. A credit card rewards optimizer app.
 - Link related topics to each other using [[topic-name]] format
 - Maintain an INDEX.md in wiki/ that lists every topic with a one-line description
 - When new raw sources are added, update the relevant wiki articles
+- When a git resource is updated, resync the wiki and add the commit hash in the logs.md (Only evaluate main branch)
 
 ## My Interests
 

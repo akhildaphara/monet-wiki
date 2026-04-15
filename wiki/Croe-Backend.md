@@ -1,17 +1,17 @@
 The [[Croe-Backend]] is the backend server for the [[Monet-App-Overview]] application. Built using Node.js and Express in TypeScript, it is responsible for providing all backend logic, serving APIs to the [[Monet-iOS-App]], handling user authentication via Google Auth, and managing data persistence through [[Database-Schema]] in AWS DynamoDB.
 
 ## Tech Stack
-- **Language**: TypeScript
+- **Language**: TypeScript (NodeNext Module Resolution)
 - **Framework**: Express.js
 - **Database**: AWS DynamoDB (via `@aws-sdk/client-dynamodb` and `@aws-sdk/lib-dynamodb`)
 - **Authentication**: Google Auth Library
-- **External APIs**: Google Generative AI for certain data enrichment features.
+- **External APIs**: Google Generative AI for certain data enrichment features, Google Places API for business categorizations.
 
 ## Architecture & Modules
-- `index.ts`: The main Express server entry point, handling routing, middleware, and request logging.
+- `index.ts`: The main Express server entry point. Implements global error handling middleware, request/response logging, and strict typings via a global `Express.Request` extension for `userId`. 
 - `optimizer.ts`: Contains the [[Card-Optimizer]] logic, finding the best credit cards for a given user transaction.
 - `categorizer.ts`: Maps merchants and transactions to specific reward categories using `brandCategoryMap.js` and `categories.js`.
-- `dao.ts` & `db.ts`: The Data Access Object layer that communicates with DynamoDB, managing users, transactions, and business overrides.
+- `dao.ts` & `db.ts`: The Data Access Object layer that communicates with DynamoDB. Uses `UpdateCommand` (`updateUserCards`, `updateUserSettings`) for atomic, race-condition-free updates to the User record.
 
 ## Running the Backend
 - Development: Uses `tsx watch src/index.ts` to run locally via `npm run dev`.
