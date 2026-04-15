@@ -25,3 +25,14 @@ DISCOVER_IT: { specialRewards: { [Category.GROCERY]: 0.05 } }
 In `db.ts`, the switch relies on `process.env.NODE_ENV !== "production"`. 
 - **Caution**: Ensure that the iOS app's `APIClient.swift` correctly points to the ngrok/local IP during development, otherwise it might try to hit a production endpoint with test data, leading to a mismatch in expected DynamoDB tables.
 
+---
+
+## Recently Resolved Architecture Bugs
+
+During the latest refactoring phase, several critical architectural bugs were squashed:
+
+- **The "Thundering Herd" Problem:** The iOS app previously fired concurrent `/auth/sync` and `/health` requests across multiple views on launch. This was resolved by implementing a centralized `DataStore` and task coalescing (`taskLock.withLock`) inside `APIClient`.
+- **Swift 6 Concurrency Violations:** The use of traditional `NSLock` `lock()` and `unlock()` across asynchronous `await` boundaries caused compiler errors. This was fixed by adopting the `withLock` closure pattern to securely encapsulate state.
+- **DynamoDB Race Conditions:** `POST /v1/user/cards` and `/settings` endpoints previously fetched a user record, modified it in memory, and wrote the whole object back (`PutCommand`), which risked data loss on concurrent requests. This was fixed by moving to atomic `UpdateCommand` expressions.
+- **Unintended API Spam:** Toggling UI settings or typing in search triggered immediate, overlapping API requests. This was fixed by introducing a 1-second `Task.sleep` debounce in the iOS `DataStore` mutations.
+
