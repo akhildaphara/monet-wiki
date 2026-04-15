@@ -1,0 +1,6 @@
+[submodule "raw/Monet"]
+	path = raw/Monet
+	url = https://github.com/akhildaphara/monet.git
+[submodule "raw/croe"]
+	path = raw/croe
+	url = https://github.com/akhildaphara/croe.git
