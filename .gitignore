@@ -2,3 +2,4 @@
 .vscode/settings.json
 data
 .DS_Store
+.agents

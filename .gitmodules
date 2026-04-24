@@ -4,3 +4,6 @@
 [submodule "raw/croe"]
 	path = raw/croe
 	url = https://github.com/akhildaphara/croe.git
+[submodule "raw/website"]
+	path = raw/website
+	url = https://github.com/akhildaphara/monet-website.git

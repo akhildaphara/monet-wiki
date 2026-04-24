@@ -31,13 +31,6 @@ These cards have fixed multipliers for specific categories.
 *   **3%**: Health & Pharmacy
 *   **1.5%**: Other Purchases
 
-### Chase Freedom Flex®
-*   **5%**: Chase Travel℠ Portal
-*   **5%**: Rotating Quarterly Categories (up to $1,500)
-*   **3%**: Dining & Restaurants
-*   **3%**: Health & Pharmacy
-*   **1%**: Other Purchases
-
 ### Citi Double Cash® Card
 *   **2%**: Everything (1% when you buy + 1% as you pay)
 
@@ -83,39 +76,66 @@ These cards have fixed multipliers for specific categories.
 
 ---
 
-## 2. Dynamic & Tiered Reward Cards
-These cards have reward structures that change based on spending thresholds or monthly behavior.
+## 2. Rotating Category Cards
+These cards offer 5% cash back on categories that change each quarter, typically on up to $1,500 in spending. Activation is required.
+
+### Chase Freedom Flex®
+*   **Permanent Rewards**:
+    *   **5%**: Chase Travel℠ Portal
+    *   **3%**: Dining & Restaurants
+    *   **3%**: Health & Pharmacy
+    *   **1%**: Other Purchases
+*   **Rotating Categories (5% on up to $1,500 per quarter)**:
+    *   **Q2 2026 (April-June)**: Amazon.com, Whole Foods Market, Chase Travel (9% total).
+    *   **2024 Rewind**:
+        *   **Q1**: Grocery Stores, Fitness Clubs & Gyms
+        *   **Q2**: Amazon.com, Hotels, Restaurants
+        *   **Q3**: Gas Stations, EV Charging, Live Entertainment
+        *   **Q4**: PayPal, McDonald's, Pet Stores
 
 ### Discover it® Card
-*   **5%**: Rotating Quarterly Categories (e.g., Grocery, Gas, Amazon - up to $1,500/quarter)
-*   **1%**: Other Purchases
-
-### Bilt World Elite Mastercard (Legacy)
-*   **3%**: Dining & Restaurants
-*   **2%**: Travel
-*   **1x**: Rent (No transaction fee, up to 100k points/year)
-*   **1%**: Other Purchases
-*   *Note: Requires 5 transactions per statement period to earn points.*
-
-### Bilt 2.0 (Blue, Obsidian, Palladium)
-The new Bilt cards use a sliding scale for rent/mortgage earnings based on your **non-housing spend** for that month:
-
-| Non-Housing Spend % of Rent | Rent/Mortgage Multiplier |
-| :--- | :--- |
-| < 25% of Rent | Flat 250 Points |
-| 25% of Rent | 0.5x Points |
-| 50% of Rent | 0.75x Points |
-| 75% of Rent | 1.0x Points |
-| 100%+ of Rent | 1.25x Points |
-
-*   **Dining**: 3x Points
-*   **Travel**: 2x Points
-*   **Everyday Spend**: 1x Points + 4% Bilt Cash
-*   **Rent Day (1st of month)**: Double points on non-rent categories.
+*   **Permanent Rewards**:
+    *   **1%**: Other Purchases
+*   **Rotating Categories (5% on up to $1,500 per quarter)**:
+    *   **Q2 2026 (April-June)**: Grocery Stores, Wholesale Clubs.
+    *   **2024 Rewind**:
+        *   **Q1**: Restaurants, Drugstores
+        *   **Q2**: Gas Stations, EV Charging, Home Improvement, Public Transit
+        *   **Q3**: Walmart, Grocery Stores
+        *   **Q4**: Amazon.com, Target
 
 ---
 
-## 3. Future AI-Targeted Card Support (Planned)
+## 3. Dynamic & Tiered Reward Cards
+These cards have reward structures that change based on spending thresholds or monthly behavior.
+
+### Bilt Rewards Mastercard
+The Bilt card program allows members to earn points on rent without a transaction fee. The core feature is the ability to choose a rewards structure each month. *Requires 5 transactions per statement period to earn points.*
+
+#### Reward Options (Choose one monthly)
+*   **Option A: Housing-Only Rewards**
+    *   Earn points on rent/mortgage based on your non-housing spend.
+    *   **1.25x**: Spend ≥100% of your rent on the card.
+    *   **1.0x**: Spend ≥75% of your rent.
+    *   **0.75x**: Spend ≥50% of your rent.
+    *   **0.5x**: Spend ≥25% of your rent.
+    *   All other purchases earn a flat **1x Bilt Point**.
+*   **Option B: Flexible Bilt Cash**
+    *   **4% Bilt Cash + 1x Bilt Point** on all non-housing purchases.
+    *   Housing payments do not earn points directly, but Bilt Cash can be redeemed for points.
+
+#### Standard Multipliers
+*   **3x Points**: Dining & Restaurants
+*   **2x Points**: Travel
+*   **1x Point**: All other non-rent purchases
+
+#### Key Benefits
+*   **Bilt Blue Status**: Entry-level tier with 1:1 point transfers to partners (Hyatt, American, etc.), free rent reporting, and access to the Bilt Neighborhood for local rewards.
+*   **Rent Day (1st of the month)**: Double points on non-rent categories (e.g., 6x on dining, 4x on travel).
+
+---
+
+## 4. Future AI-Targeted Card Support (Planned)
 The following cards require the upcoming **AI Strategy Engine** to optimize because their "Best Category" is variable:
 
 ### Citi Custom Cash®
