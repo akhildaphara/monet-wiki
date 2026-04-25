@@ -1,7 +1,7 @@
 # Feature Plan: PDF Statement Analysis & AI Optimization Strategy
 
-[Maybe I should just do this as a gemma/opal app within gemini?]
-This document outlines the plan to implement a "Manual Analyze" feature for Monet. This feature leverages Gemini AI to solve the problem of **complex, dynamic reward structures** (like Bilt 2.0 rent tiers or "Highest Category" multipliers) that static optimizers struggle with. Users will be directed to a **companion web application** to upload 1-6 months of PDF statements, which Gemini will analyze to generate both a retrospective efficiency report and a forward-looking AI Strategy.
+[Use plaid]
+This feature leverages Gemini AI to solve the problem of **complex, dynamic reward structures** (like Bilt 2.0 rent tiers or "Highest Category" multipliers) that static optimizers struggle with. Users will be directed to a **companion web application** to upload 1-6 months of PDF statements, which Gemini will analyze to generate both a retrospective efficiency report and a forward-looking AI Strategy.
 
 ## 1. Feature Overview
 

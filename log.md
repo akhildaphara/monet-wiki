@@ -20,3 +20,11 @@ Refined the `AI-Analysis-Planning.md` to focus on solving complex, dynamic rewar
 
 ## [2026-04-15] planning | Consolidated Card Reward Catalog
 Gathered and consolidated all credit card reward structures from the codebase (`cardRewardsData.ts`), Bilt 2.0 research, and future AI strategy plans. Created `outputs/Card-Reward-Catalog.md` as a single source of truth for all supported and planned cards, covering static multipliers, dynamic rent-tiered rewards, and AI-targeted cards like Citi Custom Cash.
+
+## [2026-04-25] sync | Major Multi-Repo Wiki Update
+Synced wiki with latest `main` across all three repos:
+- **croe** `d7a5cc9fd3019b54fbf320116e3c22deb8d89a4c`: Modular API routing refactor (`src/api/` with 8 domain sub-routers), middleware extraction (`auth.ts`, `logging.ts`), Plaid Transactions Sync API + webhook processing, insights engine with global optimization and "Best New Card" suggestion, AES-256-CBC token encryption, Plaid category mapping with merchant overrides, expanded brand rule engine (~900+ entries).
+- **Monet (iOS)** `ca1bfedc20ba472d95c76dfaec1190039b8b22b8`: New `BankConnectionsView` (multi-institution management with auto-suggest card mapping), `InsightsView` (Swift Charts, configurable 30/90/180d time ranges, per-category breakdowns), `NetworkStatusBanner` (3-state connectivity indicator), `InsightsManager` service, enhanced `DataStore` with Plaid account management and automated data refresh.
+- **website** `0b872db3224a2b0d0e2f5f4bb22287897a68bd0d`: New Next.js 16 landing page with dark-mode design, Framer Motion animations, merchant intelligence feature highlight, and green accent theme.
+
+**Wiki changes**: Rewrote `Croe-Backend.md`, `Monet-iOS-App.md`, `Plaid-Integration.md`, `Database-Schema.md`, `Monet-App-Overview.md`, `Card-Optimizer.md`. Created `Monet-Website.md`. Updated `INDEX.md`. Removed stale `Plaid.md` stub.
