@@ -1,48 +1,107 @@
-g# AWS Deployment Plan for Croe Backend
+g# AWS Deployment Plan for Croe Backend (Dual-Mode)
 
-## Should we use the Serverless Framework?
+## Overview
 
-**Yes, absolutely.** For a beta launch of a Node.js/Express backend, the Serverless Framework (deploying to AWS Lambda + API Gateway) is arguably the best approach for the following reasons:
+The goal is to maintain a single codebase that runs:
 
-1. **Cost-Effective:** Lambda charges per execution. During beta testing, where traffic is unpredictable or relatively low, your backend hosting costs will be close to $0. You avoid the fixed hourly costs of an always-on EC2 instance or AWS App Runner.
-2. **Minimal Code Changes:** By using a wrapper like `serverless-http`, you can take your existing Express app and deploy it to Lambda with just 3-4 lines of code changes. You don't have to rewrite your existing routing logic.
-3. **IAM & DynamoDB Integration:** Your app already uses DynamoDB. Serverless makes it incredibly easy to attach IAM permissions directly to your Lambda function within the `serverless.yml` configuration, ensuring your API has the exact permissions needed to read/write to `MonetUsers`, `MonetOverrides`, etc.
-4. **Environment Variables:** Serverless integrates seamlessly with AWS Systems Manager (SSM) Parameter Store to securely inject your `GOOGLE_PLACES_API_KEY` and Plaid secrets at deploy time.
+1.  **Locally:** Using standard Express and a local DynamoDB instance for rapid development.
+2.  **AWS (Serverless):** Using AWS Lambda + API Gateway for dev/prod environments, taking advantage of pay-as-you-go scaling.
 
 ---
 
-## Deployment Strategy & Plan
+## Architecture: Dual-Mode Execution
 
-### Phase 1: Code Modifications (Adapting Express)
+We use `serverless-http` to wrap the Express application. The entry point (`src/index.ts`) detects the environment to decide whether to start a long-running server or export a Lambda handler.
 
-To make your Express app run on Lambda, you need to wrap it.
+### 1. Code Adaptation (`src/index.ts`)
 
-1. **Install Dependencies:** Run `npm install serverless-http` and `npm install -D serverless` in the `croe` directory.
-2. **Update `src/index.ts`:**
-   - Export your configured `app` instead of just running `app.listen()`.
-   - Wrap the app: `export const handler = serverless(app);`.
-   - _Tip:_ Keep `app.listen()` inside a check `if (process.env.NODE_ENV !== 'production')` so your `npm run dev` command still works perfectly for local development.
+Update the main entry point to support both modes:
 
-### Phase 2: Configuration (`serverless.yml`)
+```typescript
+import serverless from "serverless-http";
+import app from "./app.js";
 
-Create a `serverless.yml` file in the `croe` directory.
+// Export the handler for AWS Lambda
+export const handler = serverless(app);
 
-1. **Define the Provider:** Set the provider to `aws`, runtime to `nodejs20.x`, and region to `us-east-1` (or your preferred region).
-2. **Define IAM Roles:** In the provider block, grant the Lambda function permissions (`dynamodb:PutItem`, `dynamodb:GetItem`, `dynamodb:Query`, etc.) specifically for your DynamoDB tables.
-3. **Define Functions:** Map the `handler` you exported in Phase 1 to a wildcard HTTP event so API Gateway routes all traffic (`/{proxy+}`) to your Express app.
+// Start the local server ONLY if running locally
+if (process.env.NODE_ENV !== "production" && !process.env.LAMBDA_TASK_ROOT) {
+  const PORT = Number(process.env.PORT) || 3000;
+  const HOST = "0.0.0.0";
+  app.listen(PORT, HOST, () => {
+    console.log(`🚀 Local Croe API server running on http://${HOST}:${PORT}`);
+  });
+}
+```
 
-### Phase 3: Infrastructure & Security
+### 2. Database Connectivity
 
-1. **AWS Secrets:** Go to the AWS Console -> Systems Manager (SSM) -> Parameter Store. Add your production secrets (Google Client ID, Google Places API, Plaid Keys) as `SecureString`s.
-2. **Inject Secrets:** Reference these SSM parameters in your `serverless.yml` environment block so they are securely injected into your Lambda function at runtime.
-3. **Provision DynamoDB:** While you can manually create the tables (`MonetUsers`, `MonetOverrides`, `MonetTransactions`) in the AWS console, it's highly recommended to define them in the `resources` section of `serverless.yml`. Ensure `BillingMode` is set to `PAY_PER_REQUEST` to handle spikes without base costs.
+The `db.ts` should dynamically choose the endpoint based on the environment:
 
-### Phase 4: CI/CD & Deployment
+- **Local:** `endpoint: "http://localhost:8000"`
+- **AWS:** No endpoint specified (defaults to the region's DynamoDB service).
 
-1. **Initial Manual Deploy:** Run `npx serverless deploy` from your terminal to verify everything works. This will provision the API Gateway, package your code, and deploy the Lambda function.
-2. **GitHub Actions:** Create a `.github/workflows/deploy.yml` file. Configure it to run `npx serverless deploy` automatically whenever code is pushed to the `main` branch. This requires adding AWS Credentials (Access Key / Secret Key) to your GitHub repository secrets.
+---
 
-### Phase 5: Client Integration
+## Configuration (`serverless.yml`)
 
-1. **Get the API URL:** After deploying, Serverless will output an API Gateway endpoint (e.g., `https://xxxxxxx.execute-api.us-east-1.amazonaws.com/dev`).
-2. **Update iOS App:** Open `MonetApp/Services/APIClient.swift` and replace the local IP `http://100.115.243.9:3000/v1` with your new production API Gateway URL.
+With **Serverless v4**, TypeScript is supported natively. We do **not** need `serverless-plugin-typescript`.
+
+```yaml
+service: croe-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    NODE_ENV: production
+    # Reference AWS SSM Parameters for secrets
+    PLAID_CLIENT_ID: ${ssm:/monet/${self:provider.stage}/plaid-client-id}
+    # ... other vars
+
+functions:
+  api:
+    handler: src/index.handler
+    events:
+      - httpApi: "*" # Routes all traffic to Express
+```
+
+---
+
+## Development Workflow
+
+### Local Development
+
+1.  **Start Local DB:** `docker run -p 8000:8000 amazon/dynamodb-local`
+2.  **Run API:** `npm run dev`
+    - Uses `.env` for configuration.
+    - Connects to `localhost:8000`.
+
+### AWS Deployment
+
+1.  **Configure AWS:** Ensure your CLI is authenticated (`aws login --profile dev`).
+2.  **Deploy to Dev:** `npx serverless deploy --stage dev --profile dev`
+3.  **Deploy to Prod:** `npx serverless deploy --stage prod --profile dev` (or appropriate profile)
+
+---
+
+## Infrastructure & Security
+
+1.  **IAM Permissions:** Define specific permissions in `serverless.yml` so the Lambda can only access necessary DynamoDB tables (`MonetUsers`, `MonetOverrides`).
+2.  **Secrets Management:**
+    - Store secrets in **AWS SSM Parameter Store** (e.g., `/monet/dev/google-api-key`).
+    - The `serverless.yml` will inject these into the Lambda environment variables at deploy time.
+3.  **VPC (Optional):** For beta, we can run in the default VPC. For high security later, we might move Lambda into a private VPC with a NAT Gateway.
+
+---
+
+## Updated NPM Scripts
+
+Add these to `package.json`:
+
+- `"dev": "tsx watch src/index.ts"` (Local execution)
+- `"deploy:dev": "serverless deploy --stage dev"`
+- `"deploy:prod": "serverless deploy --stage prod"`
+- `"info": "serverless info"`

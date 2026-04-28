@@ -18,43 +18,41 @@ All routes are mounted under `/v1/plaid`. Authenticated routes use the `authenti
 
 | Endpoint | Auth | Description |
 |---|---|---|
-| `POST /plaid/webhook` | Public | Receives Plaid webhook events. On `TRANSACTIONS.SYNC_UPDATES_AVAILABLE`, `INITIAL_UPDATE`, `HISTORICAL_UPDATE`, or `DEFAULT_UPDATE`, triggers background transaction sync for the affected item. |
-| `POST /plaid/create_link_token` | ✅ | Creates a Plaid Link token. Supports `updateItemId` for re-authentication flows. |
-| `POST /plaid/exchange_public_token` | ✅ | Exchanges the Plaid `public_token` for an `access_token`, stores it encrypted in DynamoDB, and triggers initial transaction sync. |
-| `DELETE /plaid/connection/:itemId` | ✅ | Removes a Plaid item from the user's account and cleans up legacy fields. |
-| `GET /plaid/institutions/:id` | ✅ | Fetches institution details (name, logo) from Plaid's API. |
-| `GET /plaid/status` | ✅ | Returns a list of the user's connected Plaid item IDs. |
-| `GET /plaid/accounts` | ✅ | Fetches all accounts across all connected items, enriched with institution names. Returns `409` with `ITEM_LOGIN_REQUIRED` if a connection needs re-authentication. |
-| `GET /plaid/transactions` | ✅ | Returns stored transactions from DynamoDB (not live Plaid API). |
-| `POST /plaid/insights/sync` | ✅ | Computes spending insights from stored transactions. See [[#Insights Engine]] below. |
+| `POST /plaid/webhook` | Public | Receives Plaid webhook events. Triggers background sync for affected items. |
+| `POST /plaid/sync-transactions` | ✅ | Explicitly triggers a sync for all of a user's Plaid items. |
+| `POST /plaid/create_link_token` | ✅ | Creates a Plaid Link token. Supports OAuth and update mode. |
+| `POST /plaid/exchange_public_token` | ✅ | Exchanges `public_token`, stores encrypted `access_token`, and triggers proactive sync. |
+| `DELETE /plaid/connection/:itemId` | ✅ | Removes a Plaid item and cleans up associated data. |
+| `GET /plaid/accounts` | ✅ | Fetches all accounts across connected items. |
+| `GET /plaid/insights` | ✅ | Returns pre-computed or on-demand spending insights. |
 
 #### Transaction Sync (`src/api/plaid/utils.ts`)
 - Uses the **Plaid Transactions Sync API** (`/transactions/sync`) with cursor-based incremental syncing.
-- Background sync is triggered by webhooks or initial token exchange — the frontend never blocks on Plaid's API.
+- **Unified Table**: All transactions are stored in a unified `MonetTransactions` table.
+- **180-Day Filter**: Only transactions from the last 180 days are ingested and processed.
+- **Proactive Sync**: Triggered on token exchange and during user login (`/auth/sync`) to ensure data is fresh.
 - Transactions are stored in the `MonetTransactions` DynamoDB table.
-- Cursors are persisted per-item in the user's `plaidItems` array.
 
 #### Plaid Category Mapping (`src/resources/plaidCategoryMap.ts`)
-Maps Plaid's `primaryPersonalFinanceCategory` to the internal `Category` enum:
-- `FOOD_AND_DRINK` → Dining, `GROCERIES` → Grocery, `GAS_STATIONS` → Gas, `TRAVEL` → Travel, etc.
-- High-value merchant name overrides for: Uber, Lyft, Amazon, Whole Foods, streaming services (Netflix/Spotify/Hulu/Disney+), wholesale clubs (Costco/Sam's Club).
+- Maps Plaid's `primaryPersonalFinanceCategory` to internal categories.
+- Integrates **detailed Plaid categories** for more granular mapping.
+- High-value merchant name overrides for: Uber, Lyft, Amazon, Whole Foods, streaming services, wholesale clubs.
 
 #### Token Encryption (`src/dao.ts`)
-- All Plaid `access_token`s are encrypted at rest using **AES-256-CBC** with a configurable `PLAID_ENCRYPTION_KEY`.
-- Encryption/decryption is transparent — tokens are encrypted before DynamoDB writes and decrypted after reads.
-- Legacy unencrypted tokens are handled gracefully via a fallback check.
+- All Plaid `access_token`s are encrypted at rest using **AES-256-CBC**.
+- Redacts sensitive tokens from logs to prevent exposure.
 
 ### Insights Engine
 
-The `POST /v1/plaid/insights/sync` endpoint accepts `plaidCardMappings` (mapping Plaid account IDs to user card IDs), `selectedCardIds`, and an optional `days` parameter (default: 30).
-
-It computes:
-1. **Actual Earnings**: Cashback earned based on the card the user *actually used* (per the mapping).
-2. **Wallet Optimal Earnings**: What they *could have earned* using the best card in their current wallet.
-3. **Global Optimal Earnings**: What the best card *across all supported cards* would have earned.
-4. **Missed Earnings**: `walletOptimalEarnings - actualEarnings`.
-5. **Suggested Card**: Iterates all cards the user doesn't own, ranks them by incremental value over actual earnings, and suggests the single best card to add.
-6. **Per-Category Breakdown**: Spend, actual, optimal, and best card per category.
+The insights engine computes spending analytics using stored transactions:
+1. **Caching**: Results are cached in the `MonetInsightsCache` DynamoDB table (24h TTL) and locally in the iOS app.
+2. **Metadata**: Includes a `computedAt` timestamp to inform the user of data freshness.
+3. **Computation**:
+   - **Actual Earnings**: Based on real transaction data and user-defined card mappings.
+   - **Wallet Optimal Earnings**: Best possible earnings with current wallet.
+   - **Global Optimal Earnings**: Best possible earnings across all supported cards.
+   - **Suggested Card**: Ranks new cards by incremental value over actual earnings.
+   - **Per-Category Breakdown**: Spend, actual, and optimal per category.
 
 ### iOS (Swift) — `raw/Monet`
 

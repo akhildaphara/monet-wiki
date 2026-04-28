@@ -26,3 +26,9 @@ Make API efficient and scalable.
 Find bugs.
 Make UI/UX top notch.
 Add/Update credit card rewards data.
+
+## Infrastructure Rules
+
+- **AWS CLI**: Always use `--profile dev` when running `aws` commands on this machine.
+- **Serverless**: Always use `--profile dev` or ensure the profile is correctly set in `serverless.yml`.
+- **Region**: The default AWS region for this project is `us-east-1`.

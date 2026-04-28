@@ -29,19 +29,30 @@ Stores custom business categorization rules defined by the user. If a user manua
   - `category` (String): The custom `Category` enum value the user assigned to the merchant.
 
 ### 3. MonetTransactions Table
-Stores Plaid transaction records synced via the Transactions Sync API and webhooks. The [[Croe-Backend]] reads from this table (not the live Plaid API) when computing [[Plaid-Integration|spending insights]].
+Stores Plaid transaction records synced via the Transactions Sync API and webhooks. This is a **unified table** storing all transactions across all connected accounts for a user.
 - **Primary Key**:
-  - Partition Key: `userId` (String) — To fetch all transactions for a specific user.
-  - Sort Key: `transactionId` (String) — Plaid's unique transaction identifier.
+  - Partition Key: `userId` (String)
+  - Sort Key: `transactionId` (String)
 - **Attributes**:
-  - `accountId` (String): The Plaid account the transaction belongs to.
-  - `amount` (Number): Transaction amount.
-  - `date` (String): Transaction date in `YYYY-MM-DD` format.
-  - `name` (String): Transaction description from the bank.
-  - `merchantName` (String, nullable): Cleaned merchant name from Plaid.
-  - `category` (String Array, nullable): Plaid's legacy category classification.
-  - `primaryPersonalFinanceCategory` (String, nullable): Plaid's primary personal finance category (used by `plaidCategoryMap.ts` for mapping to internal categories).
+  - `accountId` (String)
+  - `amount` (Number)
+  - `date` (String): `YYYY-MM-DD`
+  - `name` (String): Transaction description
+  - `merchantName` (String, nullable)
+  - `primaryPersonalFinanceCategory` (String, nullable): Used for category mapping.
+  - `computedAt` (Number, optional): Timestamp of when the transaction was last processed.
+
+### 4. MonetInsightsCache Table
+Stores pre-computed spending insights to optimize performance and reduce redundant calculations.
+- **Primary Key**:
+  - Partition Key: `userId` (String)
+  - Sort Key: `cacheKey` (String): A hash of the user's wallet state, card mappings, and selected time range.
+- **Attributes**:
+  - `data` (Map): The serialized insights result (summary, category breakdowns).
+  - `computedAt` (Number): ISO timestamp of computation.
+  - `ttl` (Number): DynamoDB TTL (24 hours from computation).
 
 ## Security
-- Plaid access tokens are encrypted at rest using **AES-256-CBC** encryption via the `PLAID_ENCRYPTION_KEY` environment variable. Tokens are encrypted before DynamoDB writes and decrypted transparently after reads. Legacy unencrypted tokens are handled via a fallback check in `decryptToken()`.
-- Batch writes to the Transactions table respect DynamoDB's 25-item-per-request limit.
+- Plaid access tokens are encrypted at rest using **AES-256-CBC**.
+- Sensitive tokens are redacted from application logs.
+- AWS Lambda functions run with scoped IAM permissions, limited to the specific DynamoDB tables and external APIs required.

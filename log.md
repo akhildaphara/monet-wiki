@@ -28,3 +28,11 @@ Synced wiki with latest `main` across all three repos:
 - **website** `0b872db3224a2b0d0e2f5f4bb22287897a68bd0d`: New Next.js 16 landing page with dark-mode design, Framer Motion animations, merchant intelligence feature highlight, and green accent theme.
 
 **Wiki changes**: Rewrote `Croe-Backend.md`, `Monet-iOS-App.md`, `Plaid-Integration.md`, `Database-Schema.md`, `Monet-App-Overview.md`, `Card-Optimizer.md`. Created `Monet-Website.md`. Updated `INDEX.md`. Removed stale `Plaid.md` stub.
+
+## [2026-04-28] sync | Unified Infrastructure & UI Redesign
+Synced wiki with latest `main` across all three repos:
+- **croe** `853f4dafad53a05834935cff93454da3d9abdcb3`: Migrated to Node 20/CJS and Serverless (AWS Lambda). Implemented unified `MonetTransactions` table, proactive sync logic, detailed Plaid category mapping, and DynamoDB-based insights caching (`MonetInsightsCache`). Added dynamic reward multipliers and user-specific card data support.
+- **Monet (iOS)** `4ce109c962dd5d90eea06009f04a58eb6c92b614`: Major UI redesign with centralized `Theme.swift`, animated Login screen, and standardized styling. Added `EditCardRewardsView` for custom multipliers, pull-to-refresh for bank sync, automatic JWT refresh, and dual-layer insights caching (local + backend).
+- **website** `1d87f391a3bceca1f2efc2a7a56a7d61f1f93e07`: Added `apple-app-site-association` for Universal Links support and synced design assets.
+
+**Wiki changes**: Updated `Croe-Backend.md`, `Monet-iOS-App.md`, `Plaid-Integration.md`, `Database-Schema.md`, `Card-Optimizer.md`, `Monet-Website.md`, and `Monet-App-Overview.md` to reflect the new architecture, features, and infrastructure.

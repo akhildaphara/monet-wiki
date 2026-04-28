@@ -11,48 +11,43 @@ The [[Monet-iOS-App]] is the frontend user interface for the [[Monet-App-Overvie
 - **Backend Communication**: Custom `APIClient` communicating with the [[Croe-Backend]], orchestrated by `DataStore`.
 
 ## Core Architecture
-- **Centralized DataStore**: The `DataStore` acts as the single source of truth for the app's state (Users, Cards, Overrides, Plaid accounts, card mappings). It handles all backend synchronization, automatically triggering syncs via `NotificationCenter` events (`.authTokenAvailable` and `.networkRegained`), and enforces a 24-hour background sync throttle. Debouncing (1-second `Task.sleep`) prevents API spam for rapid user interactions like toggling cards or changing settings.
-- **APIClient Task Coalescing**: To prevent the "thundering herd" problem, `APIClient` uses Swift 6 concurrency-safe locking (`taskLock.withLock`) to coalesce concurrent requests to `/auth/sync` and `/health` into a single shared `Task`.
-- **InsightsManager**: An `@ObservableObject` that owns the insights lifecycle. Stores `plaidCardMappings` in `@AppStorage`, fetches insights from the backend with a configurable `selectedDays` (30/90/180), and publishes `summary` and `categoryInsights` for the UI. Handles `ITEM_LOGIN_REQUIRED` errors gracefully with user-facing guidance. Features a **dual-layer cache** with a 24-hour refresh cadence:
-  - **Local (iOS)**: Caches the full insights response in `@AppStorage`, keyed by a hash of `selectedCardIds + plaidCardMappings + selectedDays`. On `fetchInsights()`, checks the local cache first — if valid (<24h and same key), displays cached data immediately with zero network calls. When offline, serves stale cached data as a graceful fallback.
-  - **Backend (DynamoDB)**: The `MonetInsightsCache` table stores computed insights with a 24h DynamoDB TTL. If the iOS cache misses but the backend cache hits, computation is skipped. Cache key changes automatically when the user modifies their wallet or card mappings.
+- **Centralized DataStore**: The `DataStore` acts as the single source of truth. It handles all backend synchronization, automatically triggering syncs via `NotificationCenter` events (`.authTokenAvailable` and `.networkRegained`), and enforces a 24-hour background sync throttle. Debouncing prevents API spam.
+- **Theme & Design Tokens**: All styling is centralized in `Theme.swift`, defining standard colors, gradients, and spacing used across the app for a unified look and feel.
+- **APIClient Task Coalescing**: Uses Swift 6 concurrency-safe locking to coalesce concurrent requests to `/auth/sync` and `/health`. Implements **automatic JWT refresh** on 401 responses.
+- **InsightsManager**: Owns the insights lifecycle. Features a **dual-layer cache** with a 24-hour refresh cadence:
+  - **Local (iOS)**: Caches full insights response in `@AppStorage`. Keyed by wallet state and time range. Displays cached data immediately on load.
+  - **Backend (DynamoDB)**: Hits the `MonetInsightsCache` if the local cache misses but the user state hasn't changed.
 
 ## Navigation Structure
 The app uses a `RootTabView` with four tabs:
 
 | Tab | View | Description |
 |---|---|---|
-| Search | `ContentView` | Merchant search dashboard — type a business name and see ranked card recommendations |
+| Search | `ContentView` | Merchant search dashboard with ranked card recommendations |
 | Insights | `InsightsView` | Spending analytics powered by Plaid transaction data |
-| Wallet | `CardWalletView` → `CardDetailsView` | Add/remove credit cards, manage bank connections |
-| Profile | `ProfileView` | Account settings, appearance, sign-out |
+| Wallet | `CardWalletView` | Manage credit cards and bank connections |
+| Profile | `ProfileView` | Account settings and developer tools |
 
-A persistent `NetworkStatusBanner` sits above the tab bar showing three states: "No Internet Connection" (red), "Server Unreachable — Tap to retry" (orange, tappable), and "Syncing with server..." (gray, with spinner).
+### Developer Tools
+A hidden developer menu (accessed via Profile) allows switching between AWS Production and Localhost backend endpoints for testing.
 
 ## Core Views
 
+### Authentication
+- `LoginView.swift`: Google Sign-In flow. Redesigned with an **animated credit card stack** logo, brand gradients, and standard theme components.
+
 ### Search & Categories
-- `ContentView.swift`: The home screen dashboard. Relies entirely on `DataStore` for remote data rather than orchestrating its own API calls.
-- `CategoriesView.swift` & `CategoryDetailsView.swift`: Browse all reward categories and see which card wins in each.
+- `ContentView.swift`: Home dashboard. Uses a `chart.pie` icon for insights. Standardized typography and layout.
+- `CategoriesView.swift` & `CategoryDetailsView.swift`: Browse reward categories.
 
 ### Wallet & Cards
-- `CardWalletView.swift`: Displays the user's selected cards. Includes a "Bank Connections" navigation link to `BankConnectionsView`.
-- `CardDetailsView.swift`: Per-card detail showing category rewards breakdown and linked Plaid account info (with last-4 mask matching).
-- `MiniCardView.swift`: A compact card preview used in recommendations and insights.
+- `CardWalletView.swift`: Displays the user's wallet. Shows a "No Cards" empty state with a call-to-action to add cards.
+- `EditCardRewardsView.swift`: New view allowing users to **manually configure reward multipliers** for specific cards, which are then synced to the backend and factored into optimization.
+- `CardDetailsView.swift`: Per-card detail showing rewards and linked Plaid accounts. Features persistent caching to prevent unnecessary re-fetches.
 
 ### Bank Connections & Insights
-- `BankConnectionsView.swift`: Dedicated bank connection management. Lists all connected Plaid items grouped by institution name with account counts. Each item expands to show individual accounts with Picker-based card mapping (auto-suggests based on last-4 mask matching). Shows "Connection needs refreshing" banners with "Fix Now" buttons for broken items. Supports "Connect a New Bank" and per-item disconnect.
-- `PlaidLinkView.swift`: A `UIViewControllerRepresentable` wrapping Plaid's `LinkViewController` for the OAuth flow. Supports both new connections and update-mode re-authentication.
-- `InsightsView.swift`: Rich spending analytics view using Swift Charts. Features:
-  - Configurable time range toolbar (30d / 90d / 180d capsule buttons)
-  - Bar chart comparing Actual vs. Wallet Best vs. Global Best earnings
-  - "Top Recommendation" card suggesting the single best card to add, with potential earnings delta and an apply link
-  - Per-category breakdown rows with stacked bar charts showing earned vs. missed rewards
-  - Empty state with Plaid Link onboarding flow
-  - Pull-to-refresh, auto-refresh on card/mapping changes via `NotificationCenter`
-
-### Authentication
-- `LoginView.swift`: Google Sign-In flow.
+- `BankConnectionsView.swift`: Grouped by institution. Features **pull-to-refresh** to trigger a full Plaid transaction sync across all connected items.
+- `InsightsView.swift`: Rich spending analytics using Swift Charts. Now displays a `computedAt` timestamp for the data. Configurable time ranges (30d/90d/180d).
 
 ## Services
 - `APIClient.swift`: All network requests to the [[Croe-Backend]], including Plaid endpoints (`createPlaidLinkToken`, `exchangePlaidPublicToken`, `fetchPlaidAccounts`, `fetchInsights`, `checkPlaidStatus`, `disconnectPlaid`). Task coalescing for auth sync and health checks. Exposes `canMakeRequests()` helper that gating all view-level fetches.

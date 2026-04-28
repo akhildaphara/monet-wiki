@@ -16,12 +16,14 @@ The [[Monet-Website]] is the public-facing landing page for the [[Monet-App-Over
 The landing page (`app/page.tsx`) is a single-page layout with these sections:
 
 1. **Navigation**: Logo (Sparkles icon) + "Get Early Access" button.
-2. **Hero Section**: Headline ("The mathematically perfect way to play the points game."), tagline, and CTA buttons ("Download for iOS", "View Supported Cards").
-3. **App Preview**: Two real app screenshots (`ss_search_home.png`, `ss_profile.png`) with green glow backdrop.
-4. **Merchant Intelligence Feature**: Split layout with copy on the left (search, ranked recommendations, live context awareness) and a search result screenshot on the right (`ss_search_result.png`).
-5. **How Monet Works**: Three-step vertical timeline (Connect accounts → Configure wallet → Spend optimally).
-6. **CTA Section**: Waitlist signup card with green glow effect.
-7. **Footer**: Copyright, social links, legal links.
+2. **Hero Section**: Headline and CTA buttons ("Download for iOS").
+3. **App Preview**: Real app screenshots with green glow backdrop.
+4. **Merchant Intelligence Feature**: Split layout highlighting ranked recommendations.
+5. **How Monet Works**: Three-step vertical timeline.
+6. **CTA Section**: Waitlist signup card.
+
+## Universal Links
+The website hosts the `/.well-known/apple-app-site-association` file, enabling **Universal Links** support. This allows the iOS app to open directly from website links (e.g., from the waitlist confirmation or promotional emails).
 
 ## Running Locally
 ```bash
