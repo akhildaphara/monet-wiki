@@ -97,7 +97,11 @@ These cards offer 5% cash back on categories that change each quarter, typically
 *   **Permanent Rewards**:
     *   **1%**: Other Purchases
 *   **Rotating Categories (5% on up to $1,500 per quarter)**:
-    *   **Q2 2026 (April-June)**: Grocery Stores, Wholesale Clubs.
+    *   **2025 Schedule**:
+        *   **Q1**: Restaurants, Home Improvement, Streaming
+        *   **Q2**: Grocery Stores and Wholesale Clubs
+        *   **Q3**: Gas Stations, EV Charging, Public Transit, Utilities
+        *   **Q4**: Amazon.com and Drugstores
     *   **2024 Rewind**:
         *   **Q1**: Restaurants, Drugstores
         *   **Q2**: Gas Stations, EV Charging, Home Improvement, Public Transit
@@ -109,29 +113,31 @@ These cards offer 5% cash back on categories that change each quarter, typically
 ## 3. Dynamic & Tiered Reward Cards
 These cards have reward structures that change based on spending thresholds or monthly behavior.
 
-### Bilt Rewards Mastercard
-The Bilt card program allows members to earn points on rent without a transaction fee. The core feature is the ability to choose a rewards structure each month. *Requires 5 transactions per statement period to earn points.*
+### Bilt Rewards (Bilt 2.0 / Cardless Era)
+The Bilt card program transitioned to a tiered system in 2026. All tiers allow members to earn points on housing payments based on their non-housing spend or earn flexible Bilt Cash.
 
-#### Reward Options (Choose one monthly)
+#### Tiers
+*   **Bilt Blue ($0 AF)**: 
+    *   **1x**: Everyday spend.
+*   **Bilt Obsidian ($95 AF)**: 
+    *   **3x**: Grocery or Dining (choice).
+    *   **2x**: Travel.
+    *   **1x**: Everyday spend.
+*   **Bilt Palladium ($495 AF)**: 
+    *   **2x**: Everyday spend.
+    *   **Perks**: $400 travel credit, $200 Bilt Cash, Priority Pass.
+
+#### Housing Earning Options
 *   **Option A: Housing-Only Rewards**
-    *   Earn points on rent/mortgage based on your non-housing spend.
-    *   **1.25x**: Spend ≥100% of your rent on the card.
-    *   **1.0x**: Spend ≥75% of your rent.
-    *   **0.75x**: Spend ≥50% of your rent.
-    *   **0.5x**: Spend ≥25% of your rent.
-    *   All other purchases earn a flat **1x Bilt Point**.
+    *   Spend 25% of housing amount: **0.5x points**
+    *   Spend 50% of housing amount: **0.75x points**
+    *   Spend 75% of housing amount: **1x points**
+    *   Spend 100%+ of housing amount: **1.25x points**
 *   **Option B: Flexible Bilt Cash**
-    *   **4% Bilt Cash + 1x Bilt Point** on all non-housing purchases.
-    *   Housing payments do not earn points directly, but Bilt Cash can be redeemed for points.
-
-#### Standard Multipliers
-*   **3x Points**: Dining & Restaurants
-*   **2x Points**: Travel
-*   **1x Point**: All other non-rent purchases
+    *   Earn **4% Bilt Cash** on everyday spend. Unlock points on housing payments or use for travel/dining credits.
 
 #### Key Benefits
-*   **Bilt Blue Status**: Entry-level tier with 1:1 point transfers to partners (Hyatt, American, etc.), free rent reporting, and access to the Bilt Neighborhood for local rewards.
-*   **Rent Day (1st of the month)**: Double points on non-rent categories (e.g., 6x on dining, 4x on travel).
+*   **Rent Day (1st of the month)**: Bonus cap is 1,000 points per month (effective Oct 2024). Tax payments excluded.
 
 ---
 

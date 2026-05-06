@@ -25,7 +25,7 @@ The current Monet architecture in `raw/croe/src/optimizer.ts` uses static multip
 
 ```typescript
 export const CREDIT_CARDS: Record<string, CreditCard> = {
-  BILT_MASTERCARD: {
+  BILT_OBSIDIAN: {
     name: "Bilt World Elite Mastercard®",
     rewards: {
       [Category.DINING]: 0.03,
