@@ -1,15 +1,24 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-05T00:00:00Z",
+  "generatedAt": "2026-05-06T02:28:00Z",
   "title": "Design System: Monet",
   "extensions": {
     "colorMeta": {
-      "primary": { "role": "primary", "displayName": "Vibrant Financial Green", "canonical": "#26ab59" }
+      "primary":     { "role": "primary",     "displayName": "Vibrant Financial Green", "canonical": "#26ab59", "oklch": "oklch(0.65 0.17 152)" },
+      "secondary":   { "role": "secondary",   "displayName": "Green Tint",              "canonical": "rgba(38,171,89,0.15)" },
+      "warning":     { "role": "warning",     "displayName": "Warning Orange",          "canonical": "#f97316" },
+      "destructive": { "role": "destructive", "displayName": "Destructive Red",         "canonical": "#ef4444" }
     },
     "shadows": [
-      { "name": "card-light", "value": "0 5px 10px rgba(0,0,0,0.08)", "purpose": "Separate stark white cards from the grouped background." },
-      { "name": "card-dark", "value": "0 5px 10px rgba(0,0,0,0.3)", "purpose": "Deeper shadow for dark mode contrast." }
-    ]
+      { "name": "card-light", "value": "shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 5)", "purpose": "Separate white cards from grouped background." },
+      { "name": "card-dark",  "value": "shadow(color: .black.opacity(0.3),  radius: 10, x: 0, y: 5)", "purpose": "Deeper shadow for dark mode contrast." },
+      { "name": "hero",       "value": "shadow(color: Theme.primaryGreen.opacity(0.3), radius: 20, x: 0, y: 10)", "purpose": "Green glow under the full-bleed result card." }
+    ],
+    "motion": {
+      "standard": { "response": 0.4, "dampingFraction": 0.7, "usage": "State transitions, category results, card reveals" },
+      "fast":     { "response": 0.3, "dampingFraction": 0.7, "usage": "Page-indicator dots, chips, toggle feedback" },
+      "enter":    { "response": 0.6, "dampingFraction": 0.8, "usage": "Full-screen entrance, login carousel scroll" }
+    }
   },
   "components": [
     {
@@ -17,8 +26,56 @@
       "kind": "card",
       "refersTo": "card",
       "description": "Standard container for recommendations and data.",
-      "html": "<div class=\"ds-card\"><h3>Recommendation</h3><p>Content goes here</p></div>",
       "css": ".ds-card { background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.08); }"
+    },
+    {
+      "name": "Hero Result Card",
+      "kind": "card",
+      "refersTo": "result-card",
+      "description": "Full-bleed green gradient card showing the best card recommendation.",
+      "css": ".ds-hero-card { background: linear-gradient(135deg, #26ab59, #1a6632); border-radius: 28px; padding: 20px; color: white; box-shadow: 0 10px 20px rgba(38,171,89,0.3); }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main CTA — green fill, white text, 60pt height.",
+      "css": ".ds-btn-primary { background: #26ab59; color: white; border-radius: 16px; height: 60px; font-weight: 600; box-shadow: 0 8px 15px rgba(38,171,89,0.3); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action — tinted green fill, green text.",
+      "css": ".ds-btn-secondary { background: rgba(38,171,89,0.15); color: #26ab59; border-radius: 16px; font-weight: 600; }"
+    },
+    {
+      "name": "Search Bar",
+      "kind": "input",
+      "refersTo": "search-bar",
+      "description": "Full-width search field with magnifying glass icon and clear button.",
+      "css": ".ds-search { background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Quick Chip",
+      "kind": "chip",
+      "refersTo": "quick-chip",
+      "description": "Tappable category shortcut pill — tinted green with icon.",
+      "css": ".ds-chip { background: rgba(38,171,89,0.1); border: 1px solid rgba(38,171,89,0.2); border-radius: 12px; padding: 12px 16px; color: #26ab59; }"
+    },
+    {
+      "name": "Loading State",
+      "kind": "state",
+      "refersTo": "loading",
+      "description": "Animated sparkle icon + copy while categorization is in progress.",
+      "css": ".ds-loading { background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Category Insight Row",
+      "kind": "list-item",
+      "refersTo": "insight-row",
+      "description": "Per-category earnings bar with earned vs. missed breakdown.",
+      "css": ".ds-insight-row { background: #ffffff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }"
     }
   ],
   "narrative": {
@@ -29,13 +86,27 @@
       "Confident, vibrant green accents against clean backgrounds",
       "Deliberate, expert craft feeling"
     ],
-    "rules": [],
+    "rules": [
+      "Never use gradient text (foregroundStyle with a gradient on Text). Use solid Theme.primaryGreen.",
+      "Never use Color.green, Color.orange, Color.red directly. Use Theme tokens.",
+      "Never use .cornerRadius(X) (non-continuous). Always use .clipShape(RoundedRectangle(cornerRadius: X, style: .continuous)).",
+      "Never nest cards inside cards.",
+      "Motion standard spring: response 0.4, dampingFraction 0.7. Motion enter spring: response 0.6, dampingFraction 0.8.",
+      "Respect accessibilityReduceMotion — provide .none animation fallback for every entrance animation.",
+      "Never use the hero-metric template (big number + small label + supporting stats grid). It is banned."
+    ],
     "dos": [
-      "Do use continuous corner radii (20px) for major surfaces like cards.",
-      "Do maintain 20px uniform padding inside cards."
+      "Do use continuous corner radii for all surfaces (style: .continuous).",
+      "Do use Theme.primaryGreen (not Color.green) everywhere the brand green appears.",
+      "Do use Theme.warningOrange for missed-earnings and nudge states.",
+      "Do maintain 20px uniform padding inside cards.",
+      "Do use the canonical spring presets defined in motion tokens."
     ],
     "donts": [
-      "Don't use generic \"AI slop\" patterns, glassmorphism, or cliché machine-generated UI.",
+      "Don't use gradient text (foregroundStyle(gradient) on Text). Banned.",
+      "Don't use Color.green, Color.orange, Color.red directly — always use Theme tokens.",
+      "Don't use .cornerRadius(X) (non-continuous).",
+      "Don't use generic AI slop patterns, glassmorphism, or the hero-metric template.",
       "Don't overwhelm the user with spreadsheet-like data; focus on the optimal recommendation."
     ]
   }
