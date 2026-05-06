@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-05T00:00:00Z",
+  "title": "Design System: Monet",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Vibrant Financial Green", "canonical": "#26ab59" }
+    },
+    "shadows": [
+      { "name": "card-light", "value": "0 5px 10px rgba(0,0,0,0.08)", "purpose": "Separate stark white cards from the grouped background." },
+      { "name": "card-dark", "value": "0 5px 10px rgba(0,0,0,0.3)", "purpose": "Deeper shadow for dark mode contrast." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Monet Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Standard container for recommendations and data.",
+      "html": "<div class=\"ds-card\"><h3>Recommendation</h3><p>Content goes here</p></div>",
+      "css": ".ds-card { background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.08); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Green Catalyst",
+    "overview": "Monet is a fresh, energetic approach to points and rewards optimization. The aesthetic is Soft & Tactile, relying on smooth continuous curves that feel soft but structured. The system builds trust immediately through expert confidence while keeping the UI frictionless and uncluttered. It explicitly rejects generic, machine-generated, or \"AI slop\" patterns in favor of bespoke, high-craft iOS-native elements.\n\n**Key Characteristics:**\n- Tactile and smooth (20pt continuous radii)\n- Confident, vibrant green accents against clean backgrounds\n- Deliberate, expert craft feeling",
+    "keyCharacteristics": [
+      "Tactile and smooth (20pt continuous radii)",
+      "Confident, vibrant green accents against clean backgrounds",
+      "Deliberate, expert craft feeling"
+    ],
+    "rules": [],
+    "dos": [
+      "Do use continuous corner radii (20px) for major surfaces like cards.",
+      "Do maintain 20px uniform padding inside cards."
+    ],
+    "donts": [
+      "Don't use generic \"AI slop\" patterns, glassmorphism, or cliché machine-generated UI.",
+      "Don't overwhelm the user with spreadsheet-like data; focus on the optimal recommendation."
+    ]
+  }
+}
