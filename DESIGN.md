@@ -54,13 +54,20 @@ Monet is a fresh, energetic approach to points and rewards optimization. The aes
 
 ## 2. Colors
 
-Vibrant Financial Green anchors the experience, providing trustworthy and energetic financial signals.
+Vibrant Financial Green anchors the experience, providing trustworthy and energetic financial signals. Secondary colors are used strictly for categorization, not core UI backgrounds.
 
 > **OKLCH note:** `#26ab59` ≈ `oklch(0.65 0.17 152)`. When specifying colors in code, keep RGB and hex in sync with `Theme.swift` as the canonical source of truth.
 
 ### Primary
 - **Vibrant Financial Green** (`#26ab59`): Primary actions, positive reward balances, conveying financial growth.
 - **Vibrant Financial Green (Tint)** (`rgba(38, 171, 89, 0.15)`): Secondary button backgrounds and subtle highlights.
+
+### Categorical (Secondary Palette)
+Used exclusively to categorize credit card networks or reward categories when the primary green is established.
+- **Amex / Cashback:** `#FFEB69` (Bright Yellow)
+- **Chase / Travel:** `#A0E1E1` (Bright Blue)
+- **Capital One / Dining:** `#FFC091` (Bright Orange)
+- **Discover / Groceries:** `#FFD7EF` (Bright Pink)
 
 ### Semantic
 - **Warning / Missed** (`#f97316` — orange): Missed earnings, optimization nudges, manual-tracking indicators. Maps to `Theme.warningOrange`.
@@ -132,24 +139,62 @@ Respect `accessibilityReduceMotion` — always provide a `.none` animation fallb
 - **Shadow:** `monetCardStyle(colorScheme:)` view modifier
 - **Internal Padding:** 20px
 - **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout
+- **Small Card:** Used for nudges, alerts, and quick balances (e.g. "You're 200 points away").
+- **Large Card:** Highlighted content needing stronger hierarchy (e.g. physical credit card carousel, main promotions).
 
-### Buttons
-- **Shape:** Soft continuous curves
-- **Primary:** `Theme.primaryGreen` background, white text, `height: 60`, `cornerRadius: 16`
-- **Secondary:** `Theme.secondaryGreen` background, `Theme.primaryGreen` text
-- **Destructive:** `Color.red` / `role: .destructive` — sign out, remove
+### List Items
+A standardized layout for transaction logs, reward categories, and card lists. Always composed of:
+1.  **Leading Asset:** Icon or Avatar.
+2.  **Title:** Primary text.
+3.  **Subtitle:** Supporting detail.
+4.  **Trailing Accessory:** Action button, switch, chevron, or value (e.g., "$5.00").
+*Never mix different trailing accessory types in the same list.*
 
-### Spacing Scale
-| Token | Value | Usage |
-|---|---|---|
-| `xs` | 8px | Icon-to-text gap, tight internal rows |
-| `sm` | 12px | Chip padding, badge padding |
-| `md` | 16px | Section spacing, list row padding |
-| `lg` | 20px | Card internal padding (canonical) |
-| `xl` | 24px | Between major sections |
-| `xxl` | 32px | Screen edge padding |
+### Contextual Navigation
+- **Bottom Sheets:** Use for complex, temporary workflows (e.g., selecting a category or editing a transaction). Keeps users anchored without pushing full screens.
+- **Inline Prompts:** Use for educational nudges (e.g., "Use your Chase Sapphire here for 3x points").
 
-## 8. Do's and Don'ts
+### Search Bar & Results
+- **Search Input:** Standardized with `monetCard` style, featuring a subtle shadow and 20pt radius.
+- **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout. Uses `standard` spring for entrance.
+
+### Success & Error Views
+- **Pattern:** Full-screen immersive layouts featuring "Tapestries"—textural illustrations with generic 3D floating primitives.
+- **Success:** Vibrant green backgrounds, central checkmark icon, and celebratory sparkles.
+- **Error:** Toned-down backgrounds with `warningOrange` accents and contextual icons (e.g., triangle exclamation).
+- **Animation:** Uses a combination of `standard` for entrance and `fast` for internal element reveals.
+
+### Onboarding Flow
+- **Structure:** Multi-step "Snappy" onboarding tutorial before the primary sign-in prompt.
+- **Visuals:** Each step features a dedicated Tapestry illustration and clear value-proposition copy.
+- **Motion:** Enforces the `standard` spring for step transitions to provide a tactile, physical feel.
+
+## 8. UX Writing & Voice
+
+**Tone:** Delightfully simple, authentically expert, and highly energetic. Monet makes credit card optimization feel like magic, not accounting.
+
+### Grammar & Copy Rules
+- **Sentence Case:** Always use sentence case for headers, buttons, and list items. (e.g. "Add a card", not "Add A Card").
+- **Active Voice:** "You earned $5.00" instead of "$5.00 was earned".
+- **Contractions:** Use them to sound human. "We're", "You've", "Can't".
+- **Conciseness:** Write headlines as if subcopy is illegal. Zero jargon.
+
+### Strict Vocabulary List
+- **Use:** "Rewards", "Cards", "Wallet", "Get more from your cards."
+- **Banned:** "Bank", "Banking", "Agent" (use "Support Team"), "Optimize Portfolio Utilization" (too jargon-heavy), "Rebates."
+
+## 9. Visual Assets
+
+### Icons
+Monet exclusively uses **SF Symbols** to ensure flawless alignment with iOS, maintaining strict visual rules:
+- **Less is More:** Use the default standard weight. Avoid multi-colored or highly complex symbol variants for standard UI.
+- **Clarity over Cleverness:** Icons must be universally understood instantly (e.g., a standard plus sign for adding a card, not a complex wallet metaphor).
+- **Interactive vs. Informational:** Interactive icons (like a close button) use primary or neutral foreground colors; informational icons in lists should be secondary.
+
+### Tapestries & Illustrations
+For empty states (e.g., "No cards added") or moments of high celebration (e.g., "You earned a sign-up bonus!"), we do not use simple icons. Instead, we use "Tapestries"—rich, textural illustrations utilizing generic, 3D floating primitives or vibrant color meshes to inject energy and delight into the experience without relying on generic stock vectors.
+
+## 10. Do's and Don'ts
 
 ### Do:
 - **Do** use continuous corner radii for all surfaces (`style: .continuous`).
