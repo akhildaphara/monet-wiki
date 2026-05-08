@@ -12,6 +12,10 @@ colors:
   destructive: "#ef4444"       # red — sign out, remove, error states
   earned: "#26ab59"            # same as primary; positive balance signals
   missed: "#f97316"            # same as warning; unrealized potential
+  bright-yellow: "#FFEB69"     # Amex / Cashback
+  bright-blue: "#A0E1E1"       # Chase / Travel
+  bright-orange: "#FFC091"     # Capital One / Dining
+  bright-pink: "#FFD7EF"       # Discover / Groceries
 typography:
   display:
     fontFamily: "system-ui, -apple-system, sans-serif"

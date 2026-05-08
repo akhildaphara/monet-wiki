@@ -7,7 +7,11 @@
       "primary":     { "role": "primary",     "displayName": "Vibrant Financial Green", "canonical": "#26ab59", "oklch": "oklch(0.65 0.17 152)" },
       "secondary":   { "role": "secondary",   "displayName": "Green Tint",              "canonical": "rgba(38,171,89,0.15)" },
       "warning":     { "role": "warning",     "displayName": "Warning Orange",          "canonical": "#f97316" },
-      "destructive": { "role": "destructive", "displayName": "Destructive Red",         "canonical": "#ef4444" }
+      "destructive": { "role": "destructive", "displayName": "Destructive Red",         "canonical": "#ef4444" },
+      "bright-yellow": { "role": "secondary", "displayName": "Bright Yellow", "canonical": "#FFEB69" },
+      "bright-blue":   { "role": "secondary", "displayName": "Bright Blue", "canonical": "#A0E1E1" },
+      "bright-orange": { "role": "secondary", "displayName": "Bright Orange", "canonical": "#FFC091" },
+      "bright-pink":   { "role": "secondary", "displayName": "Bright Pink", "canonical": "#FFD7EF" }
     },
     "shadows": [
       { "name": "card-light", "value": "shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 5)", "purpose": "Separate white cards from grouped background." },
