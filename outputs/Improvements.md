@@ -1,4 +1,4 @@
-## MonetApp (iOS)
+## swift-app (iOS)
 
 ### Suggested Improvements
 

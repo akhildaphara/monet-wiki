@@ -1,6 +1,6 @@
 # Bug Hunt & Code Improvements
 
-Based on a preliminary scan of the `croe` backend and `MonetApp` frontend, here are a few potential bugs and architectural issues to look out for:
+Based on a preliminary scan of the `croe` backend and `swift-app` frontend, here are a few potential bugs and architectural issues to look out for:
 
 ### 1. `findBestCardsForUser` Edge Case
 In `raw/croe/src/optimizer.ts`, the `findBestCardsForUser` function skips a category if `highestCashback > 0` evaluates to false. 

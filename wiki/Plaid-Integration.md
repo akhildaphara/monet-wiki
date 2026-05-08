@@ -1,6 +1,6 @@
 # Plaid Integration
 
-> **Status: Active & Mature** — The Plaid integration is fully implemented across the iOS frontend (`MonetApp`), the Node.js backend (`croe`), and the DynamoDB data layer.
+> **Status: Active & Mature** — The Plaid integration is fully implemented across the iOS frontend (`swift-app`), the Node.js backend (`croe`), and the DynamoDB data layer.
 
 Plaid enables automatic bank account sync: users link their banks via the Plaid Link in-app OAuth flow, and the backend pulls real transactions (via the Transactions Sync API and webhooks), maps them to wallet cards, and computes spending insights including actual vs. optimal rewards earnings per category and globally. The integration supports multiple bank connections per user, encrypted access token storage, and a dedicated connection management UI.
 

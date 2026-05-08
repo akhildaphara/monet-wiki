@@ -6,7 +6,7 @@ To elevate Monet from a functional utility to a premium financial app, consider 
 
 The `cardRewardsData.ts` defines `themeColorHex` and `imageName`.
 
-- **Action**: Render the cards in the `CardWalletView.swift` to look exactly like the physical cards. Apple Wallet does this beautifully. A gradient mesh based on the `themeColorHex` with a subtle glassmorphism effect (using `.ultraThinMaterial` in SwiftUI) will make the wallet feel premium.
+- **Action**: Render the cards in the `WalletView.swift` to look exactly like the physical cards. Apple Wallet does this beautifully. A gradient mesh based on the `themeColorHex` with a subtle glassmorphism effect (using `.ultraThinMaterial` in SwiftUI) will make the wallet feel premium.
 
 ## 2. Interactive "Where am I?" Search Bar
 

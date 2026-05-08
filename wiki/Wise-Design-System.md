@@ -39,4 +39,4 @@ High-value actions (e.g., adding a new card) trigger a full-screen celebration b
 Error states map to specific SF Symbols (e.g., `powerplug` for connection issues, `magnifyingglass` for missing data) to reduce cognitive load and provide empathetic feedback.
 
 ## Implementation Progress
-Most core components (`MonetButton`, `MonetCard`, `MonetListItem`, `MonetNudge`) are already integrated into the `MonetApp` codebase. For a full audit, see [[WISE_DESIGN_ASSESSMENT.md]].
+Most core components (`AppButton`, `AppCard`, `ListItem`, `Nudge`) are already integrated into the `swift-app` codebase. For a full audit, see [[WISE_DESIGN_ASSESSMENT.md]].

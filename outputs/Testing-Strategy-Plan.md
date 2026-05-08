@@ -1,9 +1,9 @@
 # Comprehensive Testing Strategy Plan for Monet
 
-> **Last Updated:** 2026-04-28 (Updated for `e6d5592` croe, `10c4570` MonetApp)  
+> **Last Updated:** 2026-04-28 (Updated for `e6d5592` croe, `10c4570` swift-app)  
 > **Status:** Ready for Implementation
 
-Transitioning from manual testing to an automated testing suite will significantly improve the stability, maintainability, and development speed of the Monet application. This plan covers the **Croe backend** (Node.js/TypeScript) and the **MonetApp frontend** (iOS/SwiftUI) with robust tooling, detailed setup steps, and concrete test examples.
+Transitioning from manual testing to an automated testing suite will significantly improve the stability, maintainability, and development speed of the Monet application. This plan covers the **Croe backend** (Node.js/TypeScript) and the **swift-app frontend** (iOS/SwiftUI) with robust tooling, detailed setup steps, and concrete test examples.
 
 ---
 
@@ -614,7 +614,7 @@ afterAll(() => mswServer.close());
 
 ---
 
-## 2. Frontend Testing Strategy (MonetApp — iOS/SwiftUI)
+## 2. Frontend Testing Strategy (swift-app — iOS/SwiftUI)
 
 ### 2.1 Unit Testing
 
@@ -644,7 +644,7 @@ afterAll(() => mswServer.close());
 #### URLProtocol Mock Pattern
 
 ```swift
-// MonetAppTests/Helpers/MockURLProtocol.swift
+// swift-appTests/Helpers/MockURLProtocol.swift
 class MockURLProtocol: URLProtocol {
     static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
 
@@ -694,7 +694,7 @@ class MockURLProtocol: URLProtocol {
 
 Add via SPM: `https://github.com/pointfreeco/swift-snapshot-testing`
 
-**Key Targets:** `MiniCardView`, `NetworkStatusBanner`, `InsightsView` charts, `CardWalletView`, `CategoryDetailsView`, `EditCardRewardsView`.
+**Key Targets:** `MiniCardView`, `NetworkStatusBanner`, `InsightsView` charts, `WalletView`, `CategoryDetailsView`, `EditCardRewardsView`.
 
 If padding, colors, or layout in `Theme.swift` change accidentally, the snapshot diff catches it immediately.
 
@@ -790,9 +790,9 @@ name: iOS Tests
 on:
   push:
     branches: [main]
-    paths: ['raw/MonetApp/**']
+    paths: ['raw/swift-app/**']
   pull_request:
-    paths: ['raw/MonetApp/**']
+    paths: ['raw/swift-app/**']
 
 jobs:
   test:
@@ -801,8 +801,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           xcodebuild test \
-            -project raw/MonetApp/MonetApp.xcodeproj \
-            -scheme MonetApp \
+            -project raw/swift-app/swift-app.xcodeproj \
+            -scheme swift-app \
             -destination 'platform=iOS Simulator,name=iPhone 16' \
             -resultBundlePath TestResults.xcresult
       - uses: actions/upload-artifact@v4

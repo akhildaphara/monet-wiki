@@ -53,7 +53,7 @@ We must know the user's rent amount and track their current monthly spend on the
 1.  **Update `UserContext` (`dao.ts`)**:
     - Add fields for `rentAmount: number`.
     - Add tracking for `currentBiltSpend: number` (reset monthly).
-2.  **Update `CardRewardsData.ts`**:
+2.  **Update `RewardStore.ts`**:
     - Create new entries for `BILT_BLUE`, `BILT_OBSIDIAN`, and `BILT_PALLADIUM`.
     - Introduce a new property in the `CreditCard` interface: `isDynamicTarget: boolean` or `targetCondition: Goal`.
 
@@ -84,7 +84,7 @@ Without Plaid, Monet has no way of knowing how much the user has _already_ spent
 
 ### Phase 4: UI Updates (`Monet-iOS-App`)
 
-1.  **Add Target Tracking UI**: If the user has a Bilt card, add a progress bar to the `SearchView` or `CardWalletView` showing how close they are to their next rent multiplier tier (e.g., _"Spend $140 more on Bilt to unlock 0.75x on rent"_).
+1.  **Add Target Tracking UI**: If the user has a Bilt card, add a progress bar to the `SearchView` or `WalletView` showing how close they are to their next rent multiplier tier (e.g., _"Spend $140 more on Bilt to unlock 0.75x on rent"_).
 2.  **Reasoning Context**: When the optimizer recommends Bilt for a generic category because of the marginal value, the reasoning string returned to the UI must explicitly state: _"Recommended because this purchase helps you hit your 0.5x Rent multiplier, yielding massive marginal value."_
 
 ## Summary Checklist for Implementation

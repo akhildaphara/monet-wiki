@@ -25,7 +25,7 @@ The app uses a `RootTabView` with four tabs:
 |---|---|---|
 | Search | `SearchView` | Merchant search dashboard with ranked card recommendations |
 | Insights | `InsightsView` | Spending analytics powered by Plaid transaction data |
-| Wallet | `CardWalletView` | Manage credit cards and bank connections |
+| Wallet | `WalletView` | Manage credit cards and bank connections |
 | Profile | `ProfileView` | Account settings and developer tools |
 
 ### Developer Tools
@@ -41,7 +41,7 @@ A hidden developer menu (accessed via Profile) allows switching between AWS Prod
 - `CategoriesView.swift` & `CategoryDetailsView.swift`: Browse reward categories.
 
 ### Wallet & Cards
-- `CardWalletView.swift`: Displays the user's wallet. Shows a "No Cards" empty state with a call-to-action to add cards.
+- `WalletView.swift`: Displays the user's wallet. Shows a "No Cards" empty state with a call-to-action to add cards.
 - `EditCardRewardsView.swift`: New view allowing users to **manually configure reward multipliers** for specific cards, which are then synced to the backend and factored into optimization.
 - `CardDetailsView.swift`: Per-card detail showing rewards and linked Plaid accounts. Features persistent caching to prevent unnecessary re-fetches.
 
@@ -62,7 +62,7 @@ All views gate API calls through `APIClient.shared.canMakeRequests()` before tou
 
 | View / Service | Behavior When Offline |
 |---|---|
-| `CardWalletView.onAppear` | Skips `fetchPlaidAccounts()` — no banner flash |
+| `WalletView.onAppear` | Skips `fetchPlaidAccounts()` — no banner flash |
 | `BankConnectionsView.task` | Shows a user-friendly "You're Offline" state with Retry button |
 | `InsightsView.onAppear` | Skips insights fetch; `InsightsManager` sets a friendly error message |
 | `InsightsView.refreshInsights()` | Debounced 500ms + offline guard — prevents 3× chain-fire during sync |

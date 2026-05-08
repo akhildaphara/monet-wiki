@@ -71,11 +71,11 @@ To run a specific UI test file or suite without launching the full Xcode GUI, us
   xcodebuild -workspace raw/Monet/Monet.xcodeproj/project.xcworkspace \
              -scheme Monet \
              -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-             test -only-testing:MonetUITests
+             test -only-testing:UITests
   ```
 - **Run a specific test class or method:**
   Append the class or method to the `-only-testing` flag:
-  `-only-testing:MonetUITests/MerchantSearchUITests/testSuccessfulSearch`
+  `-only-testing:UITests/MerchantSearchUITests/testSuccessfulSearch`
 
 ### 3. Writing XCUITests to Drive the UI
 

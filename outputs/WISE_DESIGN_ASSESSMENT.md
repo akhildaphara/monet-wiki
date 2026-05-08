@@ -90,11 +90,11 @@ Focus on replacing the most frequently used elements with standardized component
 
 ### High-Energy Celebration Screens
 
-We can elevate "moments of magic" by introducing a full-screen variant for `MonetSuccessView`. For high-value actions like successfully adding a credit card or reaching a reward milestone, the entire background should transition to `Theme.primaryGreenGradient` with white text. This creates a powerful brand moment that feels rewarding.
+We can elevate "moments of magic" by introducing a full-screen variant for `SuccessView`. For high-value actions like successfully adding a credit card or reaching a reward milestone, the entire background should transition to `Theme.primaryGreenGradient` with white text. This creates a powerful brand moment that feels rewarding.
 
 ### Contextual Visual Metaphors
 
-Standardize `MonetErrorView` to use contextual SF Symbols that map to Wise's metaphors. This reduces cognitive load as users begin to associate specific icons with specific types of issues (e.g., connection vs. data not found).
+Standardize `ErrorView` to use contextual SF Symbols that map to Wise's metaphors. This reduces cognitive load as users begin to associate specific icons with specific types of issues (e.g., connection vs. data not found).
 
 ### Celebratory Typography
 
@@ -114,18 +114,18 @@ Strictly audit the app for "bank-speak".
 We have actively started implementing these findings into the iOS codebase (`raw/Monet`):
 
 - [x] **Theme.swift Update:** Added Categorical Palette (Yellow, Blue, Orange, Pink).
-- [x] **MonetButton:** Built strict primary, secondary, destructive, and white button styles.
-- [x] **MonetCard:** Implemented `.small` (16px radius, 16px padding) and `.large` (24px radius, 20px padding) variants.
-- [x] **MonetListItem:** Created the unified layout system with `systemIcon` and `navigation` convenience initializers.
-- [x] **MonetAvatar:** Built a standardized avatar component for user profiles.
-- [x] **MonetSuccessView Enhancement:** Added a `celebration` mode with a full-screen green gradient.
-- [x] **MonetErrorView Enhancement:** Standardized on contextual metaphors like `powerplug` and `magnifyingglass`.
-- [x] **MonetConfirmationView:** Created a destructive confirmation pattern for sensitive actions like removing cards.
-- [x] **MonetSegmentedControl:** Built a custom, snappy switcher for time ranges and sorting.
-- [x] **MonetNudge:** Created a semantic informational component for prompts and status updates.
-- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `MonetCard` and `MonetListItem`.
-- [x] **CategoriesView Refactor:** Standardized category list and sorting using `MonetSegmentedControl`.
-- [x] **InsightsView Refactor:** Integrated `MonetSegmentedControl` and `MonetNudge` for a more professional dashboard feel.
+- [x] **AppButton:** Built strict primary, secondary, destructive, and white button styles.
+- [x] **AppCard:** Implemented `.small` (16px radius, 16px padding) and `.large` (24px radius, 20px padding) variants.
+- [x] **ListItem:** Created the unified layout system with `systemIcon` and `navigation` convenience initializers.
+- [x] **Avatar:** Built a standardized avatar component for user profiles.
+- [x] **SuccessView Enhancement:** Added a `celebration` mode with a full-screen green gradient.
+- [x] **ErrorView Enhancement:** Standardized on contextual metaphors like `powerplug` and `magnifyingglass`.
+- [x] **ConfirmationView:** Created a destructive confirmation pattern for sensitive actions like removing cards.
+- [x] **SegmentedControl:** Built a custom, snappy switcher for time ranges and sorting.
+- [x] **Nudge:** Created a semantic informational component for prompts and status updates.
+- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `AppCard` and `ListItem`.
+- [x] **CategoriesView Refactor:** Standardized category list and sorting using `SegmentedControl`.
+- [x] **InsightsView Refactor:** Integrated `SegmentedControl` and `Nudge` for a more professional dashboard feel.
 - [x] **Transition Refinement:** Implemented context-aware "Analyzing" overlays in `InsightsView` to eliminate UI flashing during time-range switches (Doherty Threshold mitigation).
 - [x] **AnalyzingTapestryView:** Created a signature "magic" animation for refresh states that bridges the gap between data request and reveal.
 

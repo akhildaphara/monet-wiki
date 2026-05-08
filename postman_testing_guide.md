@@ -13,11 +13,11 @@ The `idToken` is a short-lived credential (usually valid for 1 hour). You will n
 This is the most straightforward approach since your app already handles Google Sign-In.
 
 1.  **Open the Project in Xcode**: Navigate to the `Monet` project.
-2.  **Edit the Sign-In Service**: Open the file `MonetApp/Services/GoogleSignInService.swift`.
+2.  **Edit the Sign-In Service**: Open the file `swift-app/Services/GoogleSignInService.swift`.
 3.  **Add a Print Statement**: Locate the `signIn` function. Inside the `if let idToken = ...` block, add a line to print the token to the console.
 
     ```swift
-    // MonetApp/Services/GoogleSignInService.swift
+    // swift-app/Services/GoogleSignInService.swift
 
     func signIn() {
         // ... previous code ...

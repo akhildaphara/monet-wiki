@@ -119,7 +119,7 @@ The system relies on tonal layering and soft drop shadows to lift content off th
 Both light and dark appearances are first-class. Never use hardcoded colors that don't adapt.
 
 - **Backgrounds:** Use `Color(uiColor: .systemGroupedBackground)` and `Color(uiColor: .systemBackground)` — they adapt automatically.
-- **Cards:** Switch between `Theme.cardBackgroundLight` / `Theme.cardBackgroundDark` via the `monetCardStyle(colorScheme:)` modifier or environment.
+- **Cards:** Switch between `Theme.cardBackgroundLight` / `Theme.cardBackgroundDark` via the `appCardStyle(colorScheme:)` modifier or environment.
 - **Text:** Use `.primary` and `.secondary` — never `Color.black` or `Color.white` for body text.
 - **Shadows:** Increase opacity in dark mode (0.08 → 0.3). The `Theme.cardShadow(colorScheme:)` helper encodes this.
 
@@ -140,7 +140,7 @@ Respect `accessibilityReduceMotion` — always provide a `.none` animation fallb
 ### Cards / Containers
 - **Shape:** Soft & Tactile, continuous curves (`RoundedRectangle(cornerRadius: 20, style: .continuous)`)
 - **Background:** White in light mode, dark gray in dark mode
-- **Shadow:** `monetCardStyle(colorScheme:)` view modifier
+- **Shadow:** `appCardStyle(colorScheme:)` view modifier
 - **Internal Padding:** 20px
 - **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout
 - **Small Card:** Used for nudges, alerts, and quick balances (e.g. "You're 200 points away").
@@ -159,7 +159,7 @@ A standardized layout for transaction logs, reward categories, and card lists. A
 - **Inline Prompts:** Use for educational nudges (e.g., "Use your Chase Sapphire here for 3x points").
 
 ### Search Bar & Results
-- **Search Input:** Standardized with `monetCard` style, featuring a subtle shadow and 20pt radius.
+- **Search Input:** Standardized with `appCard` style, featuring a subtle shadow and 20pt radius.
 - **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout. Uses `standard` spring for entrance.
 
 ### Success & Error Views
