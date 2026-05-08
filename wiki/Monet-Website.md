@@ -15,15 +15,15 @@ The [[Monet-Website]] is the public-facing landing page for the [[Monet-App-Over
 ## Page Structure
 The landing page (`app/page.tsx`) is a single-page layout with these sections:
 
-1. **Navigation**: Logo (Sparkles icon) + "Get Early Access" button.
-2. **Hero Section**: Headline and CTA buttons ("Download for iOS").
-3. **App Preview**: Real app screenshots with green glow backdrop.
-4. **Merchant Intelligence Feature**: Split layout highlighting ranked recommendations.
-5. **How Monet Works**: Three-step vertical timeline.
-6. **CTA Section**: Waitlist signup card.
+1. **Navigation**: Modernized logo (Sparkles icon) + persistent theme toggle + "Get Early Access" button.
+2. **Hero Section**: Headline, subheadline, and CTA buttons ("Download for iOS"). Features **3D transform animations** and refined glassmorphism on the main app screenshot.
+3. **App Preview**: Interactive theme-aware screenshots with toggleable light/dark modes.
+4. **Merchant Intelligence**: Interactive merchant search UI with loading states and ranked card recommendations.
+5. **How Monet Works**: Three-step vertical timeline with updated feature icons.
+6. **CTA Section**: Waitlist signup card integrated with **Formspree** for submission handling.
 
 ## Universal Links
-The website hosts the `/.well-known/apple-app-site-association` file, enabling **Universal Links** support. This allows the iOS app to open directly from website links (e.g., from the waitlist confirmation or promotional emails).
+The website hosts the `/.well-known/apple-app-site-association` file, enabling **Universal Links** support.
 
 ## Running Locally
 ```bash
@@ -32,5 +32,5 @@ npm run dev   # → http://localhost:3001
 ```
 
 ## Repository
-- Hosted in the `raw/website` git submodule.
-- Current HEAD: `0b872db` (refactored from orange to green accent theme).
+- Hosted in the `raw/website` directory.
+- Current HEAD: `a5b7a16` (Modernized navigation, interactive search UI, and Formspree integration).

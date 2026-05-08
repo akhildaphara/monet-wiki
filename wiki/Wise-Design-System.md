@@ -7,7 +7,13 @@ The system is defined by **vibrant color contrasts**, **expressive typography pa
 ## Core Foundations
 
 ### 1. Color Strategy
-Monet uses a **Restrained** color strategy. While "Vibrant Financial Green" (`#26ab59`) anchors the identity, secondary categorical colors (Yellow, Blue, Orange, Pink) are used exclusively to distinguish credit card networks or reward categories.
+Monet uses a **Restrained** color strategy. While "Vibrant Financial Green" (`#26ab59`) anchors the identity, secondary categorical colors are used exclusively to distinguish credit card networks or reward categories.
+
+#### Brand Category Mappings:
+- **Bright Yellow** (`#FFEB69`): Amex / Cashback
+- **Bright Blue** (`#A0E1E1`): Chase / Travel
+- **Bright Orange** (`#FFC091`): Capital One / Dining
+- **Bright Pink** (`#FFD7EF`): Discover / Groceries
 
 ### 2. Typography
 We strictly utilize Apple's **SF Pro** font family with semantic scaling. To mimic Wise's "celebratory" feel without custom font files, we lean into **System Rounded** and **Black/Heavy** weights for major headlines and magic moments.
