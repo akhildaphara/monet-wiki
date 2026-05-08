@@ -99,16 +99,25 @@ Strictly audit the app for "bank-speak".
 
 We have actively started implementing these findings into the iOS codebase (`raw/Monet`):
 - [x] **Theme.swift Update:** Added Categorical Palette (Yellow, Blue, Orange, Pink).
-- [x] **MonetButton:** Built strict primary, secondary, and destructive button styles using the `monetFast` spring animation for interactions.
+- [x] **MonetButton:** Built strict primary, secondary, destructive, and white button styles.
 - [x] **MonetCard:** Implemented `.small` (16px radius, 16px padding) and `.large` (24px radius, 20px padding) variants.
 - [x] **MonetListItem:** Created the unified layout system with `systemIcon` and `navigation` convenience initializers.
-- [x] **MonetAvatar:** Built a standardized avatar component for user profiles and institution logos.
-- [x] **MonetSuccessView Enhancement:** Added a `celebration` mode with a full-screen green gradient for high-energy moments.
-- [x] **MonetErrorView Enhancement:** Standardized on contextual metaphors like `powerplug` for connection issues and `magnifyingglass` for missing data.
-- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `MonetCard` and `MonetListItem`. Integrated `MonetAvatar`.
-- [x] **Sentence Case Audit:** Performed a wide-scale audit to ensure all headers, buttons, and labels follow Wise's sentence case rule (e.g., "Bank connections" vs "Bank Connections").
-- [x] **Vocabulary Update:** Replaced "cashback" with "rewards" in primary UI labels to align with a broader financial optimizer identity.
-- [x] **CardWalletView Refactor:** Integrated the new `.celebration` success screen when a card is added.
+- [x] **MonetAvatar:** Built a standardized avatar component for user profiles.
+- [x] **MonetSuccessView Enhancement:** Added a `celebration` mode with a full-screen green gradient.
+- [x] **MonetErrorView Enhancement:** Standardized on contextual metaphors like `powerplug` and `magnifyingglass`.
+- [x] **MonetConfirmationView:** Created a destructive confirmation pattern for sensitive actions like removing cards.
+- [x] **MonetSegmentedControl:** Built a custom, snappy switcher for time ranges and sorting.
+- [x] **MonetNudge:** Created a semantic informational component for prompts and status updates.
+- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `MonetCard` and `MonetListItem`.
+- [x] **CategoriesView Refactor:** Standardized category list and sorting using `MonetSegmentedControl`.
+- [x] **InsightsView Refactor:** Integrated `MonetSegmentedControl` and `MonetNudge` for a more professional dashboard feel.
+- [x] **CardDetailsView Polishing:** Replaced custom prompts with `MonetNudge` and standard buttons.
+- [x] **BankConnectionsView Refactor:** Completely redesigned using `MonetCard` and `MonetListItem`. Replaced the generic list with institution-based cards and integrated `MonetNudge` for status updates.
+- [x] **Sentence Case Audit:** Performed a wide-scale audit across all views, including `BankConnectionsView` and `EditCardRewardsView`.
+- [x] **Vocabulary Update:** Replaced "cashback" with "rewards" and "back" with "rewards" in primary UI labels and reasoning strings.
+- [x] **Add/Remove Flow Refactor:** Optimized card management to be safer and more intentional.
+- [x] **Navigation Update:** Replaced deprecated `NavigationView` patterns with `NavigationStack` and modern `toolbar` modifiers.
+- [x] **Component Generalization:** Enhanced `MonetSegmentedControl` to support any type (including `String`) for broader utility.
 
 ---
 
@@ -174,7 +183,7 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [ ] components/modal.md
 - [ ] components/money-input.md
 - [ ] components/navigation-option.md
-- [ ] components/nudge.md
+- [x] components/nudge.md
 - [ ] components/password-input.md
 - [ ] components/popover.md
 - [ ] components/progress-bar.md
@@ -182,15 +191,15 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [ ] components/promo-card.md
 - [ ] components/radio.md
 - [ ] components/screen-loader.md
-- [ ] components/search-input.md
+- [x] components/search-input.md
 - [ ] components/section-header.md
-- [ ] components/segmented-control.md
+- [x] components/segmented-control.md
 - [ ] components/select.md
 - [ ] components/snackbar.md
 - [ ] components/summary.md
 - [ ] components/switch.md
 - [ ] components/table.md
-- [ ] components/tabs.md
+- [x] components/tabs.md
 - [ ] components/text-area.md
 - [ ] components/text-input.md
 - [ ] components/upload-input.md
@@ -237,4 +246,5 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [x] patterns/success-screen.md
 - [x] patterns/validation-messages.md
 - [ ] patterns/video-embed.md
+
 
