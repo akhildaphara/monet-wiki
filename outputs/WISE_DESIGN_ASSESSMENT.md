@@ -63,9 +63,9 @@ Focus on replacing the most frequently used elements with standardized component
     - **Celebration Type:** Full-screen green background used for high-value moments (adding a new card, hitting a savings goal). High-energy brand moment.
     - **Confirmation Type:** Standard white or green background for admin tasks (updating a nickname, linking an account).
 - **Error Screens:** Highly contextual illustrations. Instead of generic "Error," Wise uses specific visual metaphors:
-    - *Electric Plug* for network issues.
-    - *Magnifying Glass (Red)* for "Page not found."
-    - *Sand Timer* for pending states or upcoming features.
+    - *Electric Plug* (`powerplug`) for network issues.
+    - *Magnifying Glass (Red)* (`magnifyingglass`) for "Page not found."
+    - *Sand Timer* (`hourglass`) for pending states or upcoming features.
 - **Validation Messages:** Zero belittling language. No "Oops!" or "Uh-oh." Uses full sentences and a "Sorry" if it's the system's fault. 
 - **Empty States:** Integrated into the page layout, not just floating. Maximum of two buttons. Never use sticky footers for integrated empty states.
 
@@ -77,21 +77,38 @@ Focus on replacing the most frequently used elements with standardized component
 
 ---
 
+## 4. New Opportunities for Improvement
+
+### High-Energy Celebration Screens
+We can elevate "moments of magic" by introducing a full-screen variant for `MonetSuccessView`. For high-value actions like successfully adding a credit card or reaching a reward milestone, the entire background should transition to `Theme.primaryGreenGradient` with white text. This creates a powerful brand moment that feels rewarding.
+
+### Contextual Visual Metaphors
+Standardize `MonetErrorView` to use contextual SF Symbols that map to Wise's metaphors. This reduces cognitive load as users begin to associate specific icons with specific types of issues (e.g., connection vs. data not found).
+
+### Celebratory Typography
+While we use `SF Pro` for consistency, we should lean into **System Rounded** and **Black/Heavy** weights for celebratory headlines. This mimics the "Wise Sans" expressive feel without introducing custom font files.
+
+### Vocabulary Governance
+Strictly audit the app for "bank-speak". 
+- Replace "Rebate" or "Cashback" with "Rewards" in general contexts unless referring to a specific card's feature.
+- Ensure "Add card" is used instead of "Link account" for credit cards to feel more physical and tangible.
+
+---
+
 ## Implementation Progress
 
 We have actively started implementing these findings into the iOS codebase (`raw/Monet`):
 - [x] **Theme.swift Update:** Added Categorical Palette (Yellow, Blue, Orange, Pink).
 - [x] **MonetButton:** Built strict primary, secondary, and destructive button styles using the `monetFast` spring animation for interactions.
 - [x] **MonetCard:** Implemented `.small` (16px radius, 16px padding) and `.large` (24px radius, 20px padding) variants.
-- [x] **MonetListItem:** Created the unified layout system with `systemIcon` and `navigation` convenience initializers to enforce the Leading Asset + Text + Trailing Accessory pattern.
-- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `MonetCard` and `MonetListItem`. Switched theme selection to a "Dark Mode" toggle for cohesion and improved icon alignment with soft circular backgrounds.
-- [x] **CardWalletView Refactor:** Implemented edge-to-edge `MonetCard` layout. Integrated `MiniCardView` for card icons in the wallet list and used the new "Tapestry" empty state.
-- [x] **CategoriesView Refactor:** Standardized category list using `MonetListItem` and `MonetCard`. Integrated the new Categorical Colors for category icons.
-- [x] **InsightsView Refactor:** Cleaned up the empty states using `InsightsTapestryView` and refactored the optimization hero card to use the `MonetCard` standard. Fixed compilation issues related to spacing tokens and navigation links.
-- [x] **ContentView Refactor:** Apply new card styles to search results and hero recommendation.
-- [x] **CardDetailsView Refactor:** Standardize rewards breakdown and header.
-- [x] **LoginView Refactor:** Implement "Snappy" motion-centric onboarding.
-- [x] **Success/Error Pattern Implementation:** Create reusable `MonetSuccessView` and `MonetErrorView` based on pattern analysis.
+- [x] **MonetListItem:** Created the unified layout system with `systemIcon` and `navigation` convenience initializers.
+- [x] **MonetAvatar:** Built a standardized avatar component for user profiles and institution logos.
+- [x] **MonetSuccessView Enhancement:** Added a `celebration` mode with a full-screen green gradient for high-energy moments.
+- [x] **MonetErrorView Enhancement:** Standardized on contextual metaphors like `powerplug` for connection issues and `magnifyingglass` for missing data.
+- [x] **ProfileView Refactor:** Replaced generic iOS `Form` with `MonetCard` and `MonetListItem`. Integrated `MonetAvatar`.
+- [x] **Sentence Case Audit:** Performed a wide-scale audit to ensure all headers, buttons, and labels follow Wise's sentence case rule (e.g., "Bank connections" vs "Bank Connections").
+- [x] **Vocabulary Update:** Replaced "cashback" with "rewards" in primary UI labels to align with a broader financial optimizer identity.
+- [x] **CardWalletView Refactor:** Integrated the new `.celebration` success screen when a card is added.
 
 ---
 
@@ -124,7 +141,7 @@ We have actively started implementing these findings into the iOS codebase (`raw
 
 ### Components
 - [ ] components/action-prompt.md
-- [ ] components/avatar.md
+- [x] components/avatar.md
 - [x] components/bottom-sheet.md
 - [x] components/button.md
 - [x] components/card.md
@@ -165,7 +182,7 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [ ] components/promo-card.md
 - [ ] components/radio.md
 - [ ] components/screen-loader.md
-- [x] components/search-input.md
+- [ ] components/search-input.md
 - [ ] components/section-header.md
 - [ ] components/segmented-control.md
 - [ ] components/select.md
@@ -210,7 +227,6 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [ ] patterns/progress-screen.md
 - [ ] patterns/quote-highlight.md
 - [ ] patterns/quote-text.md
-- [x] patterns/success-screen.md
 - [ ] patterns/tabs-data.md
 - [ ] patterns/tabs-feature.md
 - [ ] patterns/text-disclaimer.md
@@ -218,5 +234,7 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [ ] patterns/text-headline.md
 - [ ] patterns/text-intro.md
 - [ ] patterns/text-stack.md
+- [x] patterns/success-screen.md
 - [x] patterns/validation-messages.md
 - [ ] patterns/video-embed.md
+
