@@ -23,7 +23,7 @@ The app uses a `RootTabView` with four tabs:
 
 | Tab | View | Description |
 |---|---|---|
-| Search | `ContentView` | Merchant search dashboard with ranked card recommendations |
+| Search | `SearchView` | Merchant search dashboard with ranked card recommendations |
 | Insights | `InsightsView` | Spending analytics powered by Plaid transaction data |
 | Wallet | `CardWalletView` | Manage credit cards and bank connections |
 | Profile | `ProfileView` | Account settings and developer tools |
@@ -37,7 +37,7 @@ A hidden developer menu (accessed via Profile) allows switching between AWS Prod
 - `LoginView.swift`: Google Sign-In flow. Redesigned with an **animated credit card stack** logo, brand gradients, and standard theme components.
 
 ### Search & Categories
-- `ContentView.swift`: Home dashboard. Uses a `chart.pie` icon for insights. Standardized typography and layout.
+- `SearchView.swift`: Home dashboard. Uses a `chart.pie` icon for insights. Standardized typography and layout.
 - `CategoriesView.swift` & `CategoryDetailsView.swift`: Browse reward categories.
 
 ### Wallet & Cards
