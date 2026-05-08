@@ -7,3 +7,4 @@
 - [[Plaid-Integration]]: End-to-end bank account linking, transaction syncing (Sync API + webhooks), encrypted token storage, and the insights computation pipeline.
 - [[Database-Schema]]: AWS DynamoDB tables for Users, Overrides, and Transactions — including encryption details and data models.
 - [[Monet-Website]]: The Next.js public-facing landing page showcasing the app and collecting waitlist signups.
+- [[Wise-Design-System]]: The foundational design language for Monet, focusing on vibrant contrast, expressive typography, and snappy motion.

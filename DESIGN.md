@@ -162,6 +162,7 @@ A standardized layout for transaction logs, reward categories, and card lists. A
 - **Pattern:** Full-screen immersive layouts featuring "Tapestries"—textural illustrations with generic 3D floating primitives.
 - **Success:** Vibrant green backgrounds, central checkmark icon, and celebratory sparkles.
 - **Error:** Toned-down backgrounds with `warningOrange` accents and contextual icons (e.g., triangle exclamation).
+- **Analyzing:** A context-aware overlay pattern for data refreshes. Uses `AnalyzingTapestryView`—a rhythmic bar-scaling animation—to bridge the Doherty Threshold and provide visual delight during background processing.
 - **Animation:** Uses a combination of `standard` for entrance and `fast` for internal element reveals.
 
 ### Onboarding Flow

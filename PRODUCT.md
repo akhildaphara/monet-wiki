@@ -38,7 +38,8 @@ Must explicitly avoid looking like "AI Slop". It should not feel generic, machin
 1. **Expert Confidence**: The app must provide recommendations with absolute clarity and authority, building trust immediately.
 2. **Clarity over Clutter**: Focus on the optimal recommendation; avoid overwhelming the user with spreadsheet-like data.
 3. **Impeccable Craft**: Every interaction, margin, and typography choice should feel deliberately crafted by experts, not generated.
-4. **Frictionless Utility**: Point maximization should feel effortless, not like a chore.
+4. **Frictionless Utility**: Point maximization should feel effortless. We respect the **Doherty Threshold**, ensuring the UI always feels instantaneous or provides delightful "Analyzing" states to mask background processing.
+5. **Invisible Architecture**: We obsess over the "back of the statue"—error states, empty screens, and transitions are as polished as the main dashboard to maintain the illusion of systemic quality.
 
 ## Accessibility & Inclusion
 Standard iOS accessibility considerations apply. Specific commitments already implemented:
