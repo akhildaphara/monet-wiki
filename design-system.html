@@ -859,6 +859,57 @@
             background-color: #1c1c1e;
         }
         .action-prompt.neutral .prompt-title { color: var(--text-primary); }
+
+        /* App Banner */
+        .app-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: white;
+            font-weight: 500;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .app-banner.full-width {
+            width: 100%;
+            border-radius: 0;
+        }
+        .app-banner.badge {
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-size: 13px;
+            width: fit-content;
+        }
+        .app-banner.success {
+            background-color: var(--primary);
+        }
+        .app-banner.destructive {
+            background-color: var(--destructive);
+        }
+        .app-banner.warning {
+            background-color: var(--warning);
+        }
+        .app-banner-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app-banner-spacer {
+            flex: 1;
+        }
+        .app-banner-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -1389,6 +1440,75 @@
                                         <button class="app-button destructive" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Retry</button>
                                         <button class="app-button secondary" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Cancel</button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AppBanner -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">AppBanner</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Network status and system-wide alerts.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Full Width (NetworkStatusBanner)</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-sm); margin: 0 -var(--space-xl); overflow: hidden;">
+                                <!-- Connected -->
+                                <div class="app-banner full-width success">
+                                    <div class="app-banner-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    </div>
+                                    <span>Connected</span>
+                                </div>
+                                
+                                <!-- Too many requests -->
+                                <div class="app-banner full-width destructive">
+                                    <div class="app-banner-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5"></path><path d="M14 11V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v7"></path><path d="M10 11V8a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v3"></path><path d="M18 11v4a6 6 0 0 1-6 6v0a6 6 0 0 1-6-6v-4"></path></svg>
+                                    </div>
+                                    <span>Too many requests. Please wait a moment.</span>
+                                </div>
+
+                                <!-- No Internet -->
+                                <div class="app-banner full-width destructive">
+                                    <div class="app-banner-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path><path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                                    </div>
+                                    <span>No Internet Connection</span>
+                                </div>
+                                
+                                <!-- Server Unreachable -->
+                                <div class="app-banner full-width warning">
+                                    <div class="app-banner-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    </div>
+                                    <span>Server Unreachable. Try again later.</span>
+                                    <div class="app-banner-spacer"></div>
+                                    <div class="app-banner-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Trying to Connect... -->
+                                <div class="app-banner full-width warning">
+                                    <div class="app-banner-spinner"></div>
+                                    <span>Trying to Connect...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Badge Style</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-sm); align-items: center;">
+                                <div class="app-banner badge success">
+                                    <div class="app-banner-icon">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    </div>
+                                    <span>Connected</span>
                                 </div>
                             </div>
                         </div>
