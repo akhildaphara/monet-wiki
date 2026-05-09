@@ -54,7 +54,7 @@ The insights engine computes spending analytics using stored transactions:
    - **Suggested Card**: Ranks new cards by incremental value over actual earnings.
    - **Per-Category Breakdown**: Spend, actual, and optimal per category.
 
-### iOS (Swift) — `raw/Monet`
+### iOS (Swift) — `raw/swift-app`
 
 #### Views
 - **`PlaidLinkView.swift`**: `UIViewControllerRepresentable` wrapping Plaid's `LinkViewController`. Supports both new connections and update-mode re-authentication (via `updateItemId`).

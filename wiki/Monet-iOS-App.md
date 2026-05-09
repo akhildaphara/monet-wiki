@@ -54,7 +54,10 @@ A hidden developer menu (accessed via Profile) allows switching between AWS Prod
 - `GoogleSignInService.swift`: Manages Google auth state and token refresh.
 - `InsightsManager.swift`: Insights data lifecycle manager (see Architecture section above).
 - `CategorizerService.swift` & `BusinessSearchService.swift`: Client-side merchant categorization utilities.
-- `NetworkMonitor`: Tracks connectivity state via `NWPathMonitor`, broadcasts `.networkRegained` notifications, and exposes `isConnected`, `isServerReachable`, and `isActivelyConnecting` states. Supports manual `retryConnection()`.
+## Repository
+- Hosted in the `raw/swift-app` directory (previously `raw/Monet`).
+- Follows standardized naming conventions for components and services.
+.
 
 ## Offline Handling
 

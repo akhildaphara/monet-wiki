@@ -23,8 +23,8 @@ typography:
     fontFamily: "system-ui, -apple-system, sans-serif"
 rounded:
   sm: "12px"                   # chips, inner badges
-  card: "20px"                 # standard cards
-  hero: "28px"                 # full-bleed hero result card
+  card: "16px"                 # standard cards
+  hero: "20px"                 # full-bleed hero result card
 spacing:
   xs: "8px"
   sm: "12px"

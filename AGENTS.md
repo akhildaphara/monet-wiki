@@ -24,7 +24,8 @@ A knowledge base about the app Monet. A credit card rewards optimizer app.
 Suggest new Ideas.
 Make API efficient and scalable.
 Find bugs.
-Make UI/UX top notch.
+Make UI/UX best in class.
+Do security analysis.
 Add/Update credit card rewards data.
 
 ## Infrastructure Rules

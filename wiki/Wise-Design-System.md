@@ -15,8 +15,12 @@ Monet uses a **Restrained** color strategy. While "Vibrant Financial Green" (`#2
 - **Bright Orange** (`#FFC091`): Capital One / Dining
 - **Bright Pink** (`#FFD7EF`): Discover / Groceries
 
+#### Semantic Colors:
+- **Warning Orange** (`#f97316`): Missed earnings, nudges, and urgent alerts.
+- **Destructive Red** (`#ef4444`): Removal, sign out, and irreversible actions.
+
 ### 2. Typography
-We strictly utilize Apple's **SF Pro** font family with semantic scaling. To mimic Wise's "celebratory" feel without custom font files, we lean into **System Rounded** and **Black/Heavy** weights for major headlines and magic moments.
+We strictly utilize Apple's **SF Pro** font family (San Francisco) for all text — clean, utilitarian, and deeply native to iOS. For hero headlines and magic moments, we lean into **Heavy** weights to create emphasis while maintaining the brand's premium, utilitarian feel.
 
 ### 3. Spacing & Radius
 A strict 4px/8px incremental scale is enforced. Hardcoded padding is prohibited in favor of semantic tokens (`Spacing.sm`, `Spacing.md`, etc.). Radii are standardized at 20pt for cards and 28pt for hero elements.

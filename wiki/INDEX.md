@@ -8,3 +8,4 @@
 - [[Database-Schema]]: AWS DynamoDB tables for Users, Overrides, and Transactions — including encryption details and data models.
 - [[Monet-Website]]: The Next.js public-facing landing page showcasing the app and collecting waitlist signups.
 - [[Wise-Design-System]]: The foundational design language for Monet, focusing on vibrant contrast, expressive typography, and snappy motion.
+- [[logs]]: Synchronization logs tracking updates between the repository's main branch and the wiki.

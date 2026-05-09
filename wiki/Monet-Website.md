@@ -8,7 +8,7 @@ The [[Monet-Website]] is the public-facing landing page for the [[Monet-App-Over
 
 ## Design
 - Dark-mode-first design with an accent green (`accent-green`) color scheme.
-- Uses `Inter` font family.
+- Uses **SF Pro** font family (San Francisco) to align with the iOS application.
 - Smooth Framer Motion entrance animations (fade-in, slide-up, slide-in).
 - Glassmorphic glow effects behind app screenshots.
 
@@ -33,4 +33,4 @@ npm run dev   # → http://localhost:3001
 
 ## Repository
 - Hosted in the `raw/website` directory.
-- Current HEAD: `a5b7a16` (Modernized navigation, interactive search UI, and Formspree integration).
+- Current HEAD: `d2c7985` (Standardized component naming and design system mappings).

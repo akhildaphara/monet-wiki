@@ -3,7 +3,7 @@ Monet is a credit card rewards optimizer application that helps users maximize t
 The platform uses a [[Card-Optimizer]] to determine the best credit card for a given purchase. The [[Plaid-Integration]] enables automatic bank account linking, transaction syncing (via the Transactions Sync API and webhooks), and personalized spending insights that compare actual rewards earned against wallet-optimal and globally-optimal strategies. The entire system is built to ensure API efficiency and scalability, while maintaining a top-notch UI/UX for end users. The application also allows users to configure business category overrides, giving them fine-grained control over how their transactions are categorized and which cards are recommended.
 
 ## System Components
-- [[Monet-iOS-App]]: A Swift/SwiftUI iOS application with merchant search, spending insights, wallet management, and bank connection management. Redesigned for standard theme tokens and improved animations.
+- [[Monet-iOS-App]]: A Swift/SwiftUI iOS application with merchant search, spending insights, wallet management, and bank connection management. Hosted in the `raw/swift-app` directory. Redesigned for standard theme tokens and improved animations.
 - [[Croe-Backend]]: A modular Node.js/Express backend running on Node 20 / CJS and deployed via Serverless (AWS Lambda).
 - [[Monet-Website]]: A Next.js landing page with Universal Link support.
 - [[Database-Schema]]: AWS DynamoDB tables for Users, Overrides, Transactions, and Insights Caching.
