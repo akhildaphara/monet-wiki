@@ -4,6 +4,9 @@ This file tracks synchronization between the repository's main branch and the or
 
 | Date | Commit Hash | Description |
 |---|---|---|
+| 2026-05-09 | `croe:6c62abd`, `swift:8d2d41a`, `web:44e7e60` | **Wiki Sync**: Comprehensive update based on true raw file state (DynamoDB schemas, API routes, SwiftData models, Next.js static export). |
+| 2026-05-09 | `20de2dd` | docs: update website font to Inter for improved modern aesthetics and compatibility |
+| 2026-05-09 | `70511c4` | chore: standardize project naming, update design system documentation, and initialize wiki synchronization logs |
 | 2026-05-08 | `d2c7985` | refactor: rename MonetApp to swift-app and standardize component naming conventions |
 | 2026-05-08 | `eceeb71` | docs: update design system brand mappings and website structure while initializing the SwiftUI review checklist |
 | 2026-05-08 | `76e2ff6` | feat: expand design system with new brand colors |
