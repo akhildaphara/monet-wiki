@@ -8,7 +8,7 @@ The [[Monet-Website]] is the public-facing landing page for the [[Monet-App-Over
 
 ## Design
 - Dark-mode-first design with an accent green (`accent-green`) color scheme.
-- Uses **SF Pro** font family (San Francisco) to align with the iOS application.
+- Uses **Inter** font family for its neutral, modern feel and broad compatibility.
 - Smooth Framer Motion entrance animations (fade-in, slide-up, slide-in).
 - Glassmorphic glow effects behind app screenshots.
 
