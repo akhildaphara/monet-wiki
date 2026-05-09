@@ -1,0 +1,1220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monet Design System</title>
+    <style>
+        :root {
+            /* Colors */
+            --primary: #26ab59;
+            --secondary: rgba(38, 171, 89, 0.15);
+            --bg-light: #f2f2f7;
+            --bg-dark: #0d0d0d;
+            --card-bg-light: #ffffff;
+            --card-bg-dark: #1e1e1e;
+            --warning: #f97316;
+            --destructive: #ef4444;
+            --earned: #26ab59;
+            --missed: #f97316;
+            --bright-yellow: #FFEB69;
+            --bright-blue: #A0E1E1;
+            --bright-orange: #FFC091;
+            --bright-pink: #FFD7EF;
+
+            /* Radii */
+            --radius-sm: 12px;
+            --radius-card: 16px;
+            --radius-hero: 20px;
+
+            /* Gradients */
+            --primary-gradient: linear-gradient(to bottom right, #26ab59, #196638);
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 20px;
+            --space-xl: 24px;
+            --space-xxl: 32px;
+
+            /* Shadows */
+            --shadow-light: 0 5px 10px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 5px 10px rgba(0, 0, 0, 0.3);
+            --shadow-hero: 0 10px 20px rgba(38, 171, 89, 0.3);
+
+            /* Theme Variables (Default Light) */
+            --bg-color: var(--bg-light);
+            --card-bg: var(--card-bg-light);
+            --text-primary: #000000;
+            --text-secondary: #3c3c43;
+            --card-shadow: var(--shadow-light);
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: var(--bg-dark);
+                --card-bg: var(--card-bg-dark);
+                --text-primary: #ffffff;
+                --text-secondary: #ebebf5;
+                --card-shadow: var(--shadow-dark);
+                --border-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        /* Dark mode override class */
+        :root.dark-mode {
+            --bg-color: var(--bg-dark);
+            --card-bg: var(--card-bg-dark);
+            --text-primary: #ffffff;
+            --text-secondary: #ebebf5;
+            --card-shadow: var(--shadow-dark);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+        :root.light-mode {
+            --bg-color: var(--bg-light);
+            --card-bg: var(--card-bg-light);
+            --text-primary: #000000;
+            --text-secondary: #3c3c43;
+            --card-shadow: var(--shadow-light);
+            --border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: var(--space-xxl);
+            transition: background-color 0.3s, color 0.3s;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 64px;
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: 0.37px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: var(--card-shadow);
+            font-family: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.96);
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        .radii-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-lg);
+            max-width: 600px;
+        }
+
+        .radii-item {
+            background: var(--card-bg);
+            padding: var(--space-md);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+        }
+
+        .radii-label {
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .radii-value {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: var(--space-xl);
+            letter-spacing: 0.36px;
+        }
+
+        /* Colors */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .color-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .color-swatch {
+            height: 140px;
+            width: 100%;
+        }
+
+        .color-info {
+            padding: var(--space-md);
+        }
+
+        .color-name {
+            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .color-hex {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        /* Typography */
+        .type-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .type-row {
+            display: flex;
+            align-items: baseline;
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .type-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .type-row:first-child {
+            padding-top: 0;
+        }
+
+        .type-label {
+            width: 180px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            line-height: 1.4;
+        }
+
+        .type-sample {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .type-display { font-size: 48px; font-weight: 900; letter-spacing: 0; }
+        .type-large-title { font-size: 34px; font-weight: 400; letter-spacing: 0.37px; }
+        .type-title1 { font-size: 28px; font-weight: 400; letter-spacing: 0.36px; }
+        .type-title2 { font-size: 22px; font-weight: 400; letter-spacing: 0.35px; }
+        .type-title3 { font-size: 20px; font-weight: 400; letter-spacing: 0.38px; }
+        .type-headline { font-size: 17px; font-weight: 600; letter-spacing: -0.41px; }
+        .type-body { font-size: 17px; font-weight: 400; letter-spacing: -0.41px; }
+        .type-subheadline { font-size: 15px; font-weight: 400; letter-spacing: -0.24px; }
+        .type-callout { font-size: 16px; font-weight: 400; letter-spacing: -0.32px; }
+        .type-footnote { font-size: 13px; font-weight: 400; letter-spacing: -0.08px; }
+        .type-caption1 { font-size: 12px; font-weight: 400; letter-spacing: 0; }
+        .type-caption2 { font-size: 11px; font-weight: 400; letter-spacing: 0.06px; }
+
+        /* Spacing */
+        .spacing-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .spacing-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-lg);
+        }
+
+        .space-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+
+        .space-label {
+            width: 120px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .space-value {
+            width: 60px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        .space-bar {
+            background-color: var(--primary);
+            height: 32px;
+            border-radius: 6px;
+            opacity: 0.8;
+        }
+
+        /* Elevation */
+        .elevation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xxl);
+            padding: var(--space-xl);
+            background: var(--bg-color);
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-color);
+        }
+
+        .elevation-card {
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 160px;
+        }
+
+        /* Components */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: var(--space-xxl);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: var(--space-lg);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-hero {
+            background: var(--primary-gradient);
+            border-radius: var(--radius-hero);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-hero);
+            color: #ffffff;
+            border: none;
+        }
+
+        .card-hero .text-secondary {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .list-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .list-content {
+            flex-grow: 1;
+        }
+
+        .list-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.41px;
+        }
+
+        .list-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            letter-spacing: -0.24px;
+        }
+
+        .list-trailing {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.41px;
+        }
+
+        /* Motion */
+        .motion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .motion-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .motion-box {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            margin: 0 auto var(--space-lg);
+        }
+
+        /* Spring animations approximation in CSS */
+        .anim-standard { transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .anim-fast { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .anim-enter { transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        .motion-card:hover .motion-box {
+            transform: scale(1.2);
+        }
+        .motion-card:active .motion-box {
+            transform: scale(0.9);
+        }
+
+        /* Guidelines */
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .guideline-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: var(--space-xl);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .guideline-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .guideline-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            letter-spacing: 0.35px;
+        }
+
+        .guideline-card h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: var(--space-lg);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.41px;
+        }
+
+        .guideline-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+            line-height: 1.6;
+        }
+
+        .guideline-card ul {
+            margin-left: var(--space-lg);
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .guideline-card li {
+            margin-bottom: var(--space-xs);
+        }
+
+        .guideline-card code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background: rgba(128, 128, 128, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .vocab-list {
+            margin-top: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .vocab-do {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(38, 171, 89, 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 15px;
+        }
+
+        .vocab-dont {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--destructive);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 15px;
+        }
+
+        .dos-donts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        /* Atomic Components */
+        .app-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-height: 56px;
+            border-radius: var(--radius-card);
+            font-weight: 600;
+            font-size: 17px;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+        }
+        .app-button:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+        .app-button.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .app-button.secondary {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+        .app-button.destructive {
+            background-color: var(--destructive);
+            color: white;
+        }
+
+        .app-switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 0;
+        }
+        .app-switch {
+            width: 52px;
+            height: 32px;
+            border-radius: 20px;
+            background-color: var(--primary);
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .app-switch.off {
+            background-color: #d1d1d6;
+        }
+        :root.dark-mode .app-switch.off {
+            background-color: #3a3a3c;
+        }
+        .app-switch-knob {
+            width: 26px;
+            height: 26px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 23px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: left 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .app-switch.off .app-switch-knob {
+            left: 3px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .chip.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+        .chip.unselected {
+            background-color: rgba(142, 142, 147, 0.12);
+            color: var(--text-primary);
+        }
+
+        .nudge {
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .nudge.info {
+            background-color: rgba(142, 142, 147, 0.12);
+            color: var(--text-primary);
+        }
+        .nudge.info .nudge-icon {
+            color: var(--text-secondary);
+        }
+        .nudge.success {
+            background-color: rgba(38, 171, 89, 0.1);
+            color: var(--primary);
+        }
+        .nudge.warning {
+            background-color: rgba(249, 115, 22, 0.1);
+            color: var(--warning);
+        }
+        .nudge.destructive {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--destructive);
+        }
+        .nudge-icon {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 25.6px;
+            box-shadow: 0 3.84px 7.68px rgba(38, 171, 89, 0.3);
+        }
+        .avatar.small {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            box-shadow: 0 2.4px 4.8px rgba(38, 171, 89, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Monet Design System</h1>
+            <button class="theme-toggle" id="themeToggle">Toggle Dark Mode</button>
+        </header>
+
+        <section>
+            <h2>Colors</h2>
+            <div class="color-grid">
+                <!-- Primary -->
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--primary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Primary Green</div>
+                        <div class="color-hex">#26ab59</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--secondary);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Primary Tint</div>
+                        <div class="color-hex">rgba(38, 171, 89, 0.15)</div>
+                    </div>
+                </div>
+                <!-- Categorical -->
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bright-yellow);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Amex / Cashback</div>
+                        <div class="color-hex">#FFEB69</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bright-blue);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Chase / Travel</div>
+                        <div class="color-hex">#A0E1E1</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bright-orange);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Capital One / Dining</div>
+                        <div class="color-hex">#FFC091</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bright-pink);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Discover / Groceries</div>
+                        <div class="color-hex">#FFD7EF</div>
+                    </div>
+                </div>
+                <!-- Semantic -->
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--warning);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Warning / Missed</div>
+                        <div class="color-hex">#f97316</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--destructive);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Destructive</div>
+                        <div class="color-hex">#ef4444</div>
+                    </div>
+                </div>
+                <!-- Neutral -->
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bg-light); border-bottom: 1px solid var(--border-color);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Background Light</div>
+                        <div class="color-hex">#f2f2f7</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--bg-dark);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Background Dark</div>
+                        <div class="color-hex">#0d0d0d</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--card-bg-light); border-bottom: 1px solid var(--border-color);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Card Light</div>
+                        <div class="color-hex">#ffffff</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: var(--card-bg-dark);"></div>
+                    <div class="color-info">
+                        <div class="color-name">Card Dark</div>
+                        <div class="color-hex">#1e1e1e</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Typography</h2>
+            <div class="type-container">
+                <div class="type-row">
+                    <div class="type-label">Display<br>48pt Heavy</div>
+                    <div class="type-sample type-display">15.5%</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Large Title<br>34pt Regular</div>
+                    <div class="type-sample type-large-title">Wallet</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Title 1<br>28pt Regular</div>
+                    <div class="type-sample type-title1">Optimize</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Title 2<br>22pt Regular</div>
+                    <div class="type-sample type-title2">Chase Sapphire Reserve</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Title 3<br>20pt Regular</div>
+                    <div class="type-sample type-title3">Recent Transactions</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Headline<br>17pt Semibold</div>
+                    <div class="type-sample type-headline">Add a card</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Body<br>17pt Regular</div>
+                    <div class="type-sample type-body">You earned $5.00 on your last purchase.</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Subheadline<br>15pt Regular</div>
+                    <div class="type-sample type-subheadline">Use your Chase Sapphire here for 3x points.</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Callout<br>16pt Regular</div>
+                    <div class="type-sample type-callout">You're 200 points away.</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Footnote<br>13pt Regular</div>
+                    <div class="type-sample type-footnote">Today, 9:41 AM</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Caption 1<br>12pt Regular</div>
+                    <div class="type-sample type-caption1">Travel Category</div>
+                </div>
+                <div class="type-row">
+                    <div class="type-label">Caption 2<br>11pt Regular</div>
+                    <div class="type-sample type-caption2">Terms apply</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Shape / Corner Radii</h2>
+            <div class="radii-container">
+                <div class="radii-item" style="border-radius: var(--radius-sm);">
+                    <div class="radii-label">Small</div>
+                    <div class="radii-value">12px</div>
+                    <div class="type-caption2" style="margin-top: var(--space-xs); color: var(--text-secondary); text-align: center;">Chips, inner badges</div>
+                </div>
+                <div class="radii-item" style="border-radius: var(--radius-card);">
+                    <div class="radii-label">Card</div>
+                    <div class="radii-value">16px</div>
+                    <div class="type-caption2" style="margin-top: var(--space-xs); color: var(--text-secondary); text-align: center;">Standard cards</div>
+                </div>
+                <div class="radii-item" style="border-radius: var(--radius-hero);">
+                    <div class="radii-label">Hero</div>
+                    <div class="radii-value">20px</div>
+                    <div class="type-caption2" style="margin-top: var(--space-xs); color: var(--text-secondary); text-align: center;">Full-bleed hero result card</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Spacing</h2>
+            <div class="spacing-container">
+                <div class="spacing-list">
+                    <div class="space-item">
+                        <div class="space-label">xs</div>
+                        <div class="space-value">8px</div>
+                        <div class="space-bar" style="width: var(--space-xs);"></div>
+                    </div>
+                    <div class="space-item">
+                        <div class="space-label">sm</div>
+                        <div class="space-value">12px</div>
+                        <div class="space-bar" style="width: var(--space-sm);"></div>
+                    </div>
+                    <div class="space-item">
+                        <div class="space-label">md</div>
+                        <div class="space-value">16px</div>
+                        <div class="space-bar" style="width: var(--space-md);"></div>
+                    </div>
+                    <div class="space-item">
+                        <div class="space-label">lg (canonical)</div>
+                        <div class="space-value">20px</div>
+                        <div class="space-bar" style="width: var(--space-lg);"></div>
+                    </div>
+                    <div class="space-item">
+                        <div class="space-label">xl</div>
+                        <div class="space-value">24px</div>
+                        <div class="space-bar" style="width: var(--space-xl);"></div>
+                    </div>
+                    <div class="space-item">
+                        <div class="space-label">xxl</div>
+                        <div class="space-value">32px</div>
+                        <div class="space-bar" style="width: var(--space-xxl);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Elevation / Shadows</h2>
+            <div class="elevation-grid">
+                <div class="elevation-card" style="box-shadow: var(--shadow-light); background: var(--card-bg-light); color: #000;">
+                    <div class="type-headline">Card Shadow Light</div>
+                    <div class="type-caption1" style="color: #3c3c43; margin-top: 4px;">0 5px 10px rgba(0, 0, 0, 0.08)</div>
+                </div>
+                <div class="elevation-card" style="box-shadow: var(--shadow-dark); background: var(--card-bg-dark); color: #fff;">
+                    <div class="type-headline">Card Shadow Dark</div>
+                    <div class="type-caption1" style="color: #ebebf5; margin-top: 4px;">0 5px 10px rgba(0, 0, 0, 0.3)</div>
+                </div>
+                <div class="elevation-card" style="box-shadow: var(--shadow-hero); background: var(--primary-gradient); color: #fff;">
+                    <div class="type-headline">Hero Shadow</div>
+                    <div class="type-caption1" style="color: rgba(255, 255, 255, 0.8); margin-top: 4px;">0 10px 20px rgba(38, 171, 89, 0.3)</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Components</h2>
+            <div class="component-grid">
+                <!-- Standard Card -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">Standard Card</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Soft & Tactile, continuous curves (16px radius). 20px internal padding.
+                    </div>
+                    
+                    <!-- List Item inside Card -->
+                    <div class="list-item">
+                        <div class="list-icon">✈️</div>
+                        <div class="list-content">
+                            <div class="list-title">Delta Airlines</div>
+                            <div class="list-subtitle">Travel</div>
+                        </div>
+                        <div class="list-trailing" style="color: var(--primary);">+3x</div>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-icon" style="background: rgba(249, 115, 22, 0.15); color: var(--warning);">☕️</div>
+                        <div class="list-content">
+                            <div class="list-title">Starbucks</div>
+                            <div class="list-subtitle">Dining</div>
+                        </div>
+                        <div class="list-trailing" style="color: var(--warning);">1x</div>
+                    </div>
+                </div>
+
+                <!-- Hero Card -->
+                <div class="card-hero" style="padding: 0;">
+                    <!-- Category Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px;">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: 4px; font-weight: 500;">Category</div>
+                            <div class="type-title3" style="font-weight: 700;">Dining</div>
+                        </div>
+                        <div class="list-icon" style="background: rgba(255,255,255,0.2); color: white;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div style="height: 1px; background: rgba(255,255,255,0.2);"></div>
+                    
+                    <!-- Recommendation Body -->
+                    <div style="padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+                        <!-- Best Card Row -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="type-footnote text-secondary" style="margin-bottom: 8px; font-weight: 500;">Best card</div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 32px; height: 20px; background: #fff; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>
+                                    <div class="type-headline">Chase Sapphire Reserve</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 32px; font-weight: 900; line-height: 1;">3%</div>
+                                <div class="type-caption1 text-secondary" style="font-weight: 500; margin-top: 4px;">rewards</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Wallet Comparison -->
+                        <div style="background: rgba(255,255,255,0.12); border-radius: var(--radius-card); padding: 14px; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="type-caption1 text-secondary" style="font-weight: 700;">Wallet Comparison</div>
+                                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.6);">Rewards</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="width: 22px; height: 14px; background: #fff; border-radius: 3px;"></div>
+                                    <div class="type-caption1" style="font-weight: 500; color: rgba(255,255,255,0.9);">Amex Gold</div>
+                                </div>
+                                <div class="type-caption1" style="font-weight: 700; font-family: monospace;">1.0%</div>
+                            </div>
+                        </div>
+                        
+                        <div style="height: 1px; background: rgba(255,255,255,0.2); margin: 8px -20px;"></div>
+                        
+                        <!-- Market Best Alternative -->
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="type-footnote text-secondary" style="font-weight: 700;">Market Best Alternative</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div class="type-subheadline">Capital One SavorOne</div>
+                                <div class="type-title3" style="font-weight: 700;">4%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Atomic Components</h2>
+            <div class="component-grid">
+                <!-- Buttons -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">AppButton</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Primary, Secondary, and Destructive states. 16px radius.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                        <button class="app-button primary">Primary Action</button>
+                        <button class="app-button secondary">Secondary Action</button>
+                        <button class="app-button destructive">Destructive Action</button>
+                    </div>
+                </div>
+
+                <!-- Toggles & Chips -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">AppSwitch & Chip</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Interactive toggles and filter chips.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">AppSwitch</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                                <div class="app-switch-container">
+                                    <span class="type-body" style="font-weight: 500;">Enable Notifications</span>
+                                    <div class="app-switch" onclick="this.classList.toggle('off')">
+                                        <div class="app-switch-knob"></div>
+                                    </div>
+                                </div>
+                                <div class="app-switch-container">
+                                    <span class="type-body" style="font-weight: 500;">Dark Mode</span>
+                                    <div class="app-switch off" onclick="this.classList.toggle('off')">
+                                        <div class="app-switch-knob"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Chip</div>
+                            <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
+                                <button class="chip selected" onclick="this.classList.toggle('selected'); this.classList.toggle('unselected')">Travel</button>
+                                <button class="chip unselected" onclick="this.classList.toggle('selected'); this.classList.toggle('unselected')">Dining</button>
+                                <button class="chip unselected" onclick="this.classList.toggle('selected'); this.classList.toggle('unselected')">Groceries</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nudges & Avatars -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">Nudge & Avatar</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Contextual alerts and user representation.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Nudge</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                                <div class="nudge info">
+                                    <svg class="nudge-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                                    <span>Analysis based on 3 linked accounts</span>
+                                </div>
+                                <div class="nudge success">
+                                    <svg class="nudge-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                    <span>You're mostly optimized!</span>
+                                </div>
+                                <div class="nudge warning">
+                                    <svg class="nudge-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                                    <span>Connection needs refreshing</span>
+                                </div>
+                                <div class="nudge destructive">
+                                    <svg class="nudge-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+                                    <span>Account disconnected</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Avatar</div>
+                            <div style="display: flex; gap: var(--space-lg); align-items: center;">
+                                <div class="avatar">AD</div>
+                                <div class="avatar small">JD</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Motion (Hover to trigger)</h2>
+            <div class="motion-grid">
+                <div class="motion-card">
+                    <div class="motion-box anim-standard"></div>
+                    <div class="type-headline">Standard</div>
+                    <div class="type-caption1" style="color: var(--text-secondary); margin-top: 4px;">response: 0.4, damping: 0.7</div>
+                </div>
+                <div class="motion-card">
+                    <div class="motion-box anim-fast"></div>
+                    <div class="type-headline">Fast</div>
+                    <div class="type-caption1" style="color: var(--text-secondary); margin-top: 4px;">response: 0.3, damping: 0.7</div>
+                </div>
+                <div class="motion-card">
+                    <div class="motion-box anim-enter"></div>
+                    <div class="type-headline">Enter</div>
+                    <div class="type-caption1" style="color: var(--text-secondary); margin-top: 4px;">response: 0.6, damping: 0.8</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Design Guidelines</h2>
+            <div class="guidelines-grid">
+                <div class="guideline-card">
+                    <h3>UX Writing & Voice</h3>
+                    <p><strong>Tone:</strong> Delightfully simple, authentically expert, and highly energetic. Monet makes credit card optimization feel like magic, not accounting.</p>
+                    <ul>
+                        <li><strong>Sentence Case:</strong> Always use sentence case for headers, buttons, and list items. (e.g. "Add a card", not "Add A Card").</li>
+                        <li><strong>Active Voice:</strong> "You earned $5.00" instead of "$5.00 was earned".</li>
+                        <li><strong>Contractions:</strong> Use them to sound human. "We're", "You've", "Can't".</li>
+                        <li><strong>Conciseness:</strong> Write headlines as if subcopy is illegal. Zero jargon.</li>
+                    </ul>
+                    <div class="vocab-list">
+                        <div class="vocab-do"><strong>Use:</strong> "Rewards", "Cards", "Wallet", "Get more from your cards."</div>
+                        <div class="vocab-dont"><strong>Banned:</strong> "Bank", "Banking", "Agent" (use "Support Team"), "Optimize Portfolio Utilization" (too jargon-heavy), "Rebates."</div>
+                    </div>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Visual Assets</h3>
+                    <h4>Icons</h4>
+                    <p>Monet exclusively uses <strong>SF Symbols</strong> to ensure flawless alignment with iOS, maintaining strict visual rules:</p>
+                    <ul>
+                        <li><strong>Less is More:</strong> Use the default standard weight. Avoid multi-colored or highly complex symbol variants for standard UI.</li>
+                        <li><strong>Clarity over Cleverness:</strong> Icons must be universally understood instantly.</li>
+                        <li><strong>Interactive vs. Informational:</strong> Interactive icons use primary or neutral foreground colors; informational icons in lists should be secondary.</li>
+                    </ul>
+                    <h4>Tapestries & Illustrations</h4>
+                    <p>For empty states or moments of high celebration, we use "Tapestries"—rich, textural illustrations utilizing generic, 3D floating primitives or vibrant color meshes to inject energy and delight.</p>
+                </div>
+
+                <div class="guideline-card full-width">
+                    <h3>Do's and Don'ts</h3>
+                    <div class="dos-donts-grid">
+                        <div class="dos-list">
+                            <h4 style="color: var(--primary);">Do</h4>
+                            <ul>
+                                <li>Use continuous corner radii for all surfaces (<code>style: .continuous</code>).</li>
+                                <li>Use <code>Theme.primaryGreen</code> (not <code>Color.green</code>) everywhere the brand green appears.</li>
+                                <li>Use <code>Theme.warningOrange</code> for missed-earnings and nudge states.</li>
+                                <li>Maintain 20px uniform padding inside cards.</li>
+                                <li>Use the canonical spring presets from the Motion section.</li>
+                            </ul>
+                        </div>
+                        <div class="donts-list">
+                            <h4 style="color: var(--destructive);">Don't</h4>
+                            <ul>
+                                <li>Use gradient text (<code>foregroundStyle(gradient)</code> on <code>Text</code>). Banned.</li>
+                                <li>Use <code>Color.green</code>, <code>Color.orange</code>, <code>Color.red</code> directly — always use Theme tokens.</li>
+                                <li>Use <code>.cornerRadius(X)</code> (non-continuous) — always <code>.clipShape(RoundedRectangle(cornerRadius: X, style: .continuous))</code>.</li>
+                                <li>Use generic "AI slop" patterns, glassmorphism, or the hero-metric template.</li>
+                                <li>Overwhelm the user with spreadsheet-like data; focus on the optimal recommendation.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+        
+        // 1. Check local storage
+        const savedTheme = localStorage.getItem('monet-theme');
+        // 2. Check system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Apply saved theme on load
+        if (savedTheme === 'dark') {
+            root.classList.add('dark-mode');
+            root.classList.remove('light-mode');
+        } else if (savedTheme === 'light') {
+            root.classList.add('light-mode');
+            root.classList.remove('dark-mode');
+        }
+        
+        toggleBtn.addEventListener('click', () => {
+            let currentIsDark;
+            
+            if (root.classList.contains('dark-mode')) {
+                currentIsDark = true;
+            } else if (root.classList.contains('light-mode')) {
+                currentIsDark = false;
+            } else {
+                currentIsDark = prefersDark;
+            }
+
+            if (currentIsDark) {
+                root.classList.remove('dark-mode');
+                root.classList.add('light-mode');
+                localStorage.setItem('monet-theme', 'light');
+            } else {
+                root.classList.remove('light-mode');
+                root.classList.add('dark-mode');
+                localStorage.setItem('monet-theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

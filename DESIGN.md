@@ -52,7 +52,7 @@ components:
 Monet is a fresh, energetic approach to points and rewards optimization. The aesthetic is Soft & Tactile, relying on smooth continuous curves that feel soft but structured. The system builds trust immediately through expert confidence while keeping the UI frictionless and uncluttered. It explicitly rejects generic, machine-generated, or "AI slop" patterns in favor of bespoke, high-craft iOS-native elements.
 
 **Key Characteristics:**
-- Tactile and smooth (20pt continuous radii)
+- Tactile and smooth (16pt standard, 20pt hero continuous radii)
 - Confident, vibrant green accents against clean backgrounds
 - Deliberate, expert craft feeling
 
@@ -138,11 +138,11 @@ Respect `accessibilityReduceMotion` — always provide a `.none` animation fallb
 ## 7. Components
 
 ### Cards / Containers
-- **Shape:** Soft & Tactile, continuous curves (`RoundedRectangle(cornerRadius: 20, style: .continuous)`)
+- **Shape:** Soft & Tactile, continuous curves (`RoundedRectangle(cornerRadius: 16, style: .continuous)`)
 - **Background:** White in light mode, dark gray in dark mode
 - **Shadow:** `appCardStyle(colorScheme:)` view modifier
 - **Internal Padding:** 20px
-- **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout
+- **Hero Result Card:** `cornerRadius: 20`, green gradient fill, white text throughout
 - **Small Card:** Used for nudges, alerts, and quick balances (e.g. "You're 200 points away").
 - **Large Card:** Highlighted content needing stronger hierarchy (e.g. physical credit card carousel, main promotions).
 
@@ -159,8 +159,8 @@ A standardized layout for transaction logs, reward categories, and card lists. A
 - **Inline Prompts:** Use for educational nudges (e.g., "Use your Chase Sapphire here for 3x points").
 
 ### Search Bar & Results
-- **Search Input:** Standardized with `appCard` style, featuring a subtle shadow and 20pt radius.
-- **Hero Result Card:** `cornerRadius: 28`, green gradient fill, white text throughout. Uses `standard` spring for entrance.
+- **Search Input:** Standardized with `appCard` style, featuring a subtle shadow and 16pt radius.
+- **Hero Result Card:** `cornerRadius: 20`, green gradient fill, white text throughout. Uses `standard` spring for entrance.
 
 ### Success & Error Views
 - **Pattern:** Full-screen immersive layouts featuring "Tapestries"—textural illustrations with generic 3D floating primitives.
