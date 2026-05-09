@@ -670,6 +670,195 @@
             font-size: 16px;
             box-shadow: 0 2.4px 4.8px rgba(38, 171, 89, 0.3);
         }
+
+        /* Segmented Control */
+        .segmented-control {
+            display: flex;
+            background-color: var(--bg-light);
+            padding: 4px;
+            border-radius: 14px;
+            gap: 0;
+        }
+        :root.dark-mode .segmented-control {
+            background-color: #1c1c1e;
+        }
+        .segmented-control-btn {
+            flex: 1;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+        .segmented-control-btn.active {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* Checkbox */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .checkbox-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid #d1d1d6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        :root.dark-mode .checkbox-box {
+            border-color: #3a3a3c;
+        }
+        .checkbox-container.checked .checkbox-box {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        .checkbox-icon {
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .checkbox-container.checked .checkbox-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Circular Button */
+        .circular-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .circular-button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+        }
+        .circular-button-container:active .circular-button {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+        .circular-button.primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        .circular-button.secondary {
+            background-color: var(--secondary);
+            color: var(--primary);
+        }
+        .circular-button.negative-primary {
+            background-color: var(--destructive);
+            color: white;
+        }
+        .circular-button.negative-secondary {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: var(--destructive);
+        }
+        .circular-button-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Text Input */
+        .text-input-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 56px;
+            padding: 0 16px;
+            background-color: var(--bg-light);
+            border-radius: 16px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        :root.dark-mode .text-input-container {
+            background-color: #1c1c1e;
+        }
+        .text-input-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--secondary);
+        }
+        .text-input-icon {
+            color: var(--text-secondary);
+            width: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .text-input-container:focus-within .text-input-icon {
+            color: var(--primary);
+        }
+        .text-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 17px;
+            color: var(--text-primary);
+            outline: none;
+        }
+        .text-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Action Prompt */
+        .action-prompt {
+            padding: var(--space-lg);
+            border-radius: 20px;
+            border: 1px solid;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        .action-prompt.error {
+            background-color: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        .action-prompt.error .prompt-title { color: var(--destructive); }
+        
+        .action-prompt.warning {
+            background-color: rgba(249, 115, 22, 0.08);
+            border-color: rgba(249, 115, 22, 0.2);
+        }
+        .action-prompt.warning .prompt-title { color: var(--warning); }
+        
+        .action-prompt.success {
+            background-color: rgba(38, 171, 89, 0.08);
+            border-color: rgba(38, 171, 89, 0.2);
+        }
+        .action-prompt.success .prompt-title { color: var(--primary); }
+        
+        .action-prompt.proposition {
+            background-color: rgba(160, 225, 225, 0.08);
+            border-color: rgba(160, 225, 225, 0.2);
+        }
+        .action-prompt.proposition .prompt-title { color: var(--bright-blue); }
+        
+        .action-prompt.neutral {
+            background-color: var(--bg-light);
+            border-color: var(--border-color);
+        }
+        :root.dark-mode .action-prompt.neutral {
+            background-color: #1c1c1e;
+        }
+        .action-prompt.neutral .prompt-title { color: var(--text-primary); }
     </style>
 </head>
 <body>
@@ -1088,6 +1277,119 @@
                             <div style="display: flex; gap: var(--space-lg); align-items: center;">
                                 <div class="avatar">AD</div>
                                 <div class="avatar small">JD</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inputs & Controls -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">Inputs & Controls</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Text input, segmented control, and checkbox.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">TextInput</div>
+                            <div class="text-input-container">
+                                <div class="text-input-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                                <input type="text" class="text-input" placeholder="Email Address">
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">SegmentedControl</div>
+                            <div class="segmented-control">
+                                <button class="segmented-control-btn active">Rewards</button>
+                                <button class="segmented-control-btn">A to Z</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">Checkbox</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                                <div class="checkbox-container checked" onclick="this.classList.toggle('checked')">
+                                    <div class="checkbox-box">
+                                        <svg class="checkbox-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                    <span class="type-body">I agree to the Terms and Conditions</span>
+                                </div>
+                                <div class="checkbox-container" onclick="this.classList.toggle('checked')">
+                                    <div class="checkbox-box">
+                                        <svg class="checkbox-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    </div>
+                                    <span class="type-body">Remember me</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions & Prompts -->
+                <div class="card">
+                    <div class="type-headline" style="margin-bottom: var(--space-xs);">Actions & Prompts</div>
+                    <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
+                        Circular buttons and contextual action prompts.
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">CircularButton</div>
+                            <div style="display: flex; gap: var(--space-xl); flex-wrap: wrap;">
+                                <div class="circular-button-container">
+                                    <div class="circular-button primary">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                    </div>
+                                    <span class="circular-button-label">Send</span>
+                                </div>
+                                <div class="circular-button-container">
+                                    <div class="circular-button secondary">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    </div>
+                                    <span class="circular-button-label">Add Card</span>
+                                </div>
+                                <div class="circular-button-container">
+                                    <div class="circular-button negative-secondary">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                    </div>
+                                    <span class="circular-button-label">Delete</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="type-footnote text-secondary" style="margin-bottom: var(--space-sm); font-weight: 500;">ActionPrompt</div>
+                            <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                                <div class="action-prompt proposition">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                                            <div class="type-headline prompt-title">New Feature</div>
+                                            <div class="type-subheadline text-secondary">Try out the new rewards optimizer.</div>
+                                        </div>
+                                        <button style="background: rgba(0,0,0,0.05); border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-secondary);">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </div>
+                                    <div style="display: flex; gap: var(--space-md);">
+                                        <button class="app-button primary" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Try it out</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-prompt error">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                                            <div class="type-headline prompt-title">Connection Failed</div>
+                                            <div class="type-subheadline text-secondary">We couldn't connect to your bank.</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; gap: var(--space-md);">
+                                        <button class="app-button destructive" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Retry</button>
+                                        <button class="app-button secondary" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Cancel</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
