@@ -13,12 +13,11 @@ Stores information about the app's users, their preferences, and Plaid integrati
 - **Attributes**:
   - `selectedCardIds` (String Array): The credit cards the user has added to their wallet.
   - `showGlobalBestCard` (Boolean): User preference toggle.
+  - `customCardRewards` (Map): User-defined reward-rate overrides keyed by `cardId -> category -> rate`.
   - `plaidItems` (List of Objects): Array of connected Plaid bank connections. Each item contains:
     - `accessToken` (String): **AES-256-CBC encrypted** Plaid access token.
     - `itemId` (String): Plaid's unique item identifier.
     - `cursor` (String, optional): Plaid Transactions Sync cursor for incremental syncing.
-  - `plaidAccessToken` (String, optional): Legacy single-connection encrypted token (maintained for backward compatibility).
-  - `plaidItemId` (String, optional): Legacy single-connection item ID.
 
 ### 2. MonetOverrides Table
 Stores custom business categorization rules defined by the user. If a user manually overrides a merchant's category in the [[Monet-iOS-App]], it is saved here to bypass the default `categorizer.ts` logic.

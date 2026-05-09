@@ -31,6 +31,7 @@ cd raw/website
 npm run dev   # → http://localhost:3001
 ```
 
-## Repository
+## Repository & Deployment
 - Hosted in the `raw/website` directory.
+- Deployed via **Firebase Hosting**. The build process generates a static export (`next build` outputs to `/out`) which is deployed to Firebase.
 - Current HEAD: `d2c7985` (Standardized component naming and design system mappings).

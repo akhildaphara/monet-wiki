@@ -4,7 +4,12 @@ The [[Card-Optimizer]] is a core logic component of the [[Croe-Backend]] that de
 The optimizer functions by evaluating a transaction's category and comparing it to the reward profiles of the cards in the user's wallet.
 
 1. **Card Data Source**: Uses `CREDIT_CARDS` and `SUPPORTED_CARDS` loaded from static resource files (`resources/cardRewardsData.ts`). Now supports **dynamic overrides** where user-specific card data (e.g., custom multipliers for Venmo or Zolve) is merged with static definitions.
-2. **Reward Calculation**: Uses the `getCashback(cardKey, categoryKey)` function to find the exact percentage or points multiplier. This calculation now factors in **user-specific multipliers** synced from the iOS app's `EditCardRewardsView`.
+2. **Reward Calculation**: Uses the `getCashback(cardKey, categoryKey, userCustomRewards)` function. This calculation evaluates multipliers in strict precedence:
+   1. **User Custom/Dynamic Rewards**: Overrides static values based on user configuration.
+   2. **Dynamic Potential**: Highest potential rate if no specific override exists.
+   3. **Special Rewards**: Fixed promotional or quarterly bonus categories.
+   4. **Standard Rewards**: Base category multiplier with fallback logic (e.g., `HOTEL` and `CAR_RENTAL` fall back to general `TRAVEL`).
+   5. **Base Rate**: `OTHER` category rate fallback.
 3. **Wallet Filtering**: When `findBestCardsForUser` is invoked with a user's wallet, it filters to valid cards and iterates over all categories to determine the highest yielding card.
 
 ## Usage in Insights Engine

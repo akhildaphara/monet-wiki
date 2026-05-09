@@ -34,13 +34,13 @@ All routes are mounted under the `/v1` prefix via a central `src/api/routes.ts` 
 | Route Group | Module | Key Endpoints |
 |---|---|---|
 | Auth | `auth/` | `POST /auth/sync` — upserts the user record on login; triggers proactive Plaid sync |
-| Cards | `cards/` | `GET /cards`, `POST /cards` — list all supported cards; update user's selected cards |
-| Categorize | `categorize/` | `GET /categorize` — categorize a merchant via brand rules or Google Places |
+| Cards | `cards/` | `GET /cards`, `POST /cards/add` — list all supported cards; add new cards to wallet |
+| Recommendations | `recommendations/` | `POST /recommend`, `POST /wallet-overview` — categorize a merchant via rule engine and recommend the best card; fetch a summary of optimal cards per category |
 | Health | `health/` | `GET /health` |
-| Overrides | `overrides/` | `POST /overrides`, `DELETE /overrides/:merchantId` — manage user category overrides |
-| Plaid | `plaid/` | `POST /plaid/sync-transactions` — syncs all Plaid items for a user. See [[Plaid-Integration]] for full breakdown |
+| Overrides | `overrides/` | `POST /user/overrides`, `DELETE /user/overrides/:merchantId` — manage user-defined category corrections |
+| Plaid | `plaid/` | `POST /plaid/create_link_token`, `POST /plaid/exchange_public_token`, `DELETE /plaid/connection/:itemId`, `GET /plaid/accounts`, `POST /plaid/insights`, `POST /plaid/sync-transactions`, `POST /plaid/webhook` — manages bank connections, transaction sync, and spending analytics |
 | Popular Categories | `popular-categories/` | `GET /popular-categories` — returns pre-computed top categories |
-| User | `user/` | `PUT /user/cards`, `PUT /user/settings`, `POST /user/custom-rewards` |
+| User | `user/` | `POST /user/cards`, `POST /user/settings`, `POST /user/cards/rewards` — update wallet, settings, and custom reward multipliers |
 
 ### Core Logic
 - `optimizer.ts`: The [[Card-Optimizer]] logic. Supports **dynamic reward structures** allowing users to override specific card multipliers (e.g., Bilt rent tiers).

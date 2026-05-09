@@ -48,6 +48,7 @@ A hidden developer menu (accessed via Profile) allows switching between AWS Prod
 ### Bank Connections & Insights
 - `BankConnectionsView.swift`: Grouped by institution. Features **pull-to-refresh** to trigger a full Plaid transaction sync across all connected items.
 - `InsightsView.swift`: Rich spending analytics using Swift Charts. Now displays a `computedAt` timestamp for the data. Configurable time ranges (30d/90d/180d).
+- `NetworkStatusBanner.swift`: A 3-state global connectivity indicator that warns users when offline or when the server is unreachable.
 
 ## Services
 - `APIClient.swift`: All network requests to the [[Croe-Backend]], including Plaid endpoints (`createPlaidLinkToken`, `exchangePlaidPublicToken`, `fetchPlaidAccounts`, `fetchInsights`, `checkPlaidStatus`, `disconnectPlaid`). Task coalescing for auth sync and health checks. Exposes `canMakeRequests()` helper that gating all view-level fetches.
@@ -57,7 +58,6 @@ A hidden developer menu (accessed via Profile) allows switching between AWS Prod
 ## Repository
 - Hosted in the `raw/swift-app` directory (previously `raw/Monet`).
 - Follows standardized naming conventions for components and services.
-.
 
 ## Offline Handling
 
