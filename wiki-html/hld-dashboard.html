@@ -502,74 +502,165 @@
             </div>
         </section>
 
+
         <!-- SCHEMA -->
         <section id="schema">
             <h2>DynamoDB Schema Map</h2>
-            <p>The application relies on a Single-Table Design pattern mapped logically into the following entities for clarity.</p>
-            <div class="diagram-wrapper">
-                <div class="mermaid">
-                    erDiagram
-                        MonetUsers {
-                            string id PK
-                            string email
-                            string name
-                        }
-                        MonetOverrides {
-                            string userId PK
-                            string merchantId "SK"
-                            string overrideData
-                        }
-                        MonetTransactions {
-                            string userId PK
-                            string transactionId "SK"
-                            string date "LSI_DateIndex"
-                            number amount
-                        }
-                        MonetInsightsCache {
-                            string userId PK
-                            string cacheKey "SK"
-                            string insightsData
-                        }
-
-                        MonetUsers ||--o{ MonetOverrides : "owns"
-                        MonetUsers ||--o{ MonetTransactions : "owns"
-                        MonetUsers ||--o{ MonetInsightsCache : "owns"
-                </div>
-            </div>
-
+            <p>The application follows a normalized repository pattern with multiple user-scoped tables, logically linked by a consistent partition key (<code>userId</code>).</p>
+            
+            <h3>MonetUsers</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Entity / Table Name</th>
-                        <th>Partition Key (PK)</th>
-                        <th>Sort Key (SK)</th>
-                        <th>LSI</th>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>MonetUsers</strong></td>
                         <td><code>id</code></td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td>String (PK)</td>
+                        <td>Google OAuth subject identifier.</td>
                     </tr>
                     <tr>
-                        <td><strong>MonetOverrides</strong></td>
+                        <td><code>showGlobalBestCard</code></td>
+                        <td>Boolean</td>
+                        <td>Whether to surface market-best recommendations.</td>
+                    </tr>
+                    <tr>
+                        <td><code>cards</code></td>
+                        <td>Map</td>
+                        <td>Keyed by <code>cardId</code>. Contains nicknames, last4, and custom reward rates.</td>
+                    </tr>
+                    <tr>
+                        <td><code>plaidItems</code></td>
+                        <td>List</td>
+                        <td>Array of bank connections (itemId, encrypted accessToken, sync cursor).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>MonetOverrides</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td><code>userId</code></td>
+                        <td>String (PK)</td>
+                        <td>Identifier of the user who owns this override.</td>
+                    </tr>
+                    <tr>
                         <td><code>merchantId</code></td>
-                        <td>-</td>
+                        <td>String (SK)</td>
+                        <td>Cleaned, lowercased merchant name.</td>
                     </tr>
                     <tr>
-                        <td><strong>MonetTransactions</strong></td>
+                        <td><code>category</code></td>
+                        <td>String</td>
+                        <td>The pinned spending category.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>MonetTransactions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td><code>userId</code></td>
+                        <td>String (PK)</td>
+                        <td>Owner of the transaction.</td>
+                    </tr>
+                    <tr>
                         <td><code>transactionId</code></td>
-                        <td><code>date</code></td>
+                        <td>String (SK)</td>
+                        <td>Plaid's unique transaction identifier.</td>
                     </tr>
                     <tr>
-                        <td><strong>MonetInsightsCache</strong></td>
+                        <td><code>date</code></td>
+                        <td>String</td>
+                        <td>ISO 8601 date. Range key for <code>DateIndex</code> LSI.</td>
+                    </tr>
+                    <tr>
+                        <td><code>accountId</code></td>
+                        <td>String</td>
+                        <td>The Plaid account ID.</td>
+                    </tr>
+                    <tr>
+                        <td><code>amount</code></td>
+                        <td>Number</td>
+                        <td>Transaction amount in USD.</td>
+                    </tr>
+                    <tr>
+                        <td><code>merchantName</code></td>
+                        <td>String</td>
+                        <td>Cleaned merchant name from Plaid.</td>
+                    </tr>
+                    <tr>
+                        <td><code>category</code></td>
+                        <td>String</td>
+                        <td>Monet-assigned spending category.</td>
+                    </tr>
+                    <tr>
+                        <td><code>pending</code></td>
+                        <td>Boolean</td>
+                        <td>Whether the transaction is authorized but not settled.</td>
+                    </tr>
+                    <tr>
+                        <td><code>primaryPersonalFinanceCategory</code></td>
+                        <td>String?</td>
+                        <td>Top-level Plaid enrichment category.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>MonetInsightsCache</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td><code>userId</code></td>
+                        <td>String (PK)</td>
+                        <td>Owner of the cache entry.</td>
+                    </tr>
+                    <tr>
                         <td><code>cacheKey</code></td>
-                        <td>-</td>
+                        <td>String (SK)</td>
+                        <td>Scope discriminator (e.g., <code>"all"</code> or <code>"account:ID"</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><code>data</code></td>
+                        <td>Map</td>
+                        <td>Serialized insights payload.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ttl</code></td>
+                        <td>Number</td>
+                        <td>Unix epoch (seconds) for automatic expiration.</td>
+                    </tr>
+                    <tr>
+                        <td><code>computedAt</code></td>
+                        <td>String</td>
+                        <td>ISO 8601 timestamp of computation.</td>
                     </tr>
                 </tbody>
             </table>
