@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Optimizer - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4f6ff',
+                            100: '#e7ebff',
+                            200: '#cfd8ff',
+                            300: '#aabaff',
+                            400: '#7a92ff',
+                            500: '#4a61ff',
+                            600: '#2a36ff',
+                            700: '#1a22eb',
+                            800: '#161cbe',
+                            900: '#151a96',
+                            950: '#0d0f57',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .prose {
+            max-width: 65ch;
+        }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 2em;
+            margin-bottom: 0.5em;
+            line-height: 1.2;
+        }
+        .prose h1 { font-size: 2.5rem; margin-top: 0; letter-spacing: -0.02em; }
+        .prose h2 { font-size: 1.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+        .prose h3 { font-size: 1.25rem; }
+        .prose p { margin-bottom: 1.25em; line-height: 1.7; color: #334155; }
+        .prose a { color: #4a61ff; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .prose a:hover { color: #1a22eb; text-decoration: underline; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.25em; color: #334155; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.25em; color: #334155; }
+        .prose li { margin-bottom: 0.5em; }
+        .prose code { 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: #f1f5f9; 
+            padding: 0.2em 0.4em; 
+            border-radius: 0.25rem; 
+            font-size: 0.875em; 
+            color: #db2777;
+        }
+        .prose pre { 
+            background-color: #1e293b; 
+            padding: 1.25em; 
+            border-radius: 0.5rem; 
+            overflow-x: auto; 
+            margin-bottom: 1.5em;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .prose pre code { 
+            background-color: transparent; 
+            padding: 0; 
+            color: #e2e8f0; 
+            font-size: 0.875em; 
+        }
+        .prose blockquote {
+            border-left: 4px solid #cbd5e1;
+            padding-left: 1em;
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 1.25em;
+            background: linear-gradient(to right, #f1f5f9, transparent);
+            padding: 1em;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+        }
+        .prose th, .prose td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75em;
+            text-align: left;
+        }
+        .prose th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .sidebar-link.active {
+            background-color: #eff6ff;
+            color: #2a36ff;
+            border-right: 3px solid #4a61ff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-brand-200 selection:text-brand-900">
+    
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col h-full shadow-sm z-10 relative">
+        <div class="p-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-display font-bold text-xl shadow-md">
+                    M
+                </div>
+                <h1 class="font-display font-bold text-xl tracking-tight text-slate-900">Monet Wiki</h1>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Documentation</p>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto py-4">
+            <nav class="space-y-1 px-3">
+                
+                    <a href="Card-Optimizer.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 active">
+                        <svg class="w-4 h-4 mr-3 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Card Optimizer
+                    </a>
+                
+                    <a href="Croe-Backend.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Croe Backend
+                    </a>
+                
+                    <a href="Database-Schema.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Database Schema
+                    </a>
+                
+                    <a href="INDEX.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        INDEX
+                    </a>
+                
+                    <a href="Monet-App-Overview.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet App Overview
+                    </a>
+                
+                    <a href="Monet-Website.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet Website
+                    </a>
+                
+                    <a href="Monet-iOS-App.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet iOS App
+                    </a>
+                
+                    <a href="Plaid-Integration.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Plaid Integration
+                    </a>
+                
+                    <a href="Wise-Design-System.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Wise Design System
+                    </a>
+                
+                    <a href="logs.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        logs
+                    </a>
+                
+            </nav>
+        </div>
+        
+        <div class="p-4 border-t border-slate-100 bg-slate-50">
+            <div class="text-xs text-slate-500 flex items-center justify-between">
+                <span>Generated automatically</span>
+                <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-[10px]">2026-05-10</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-[#f8fafc] relative">
+        <!-- Decorative background element -->
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-slate-100 to-transparent -z-10"></div>
+        
+        <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
+            <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
+                <p>The <a href="Card-Optimizer.html">Card-Optimizer</a> is a core logic component of the <a href="Croe-Backend.html">Croe-Backend</a> that determines the credit card offering the highest return for a specific transaction category. Its primary purpose is to cross-reference the user&#39;s available cards against known reward structures to maximize cashback or points. It is used both in real-time merchant search (via the <code>/v1/categorize</code> endpoint) and in the <a href="Plaid-Integration%7CInsights-Engine.html">Plaid-Integration|Insights Engine</a> for retrospective analysis of actual vs. optimal spending.</p>
+<h2>How It Works</h2>
+<p>The optimizer functions by evaluating a transaction&#39;s category and comparing it to the reward profiles of the cards in the user&#39;s wallet.</p>
+<ol>
+<li><strong>Card Data Source</strong>: Uses <code>CREDIT_CARDS</code> and <code>SUPPORTED_CARDS</code> loaded from static resource files (<code>resources/cardRewardsData.ts</code>). Now supports <strong>dynamic overrides</strong> where user-specific card data (e.g., custom multipliers for Venmo or Zolve) is merged with static definitions.</li>
+<li><strong>Reward Calculation</strong>: Uses the <code>getCashback(cardKey, categoryKey, userCustomRewards)</code> function. This calculation evaluates multipliers in strict precedence:<ol>
+<li><strong>User Custom/Dynamic Rewards</strong>: Overrides static values based on user configuration.</li>
+<li><strong>Dynamic Potential</strong>: Highest potential rate if no specific override exists.</li>
+<li><strong>Special Rewards</strong>: Fixed promotional or quarterly bonus categories.</li>
+<li><strong>Standard Rewards</strong>: Base category multiplier with fallback logic (e.g., <code>HOTEL</code> and <code>CAR_RENTAL</code> fall back to general <code>TRAVEL</code>).</li>
+<li><strong>Base Rate</strong>: <code>OTHER</code> category rate fallback.</li>
+</ol>
+</li>
+<li><strong>Wallet Filtering</strong>: When <code>findBestCardsForUser</code> is invoked with a user&#39;s wallet, it filters to valid cards and iterates over all categories to determine the highest yielding card.</li>
+</ol>
+<h2>Usage in Insights Engine</h2>
+<p>The optimizer is also used by the <a href="Plaid-Integration%7CInsights-Engine.html">Plaid-Integration|Insights Engine</a> to compute:</p>
+<ul>
+<li><strong>Actual Earnings</strong>: Based on real transaction data and user-defined card mappings.</li>
+<li><strong>Wallet Optimal</strong>: The best rate across the user&#39;s current wallet.</li>
+<li><strong>Global Optimal</strong>: The best rate across <em>all</em> supported cards (including new cards like Venmo and Zolve).</li>
+<li><strong>Incremental Card Value</strong>: Powering the &quot;Best New Card&quot; suggestion by analyzing potential gains from adding a specific card to the wallet.</li>
+</ul>
+<h2>Categorization Pipeline</h2>
+<p>The categorizer (<code>categorizer.ts</code>) feeds categories to the optimizer via a two-stage process:</p>
+<ol>
+<li><strong>Local Brand Rule Engine</strong> (<code>brandCategoryMap.ts</code>): ~900+ entries with exact, domain, substring, and fuzzy matching. Returns immediately for known brands.</li>
+<li><strong>Google Places API Fallback</strong> (<code>placesService.ts</code>): Queries the Places API, maps returned MCC/place types to internal categories.</li>
+<li><strong>Plaid Category Mapping</strong> (<code>plaidCategoryMap.ts</code>): For transaction-based analysis (insights), maps Plaid&#39;s <code>primaryPersonalFinanceCategory</code> to internal categories with high-value merchant name overrides.</li>
+</ol>
+<h2>Dependencies</h2>
+<ul>
+<li>Relies on the categorization engine (<code>categorizer.ts</code>, <code>brandCategoryMap.ts</code>, <code>placesService.ts</code>, <code>plaidCategoryMap.ts</code>) to provide an accurate category for the business.</li>
+<li>Requires up-to-date credit card reward data. A potential area for improvement (as noted in My Interests in AGENTS.md) is adding or updating credit card rewards data to keep the engine accurate.</li>
+</ul>
+
+            </article>
+            
+            <div class="mt-12 flex justify-between items-center pt-6 border-t border-slate-200 text-sm text-slate-500">
+                <p>Monet Documentation</p>
+                <a href="#" class="hover:text-brand-600 transition-colors flex items-center gap-1">
+                    Back to top
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

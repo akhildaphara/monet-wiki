@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monet Architecture Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&family=Syne:wght@500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Syne"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        monet: {
+                            900: '#050505',
+                            800: '#111111',
+                            700: '#1a1a1a',
+                            accent: '#10b981', // Emerald
+                            accent2: '#8b5cf6', // Violet
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #f3f4f6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Noise overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
+            pointer-events: none;
+            z-index: 50;
+        }
+        /* Ambient glows */
+        .glow-1 {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+        .glow-2 {
+            position: absolute;
+            bottom: -10%; right: -10%;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            overflow-x: auto;
+        }
+        /* Custom scrollbar for mermaid containers */
+        .mermaid::-webkit-scrollbar {
+            height: 8px;
+        }
+        .mermaid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+            border-radius: 4px;
+        }
+        .mermaid::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        .mermaid::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen selection:bg-monet-accent selection:text-white">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+        <!-- Header -->
+        <header class="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+            <div>
+                <a href="Monet-App-Overview.html" class="inline-flex items-center text-sm font-mono text-monet-accent hover:text-emerald-400 transition-colors mb-6 group">
+                    <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    BACK TO DOCS
+                </a>
+                <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                    System<br/>Architecture
+                </h1>
+            </div>
+            <div class="text-gray-400 max-w-sm text-sm leading-relaxed">
+                <p>Ecosystem visualization for Monet App. Mapping the relationships between iOS clients, Croe backend, AWS infrastructure, and external financial APIs.</p>
+            </div>
+        </header>
+
+        <!-- Diagrams Container -->
+        <div class="space-y-32">
+            
+            <!-- Section 1: System Context -->
+            <section class="relative">
+                <div class="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-monet-accent/50 via-transparent to-transparent hidden md:block"></div>
+                <div class="md:pl-12">
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="font-mono text-xs px-2 py-1 rounded bg-monet-accent/10 text-monet-accent border border-monet-accent/20">01</span>
+                            <h2 class="text-3xl font-display font-bold text-white">System Context</h2>
+                        </div>
+                        <p class="text-gray-400 max-w-2xl">High-level overview of the Monet ecosystem, illustrating the interactions between the iOS App, Next.js Website, Node.js Backend, and third-party services.</p>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-8 md:p-12 overflow-hidden relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="mermaid">
+graph TD
+    %% Styling
+    classDef client fill:#1e293b,stroke:#334155,stroke-width:1px,color:#f8fafc,rx:8px,ry:8px
+    classDef backend fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#f8fafc,rx:8px,ry:8px
+    classDef db fill:#020617,stroke:#8b5cf6,stroke-width:2px,color:#f8fafc,rx:8px,ry:8px
+    classDef external fill:#1e1e1e,stroke:#525252,stroke-width:1px,color:#a3a3a3,stroke-dasharray: 5 5,rx:8px,ry:8px
+    
+    subgraph Clients ["📱 Client Applications"]
+        iOS["Monet iOS App<br/>(SwiftUI / SwiftData)"]:::client
+        Web["Monet Website<br/>(Next.js)"]:::client
+    end
+    
+    subgraph Core ["⚡ Core Infrastructure"]
+        API["Croe Backend<br/>(Node.js 20 / Express / Lambda)"]:::backend
+        DB[("AWS DynamoDB<br/>(Users, Txns, Insights)")]:::db
+    end
+    
+    subgraph External ["🌐 External APIs"]
+        Plaid["Plaid API<br/>(LinkKit / Webhooks)"]:::external
+        GoogleAuth["Google Sign-in"]:::external
+        GooglePlaces["Google Places API<br/>(Merchant Categorization)"]:::external
+    end
+
+    iOS <-->|"REST API /v1"| API
+    Web -->|"Marketing / Info"| API
+    API <-->|"Read / Write"| DB
+    iOS -->|"Auth Token"| GoogleAuth
+    iOS <-->|"LinkKit Flow"| Plaid
+    API <-->|"Sync / Webhooks"| Plaid
+    API -->|"Enrichment"| GooglePlaces
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Data Flow -->
+            <section class="relative">
+                <div class="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-monet-accent2/50 via-transparent to-transparent hidden md:block"></div>
+                <div class="md:pl-12">
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="font-mono text-xs px-2 py-1 rounded bg-monet-accent2/10 text-monet-accent2 border border-monet-accent2/20">02</span>
+                            <h2 class="text-3xl font-display font-bold text-white">Data Flow: Plaid Sync & Insights</h2>
+                        </div>
+                        <p class="text-gray-400 max-w-2xl">Sequence of operations detailing how bank transactions are ingested via Plaid webhooks, processed by the calculation engine, and delivered to the iOS client.</p>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-8 md:p-12 overflow-hidden relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant Bank as 🏦 Bank
+    participant Plaid as 🔗 Plaid
+    participant API as ⚡ Croe Backend
+    participant DB as 🗄️ DynamoDB
+    participant Calc as 🧠 Calc Engine
+    participant iOS as 📱 iOS App
+
+    Bank->>Plaid: User Transactions Occur
+    Plaid->>API: Webhook (SYNC_UPDATES_AVAILABLE)
+    activate API
+    API->>Plaid: Fetch /transactions/sync
+    Plaid-->>API: Return New Transactions
+    API->>DB: Store in MonetTransactions
+    API->>Calc: Trigger Insights Update
+    activate Calc
+    Calc->>DB: Fetch User Cards & Rules
+    DB-->>Calc: Ruleset
+    Calc->>DB: Save to MonetInsightsCache
+    deactivate Calc
+    deactivate API
+
+    Note over iOS,API: User opens the app
+    iOS->>API: GET /v1/insights
+    activate API
+    API->>DB: Retrieve Cache
+    DB-->>API: Cached Insights
+    API-->>iOS: Return Insights JSON
+    deactivate API
+    iOS->>iOS: Render Insights View
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: ERD -->
+            <section class="relative">
+                <div class="absolute -left-4 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500/50 via-transparent to-transparent hidden md:block"></div>
+                <div class="md:pl-12">
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="font-mono text-xs px-2 py-1 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">03</span>
+                            <h2 class="text-3xl font-display font-bold text-white">Database Entity Relationship</h2>
+                        </div>
+                        <p class="text-gray-400 max-w-2xl">Schema design for AWS DynamoDB tables, showing the relationships between users, their transactions, manual overrides, and cached insights.</p>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl p-8 md:p-12 overflow-hidden relative group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="mermaid">
+erDiagram
+    MonetUsers ||--o{ MonetTransactions : "has many"
+    MonetUsers ||--o{ MonetOverrides : "creates"
+    MonetUsers ||--|| MonetInsightsCache : "owns"
+
+    MonetUsers {
+        string userId PK
+        string email
+        string[] selectedCardIds
+        string[] plaidItems
+        datetime createdAt
+    }
+    
+    MonetTransactions {
+        string transactionId PK
+        string userId FK
+        string merchantName
+        float amount
+        string category
+        datetime date
+    }
+    
+    MonetOverrides {
+        string overrideId PK
+        string userId FK
+        string merchantId
+        string category
+    }
+    
+    MonetInsightsCache {
+        string cacheId PK
+        string userId FK
+        json recommendations
+        datetime lastUpdated
+    }
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        
+        <!-- Footer -->
+        <footer class="mt-32 pt-8 border-t border-white/10 text-center text-gray-500 text-sm font-mono">
+            <p>Monet Architecture Dashboard &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                background: 'transparent',
+                primaryColor: '#111111',
+                primaryTextColor: '#f3f4f6',
+                primaryBorderColor: '#333333',
+                lineColor: '#525252',
+                secondaryColor: '#1a1a1a',
+                tertiaryColor: '#050505',
+                fontFamily: '"JetBrains Mono", monospace',
+                fontSize: '14px',
+                // Sequence Diagram specific
+                actorBkg: '#111111',
+                actorBorder: '#10b981',
+                actorTextColor: '#f3f4f6',
+                actorLineColor: '#525252',
+                signalColor: '#a3a3a3',
+                signalTextColor: '#d4d4d4',
+                labelBoxBkgColor: '#1a1a1a',
+                labelBoxBorderColor: '#333333',
+                labelTextColor: '#f3f4f6',
+                loopTextColor: '#f3f4f6',
+                noteBkgColor: '#1a1a1a',
+                noteBorderColor: '#8b5cf6',
+                noteTextColor: '#f3f4f6',
+            }
+        });
+    </script>
+</body>
+</html>

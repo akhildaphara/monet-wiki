@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monet Backend Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            /* Monet Design System */
+            --primary: #26ab59;
+            --secondary: rgba(38, 171, 89, 0.15);
+            --bg-light: #f2f2f7;
+            --bg-dark: #0d0d0d;
+            --card-bg-light: #ffffff;
+            --card-bg-dark: #1e1e1e;
+            --warning: #f97316;
+            --destructive: #ef4444;
+
+            /* Radii */
+            --radius-sm: 12px;
+            --radius-card: 16px;
+            --radius-hero: 20px;
+
+            /* Shadows */
+            --shadow-light: 0 5px 10px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 5px 10px rgba(0, 0, 0, 0.3);
+
+            /* Layout Mappings (Light) */
+            --bg-body: var(--bg-light);
+            --bg-sidebar: var(--card-bg-light);
+            --bg-content: var(--card-bg-light);
+            --bg-code: var(--card-bg-light);
+            --text-main: #3c3c43;
+            --text-heading: #000000;
+            --text-muted: #8e8e93;
+            --text-code: #000000;
+            --border: rgba(0, 0, 0, 0.1);
+            
+            --color-primary: var(--primary);
+            --color-primary-bg: var(--secondary);
+            
+            --color-get: #3b82f6;
+            --color-get-bg: rgba(59, 130, 246, 0.15);
+            --color-post: var(--primary);
+            --color-post-bg: var(--secondary);
+            --color-delete: var(--destructive);
+            --color-delete-bg: rgba(239, 68, 68, 0.15);
+            
+            --sidebar-width: 280px;
+            --radius: var(--radius-sm);
+            --card-shadow: var(--shadow-light);
+        }
+
+        [data-theme="dark"] {
+            /* Layout Mappings (Dark) */
+            --bg-body: var(--bg-dark);
+            --bg-sidebar: var(--card-bg-dark);
+            --bg-content: var(--card-bg-dark);
+            --bg-code: #161618;
+            --text-main: #ebebf5;
+            --text-heading: #ffffff;
+            --text-muted: #8e8e93;
+            --text-code: #ffffff;
+            --border: rgba(255, 255, 255, 0.1);
+            --card-shadow: var(--shadow-dark);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Top Nav Mobile Only */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            z-index: 50;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .menu-btn {
+            background: none; border: none; cursor: pointer;
+            color: var(--text-heading); font-size: 24px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0; bottom: 0; left: 0;
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 30px 0;
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 0 24px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 6px;
+            padding: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover { background: var(--border); }
+
+        .nav-group { margin-bottom: 24px; }
+        .nav-title {
+            padding: 0 24px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 8px 24px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-body);
+            color: var(--color-primary);
+        }
+
+        .nav-link.active {
+            border-left-color: var(--color-primary);
+            color: var(--color-primary);
+            font-weight: 600;
+            background: var(--color-primary-bg);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            max-width: 1000px;
+            padding: 60px 80px;
+        }
+
+        section {
+            margin-bottom: 80px;
+            padding-top: 20px; /* Offset for anchor tags */
+        }
+
+        h1 { font-size: 36px; font-weight: 800; color: var(--text-heading); margin-bottom: 16px; letter-spacing: -1px; }
+        h2 { font-size: 28px; font-weight: 700; color: var(--text-heading); margin-bottom: 24px; letter-spacing: -0.5px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        h3 { font-size: 20px; font-weight: 600; color: var(--text-heading); margin-bottom: 16px; margin-top: 32px; }
+        p { margin-bottom: 20px; font-size: 16px; }
+
+        /* API Accordion */
+        .api-endpoint {
+            background: var(--bg-content);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .api-header:hover { background: var(--bg-body); }
+
+        .api-method {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-right: 16px;
+            text-transform: uppercase;
+        }
+        
+        .method-get { background: var(--color-get-bg); color: var(--color-get); }
+        .method-post { background: var(--color-post-bg); color: var(--color-post); }
+        .method-delete { background: var(--color-delete-bg); color: var(--color-delete); }
+
+        .api-path {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-heading);
+            flex: 1;
+        }
+
+        .api-summary {
+            font-size: 14px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+            margin-right: 16px;
+        }
+
+        .api-expand-icon {
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+
+        .api-body {
+            display: none;
+            padding: 24px 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-content);
+        }
+
+        .api-endpoint.open .api-body { display: block; }
+        .api-endpoint.open .api-expand-icon { transform: rotate(180deg); }
+
+        /* Request / Response Layout */
+        .api-details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 800px) {
+            .api-details-grid.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .api-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .api-auth-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--border);
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .api-auth-badge.required {
+            background: var(--color-primary-bg);
+            color: var(--color-primary);
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: var(--text-code);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* Diagrams */
+        .diagram-wrapper {
+            background: var(--bg-content);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            box-shadow: var(--card-shadow);
+            padding: 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+        
+        .diagram-wrapper svg {
+            min-width: 700px;
+            max-width: none;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-body);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-heading);
+        }
+
+        td { font-size: 14px; }
+        
+        td code {
+            background: var(--bg-body);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            border: 1px solid var(--border);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.mobile-open { transform: translateX(0); box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+            .mobile-header { display: flex; }
+            .main-content { margin-left: 0; padding: 100px 24px 60px; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <div class="sidebar-title">Monet Docs</div>
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">Monet Backend</div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">Overview</div>
+            <a href="#architecture" class="nav-link">System Architecture</a>
+            <a href="#data-flows" class="nav-link">Data Flows</a>
+            <a href="#schema" class="nav-link">DynamoDB Schema</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-title">API Endpoints</div>
+            <a href="#api-auth" class="nav-link">Auth & Health</a>
+            <a href="#api-cards" class="nav-link">Cards Management</a>
+            <a href="#api-user" class="nav-link">User Profile & Overrides</a>
+            <a href="#api-recommend" class="nav-link">Recommendations</a>
+            <a href="#api-plaid" class="nav-link">Plaid Integration</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Monet Technical Reference</h1>
+        <p>A comprehensive guide to the Monet backend architecture, data flows, and REST API registry.</p>
+
+        <!-- ARCHITECTURE -->
+        <section id="architecture">
+            <h2>System Architecture Map</h2>
+            <p>The Monet platform leverages a serverless Node.js/Express Lambda architecture deployed via AWS API Gateway. It serves both the Swift iOS application and the Next.js Web client, utilizing DynamoDB for high-speed state management and integrating tightly with Plaid for transaction intelligence.</p>
+            
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    graph TD
+                        Client_iOS["📱 Swift iOS App"]
+                        Client_Web["💻 Next.js Web App"]
+                        API_Gateway["🚪 API Gateway"]
+                        Lambda_Node["⚡ Node/Express Lambda"]
+                        DB_Dynamo[("🗄️ DynamoDB\n(Users, Overrides, Transactions)")]
+                        Plaid["🏦 Plaid API"]
+                        GooglePlaces["🗺️ Google Places API"]
+
+                        Client_iOS -->|REST API| API_Gateway
+                        Client_Web -->|REST API| API_Gateway
+                        API_Gateway --> Lambda_Node
+                        Lambda_Node -->|Read/Write| DB_Dynamo
+                        Lambda_Node -->|Webhooks / Sync| Plaid
+                        Lambda_Node -->|Merchant Lookup| GooglePlaces
+                </div>
+            </div>
+        </section>
+
+        <!-- DATA FLOWS -->
+        <section id="data-flows">
+            <h2>Key Data Flows</h2>
+
+            <h3>1. Authentication & Bootstrapping</h3>
+            <p>The initial boot and synchronization flow, bringing the client up to date with the latest user profile, card wallet, and custom overrides via a single unified request.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Client as 📱 Client
+                        participant Auth as 🔑 Google Auth
+                        participant API as ⚡ Backend (/sync)
+                        participant DB as 🗄️ DynamoDB
+                        
+                        Client->>Auth: Authenticate
+                        Auth-->>Client: ID Token
+                        Client->>API: POST /v1/auth/sync (Token)
+                        API->>API: Verify Token Integrity
+                        API->>DB: Fetch User (MonetUsers)
+                        API->>DB: Fetch Overrides (MonetOverrides)
+                        DB-->>API: Data Payload
+                        API-->>Client: { user, overrides, cards }
+                </div>
+            </div>
+
+            <h3>2. Recommendation Engine</h3>
+            <p>The core path for determining the highest rewarding card for a specific merchant or broad category.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Client as 📱 Client
+                        participant API as ⚡ Backend
+                        participant Places as 🗺️ Google Places
+                        participant DB as 🗄️ DynamoDB
+                        
+                        Client->>API: POST /v1/recommend {name, category}
+                        opt Name provided without explicit category
+                            API->>Places: Query Places API
+                            Places-->>API: Merchant Category Resolution
+                        end
+                        API->>DB: Get User Rewards & Overrides
+                        API->>API: Evaluate Deck & Calculate Max Reward
+                        API-->>Client: { bestCard, allRates, marketBest }
+                </div>
+            </div>
+
+            <h3>3. Plaid Insights Processing</h3>
+            <p>A heavy computational background sync for downloading transactions, categorizing them, and generating historical spending insights and missed rewards.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Client as 📱 Client
+                        participant API as ⚡ Backend (/insights/sync)
+                        participant Plaid as 🏦 Plaid
+                        participant DB as 🗄️ DynamoDB
+                        
+                        Client->>API: POST insights/sync
+                        API->>Plaid: Fetch recent transactions
+                        Plaid-->>API: Sync Updates
+                        API->>DB: Persist new transactions
+                        
+                        loop For each transaction
+                            API->>API: Calculate actual earnings
+                            API->>API: Calculate optimal (missed) earnings
+                            API->>API: Aggregate by category
+                        end
+                        
+                        API-->>Client: { summary, categories, transactions }
+                </div>
+            </div>
+        </section>
+
+        <!-- SCHEMA -->
+        <section id="schema">
+            <h2>DynamoDB Schema Map</h2>
+            <p>The application relies on a Single-Table Design pattern mapped logically into the following entities for clarity.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    erDiagram
+                        MonetUsers {
+                            string id PK
+                            string email
+                            string name
+                        }
+                        MonetOverrides {
+                            string userId PK
+                            string merchantId "SK"
+                            string overrideData
+                        }
+                        MonetTransactions {
+                            string userId PK
+                            string transactionId "SK"
+                            string date "LSI_DateIndex"
+                            number amount
+                        }
+                        MonetInsightsCache {
+                            string userId PK
+                            string cacheKey "SK"
+                            string insightsData
+                        }
+
+                        MonetUsers ||--o{ MonetOverrides : "owns"
+                        MonetUsers ||--o{ MonetTransactions : "owns"
+                        MonetUsers ||--o{ MonetInsightsCache : "owns"
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Entity / Table Name</th>
+                        <th>Partition Key (PK)</th>
+                        <th>Sort Key (SK)</th>
+                        <th>LSI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>MonetUsers</strong></td>
+                        <td><code>id</code></td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MonetOverrides</strong></td>
+                        <td><code>userId</code></td>
+                        <td><code>merchantId</code></td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MonetTransactions</strong></td>
+                        <td><code>userId</code></td>
+                        <td><code>transactionId</code></td>
+                        <td><code>date</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>MonetInsightsCache</strong></td>
+                        <td><code>userId</code></td>
+                        <td><code>cacheKey</code></td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- API REGISTRY -->
+        <section id="api-endpoints">
+            <h2>REST API Reference</h2>
+            <p>Interactive documentation of all registered endpoints. Click any route to expand its request and response payload definitions.</p>
+
+            <h3 id="api-auth">Health & Authentication</h3>
+            
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-get">GET</span>
+                    <span class="api-path">/v1/health</span>
+                    <span class="api-summary">System health check endpoint.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Basic health ping to verify the Lambda is alive and API Gateway is routing correctly.</p>
+                    <span class="api-auth-badge">Auth: None</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "status": "string"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/auth/sync</span>
+                    <span class="api-summary">Bootstraps the client state.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Synchronizes user authentication state, profile data, and fetches the entire wallet & merchant overrides in one call.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "user": {
+    "id": "string",
+    "showGlobalBestCard": "boolean",
+    "cards": {
+      "cardId": {
+        "nickname": "string?",
+        "last4": "string?",
+        "cycleStartDate": "string?",
+        "customRewards": { "categoryId": 1.5 }
+      }
+    },
+    "plaidItems": [{ "itemId": "string" }],
+    "isNewUser": "boolean?"
+  },
+  "overrides": ["OverrideRecord"],
+  "cards": ["CardListItem"]
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="api-cards">Cards Management</h3>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/cards/add</span>
+                    <span class="api-summary">Adds cards to user's wallet.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Attaches newly selected global cards into the user's specific wallet configuration.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "cards": [
+    { "id": "string" }
+  ]
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>[
+  {
+    "category": "string",
+    "card": "string",
+    "rewards": "number"
+  }
+]</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-get">GET</span>
+                    <span class="api-path">/v1/cards</span>
+                    <span class="api-summary">Get master cards list.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Retrieves the complete master catalog of all available credit cards in the database.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>[
+  {
+    "id": "string",
+    "name": "string",
+    "note": "string?",
+    "rewards": { "categoryName": 2.0 },
+    "specialRewards": ["SpecialReward"],
+    "applyUrl": "string?",
+    "themeColorHex": "string?",
+    "imageName": "string?"
+  }
+]</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="api-user">User Profile & Overrides</h3>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/user/cards</span>
+                    <span class="api-summary">Updates custom wallet configuration.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Modifies nicknames, last 4 digits, cycle dates, or reward multipliers for existing cards in the user's wallet.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "cards": {
+    "card_id_1": {
+      "nickname": "string?",
+      "last4": "string?",
+      "cycleStartDate": "string?",
+      "customRewards": { "Dining": 3 }
+    }
+  }
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "success": "boolean",
+  "user": "SanitizedUser",
+  "cards": ["CardListItem"]
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/user/overrides</span>
+                    <span class="api-summary">Creates a merchant category override.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Forces a specific merchant to always resolve to a chosen category for the authenticated user.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "merchantName": "string",
+  "category": "string"
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "success": "boolean",
+  "override": "OverrideRecord?",
+  "error": "string?"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-delete">DELETE</span>
+                    <span class="api-path">/v1/user/overrides/:merchantId</span>
+                    <span class="api-summary">Removes a merchant override.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "success": "boolean",
+  "error": "string?"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="api-recommend">Recommendations</h3>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/recommend</span>
+                    <span class="api-summary">Core engine endpoint.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Provides credit card recommendations based on merchant name or category.</p>
+                    <span class="api-auth-badge">Auth: Optional</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "name": "string?",
+  "category": "string?",
+  "includeMarketBest": "boolean?"
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "name": "string?",
+  "category": "string?",
+  "bestCard": {
+    "cardId": "string",
+    "cardName": "string",
+    "rate": "number"
+  },
+  "allRates": ["CardRate"],
+  "marketBestCard": "CardRate?"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/wallet-overview</span>
+                    <span class="api-summary">Consolidated recommendations mapping.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Returns a consolidated overview of recommendations for all categories based strictly on the user's current wallet.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "categoryRecommendations": {
+    "Dining": {
+      "bestCard": {
+        "cardId": "string",
+        "cardName": "string",
+        "rate": "number"
+      }
+    }
+  }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="api-plaid">Plaid Integration</h3>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/plaid/insights/sync</span>
+                    <span class="api-summary">Aggregates spending insights.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Syncs transactions and computes complex spending insights, missed rewards, and optimal alternative cards based on history.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "plaidCardMappings": {
+    "plaid_account_id": "monet_card_id"
+  },
+  "cards": {
+    "cardId": {
+      "nickname": "string?",
+      "last4": "string?",
+      "cycleStartDate": "string?",
+      "customRewards": { "categoryId": 1.5 }
+    }
+  },
+  "days": "number?"
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "summary": {
+    "totalSpend": "number",
+    "actualEarnings": "number",
+    "optimalEarnings": "number",
+    "missedEarnings": "number",
+    "globalOptimalEarnings": "number",
+    "suggestedCard": {
+      "id": "string",
+      "potentialEarnings": "number",
+      "additionalEarnings": "number"
+    },
+    "usedAccountIds": ["string"]
+  },
+  "categories": [
+    {
+      "category": "string",
+      "displayName": "string",
+      "spend": "number",
+      "actual": "number",
+      "optimal": "number",
+      "bestCard": "string"
+    }
+  ],
+  "dynamicCards": ["DynamicCardData"],
+  "transactions": ["TransactionRecord"],
+  "computedAt": "string"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/plaid/create_link_token</span>
+                    <span class="api-summary">Initializes Plaid Link.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid">
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "link_token": "string?",
+  "error": "string?"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/plaid/exchange_public_token</span>
+                    <span class="api-summary">Exchanges a Plaid public token for an access token.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <span class="api-auth-badge required">Auth: Required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request Body</div>
+                            <pre>{
+  "public_token": "string"
+}</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "success": "boolean",
+  "error": "string?"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Interactive Accordions
+        function toggleEndpoint(element) {
+            const endpoint = element.parentElement;
+            endpoint.classList.toggle('open');
+        }
+
+        // Sidebar Active Links & ScrollSpy
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Fallback to sub-section IDs
+            if(!current && scrollY > 0) {
+                const subSections = document.querySelectorAll('h3[id]');
+                subSections.forEach(sub => {
+                    const subTop = sub.offsetTop;
+                    if (scrollY >= (subTop - 100)) {
+                        current = sub.getAttribute('id');
+                    }
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        }
+
+        // Close sidebar on link click (mobile)
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('sidebar').classList.remove('mobile-open');
+            });
+        });
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('docs-theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('docs-theme', 'dark');
+            }
+            // Mermaid requires reload to swap colors beautifully
+            window.location.reload();
+        }
+
+        // Init Theme
+        const savedTheme = localStorage.getItem('docs-theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Initialize Mermaid
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+            themeVariables: isDark ? {
+                primaryColor: '#26ab59',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#26ab59',
+                lineColor: '#ebebf5',
+                secondaryColor: 'rgba(38, 171, 89, 0.15)',
+                tertiaryColor: '#1e1e1e'
+            } : {
+                primaryColor: '#26ab59',
+                primaryTextColor: '#000000',
+                primaryBorderColor: '#26ab59',
+                lineColor: '#3c3c43',
+                secondaryColor: 'rgba(38, 171, 89, 0.15)',
+                tertiaryColor: '#ffffff'
+            }
+        });
+    </script>
+</body>
+</html>

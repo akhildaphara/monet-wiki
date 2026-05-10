@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Croe Backend - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4f6ff',
+                            100: '#e7ebff',
+                            200: '#cfd8ff',
+                            300: '#aabaff',
+                            400: '#7a92ff',
+                            500: '#4a61ff',
+                            600: '#2a36ff',
+                            700: '#1a22eb',
+                            800: '#161cbe',
+                            900: '#151a96',
+                            950: '#0d0f57',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .prose {
+            max-width: 65ch;
+        }
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            color: #0f172a;
+            margin-top: 2em;
+            margin-bottom: 0.5em;
+            line-height: 1.2;
+        }
+        .prose h1 { font-size: 2.5rem; margin-top: 0; letter-spacing: -0.02em; }
+        .prose h2 { font-size: 1.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+        .prose h3 { font-size: 1.25rem; }
+        .prose p { margin-bottom: 1.25em; line-height: 1.7; color: #334155; }
+        .prose a { color: #4a61ff; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .prose a:hover { color: #1a22eb; text-decoration: underline; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.25em; color: #334155; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.25em; color: #334155; }
+        .prose li { margin-bottom: 0.5em; }
+        .prose code { 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background-color: #f1f5f9; 
+            padding: 0.2em 0.4em; 
+            border-radius: 0.25rem; 
+            font-size: 0.875em; 
+            color: #db2777;
+        }
+        .prose pre { 
+            background-color: #1e293b; 
+            padding: 1.25em; 
+            border-radius: 0.5rem; 
+            overflow-x: auto; 
+            margin-bottom: 1.5em;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .prose pre code { 
+            background-color: transparent; 
+            padding: 0; 
+            color: #e2e8f0; 
+            font-size: 0.875em; 
+        }
+        .prose blockquote {
+            border-left: 4px solid #cbd5e1;
+            padding-left: 1em;
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 1.25em;
+            background: linear-gradient(to right, #f1f5f9, transparent);
+            padding: 1em;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5em;
+        }
+        .prose th, .prose td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75em;
+            text-align: left;
+        }
+        .prose th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .sidebar-link.active {
+            background-color: #eff6ff;
+            color: #2a36ff;
+            border-right: 3px solid #4a61ff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-brand-200 selection:text-brand-900">
+    
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-slate-200 flex flex-col h-full shadow-sm z-10 relative">
+        <div class="p-6 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white font-display font-bold text-xl shadow-md">
+                    M
+                </div>
+                <h1 class="font-display font-bold text-xl tracking-tight text-slate-900">Monet Wiki</h1>
+            </div>
+            <p class="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider">Documentation</p>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto py-4">
+            <nav class="space-y-1 px-3">
+                
+                    <a href="Card-Optimizer.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Card Optimizer
+                    </a>
+                
+                    <a href="Croe-Backend.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 active">
+                        <svg class="w-4 h-4 mr-3 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Croe Backend
+                    </a>
+                
+                    <a href="Database-Schema.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Database Schema
+                    </a>
+                
+                    <a href="INDEX.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        INDEX
+                    </a>
+                
+                    <a href="Monet-App-Overview.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet App Overview
+                    </a>
+                
+                    <a href="Monet-Website.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet Website
+                    </a>
+                
+                    <a href="Monet-iOS-App.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Monet iOS App
+                    </a>
+                
+                    <a href="Plaid-Integration.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Plaid Integration
+                    </a>
+                
+                    <a href="Wise-Design-System.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Wise Design System
+                    </a>
+                
+                    <a href="logs.html" 
+                       class="sidebar-link flex items-center px-3 py-2.5 text-sm rounded-md transition-all duration-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        logs
+                    </a>
+                
+            </nav>
+        </div>
+        
+        <div class="p-4 border-t border-slate-100 bg-slate-50">
+            <div class="text-xs text-slate-500 flex items-center justify-between">
+                <span>Generated automatically</span>
+                <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-[10px]">2026-05-10</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-[#f8fafc] relative">
+        <!-- Decorative background element -->
+        <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-slate-100 to-transparent -z-10"></div>
+        
+        <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
+            <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
+                <p>The <a href="Croe-Backend.html">Croe-Backend</a> is the backend server for the <a href="Monet-App-Overview.html">Monet-App-Overview</a> application. Built using Node.js and Express in TypeScript, it is responsible for providing all backend logic, serving APIs to the <a href="Monet-iOS-App.html">Monet-iOS-App</a>, handling user authentication via Google Auth, managing data persistence through <a href="Database-Schema.html">Database-Schema</a> in AWS DynamoDB, and powering the <a href="Plaid-Integration.html">Plaid-Integration</a> pipeline for transaction sync, webhook processing, and spending insights.</p>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Language</strong>: TypeScript (CommonJS / CJS)</li>
+<li><strong>Runtime</strong>: Node.js 20</li>
+<li><strong>Framework</strong>: Express.js</li>
+<li><strong>Deployment</strong>: Serverless Framework (AWS Lambda)</li>
+<li><strong>Database</strong>: AWS DynamoDB (via <code>@aws-sdk/client-dynamodb</code> and <code>@aws-sdk/lib-dynamodb</code>)</li>
+<li><strong>Authentication</strong>: Google Auth Library (<code>google-auth-library</code>) &amp; JWT Authorizer</li>
+<li><strong>External APIs</strong>: Google Places API (merchant categorization), Plaid API (bank account linking &amp; transaction sync)</li>
+<li><strong>Linting</strong>: ESLint</li>
+</ul>
+<h2>Infrastructure</h2>
+<ul>
+<li><strong>AWS Profile</strong>: Always use <code>--profile dev</code> for CLI operations.</li>
+<li><strong>Region</strong>: <code>us-east-1</code> (default).</li>
+<li><strong>Deployment</strong>: Managed via <code>serverless.yml</code> with scoped IAM permissions for Lambda functions.</li>
+</ul>
+<h2>Architecture &amp; Modules</h2>
+<p>The codebase is structured as a modular Express application designed for Lambda execution:</p>
+<h3>Entry Point</h3>
+<ul>
+<li><code>src/index.ts</code>: Local development entry point. Performs a DynamoDB health check and starts the Express server on <code>0.0.0.0:3000</code>.</li>
+<li><code>src/app.ts</code>: Constructs the Express application. Mounts global JSON parsing, the <a href="#Middleware%7Clogging-middleware.html">#Middleware|logging middleware</a>, the <code>/v1</code> API router, a root <code>/health</code> endpoint, and a global error handler.</li>
+<li><code>serverless.yml</code>: Defines the Lambda handlers, API Gateway events, and environment-specific configurations.</li>
+</ul>
+<h3>Middleware (<code>src/middleware/</code>)</h3>
+<ul>
+<li><code>auth.ts</code>: Authentication middleware. Verifies the <code>Authorization: Bearer &lt;token&gt;</code> header. Supports JWT-based authentication with automatic refresh logic in the <a href="Monet-iOS-App.html">Monet-iOS-App</a>.</li>
+<li><code>logging.ts</code>: Request/response logging middleware. Logs method, URL, query params, body, and timestamps. Redacts sensitive tokens (Plaid/Auth) from logs to ensure security.</li>
+</ul>
+<h3>API Routes (<code>src/api/</code>)</h3>
+<p>All routes are mounted under the <code>/v1</code> prefix via a central <code>src/api/routes.ts</code> router that aggregates domain-specific sub-routers:</p>
+<table>
+<thead>
+<tr>
+<th>Route Group</th>
+<th>Module</th>
+<th>Key Endpoints</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Auth</td>
+<td><code>auth/</code></td>
+<td><code>POST /auth/sync</code> — upserts the user record on login; triggers proactive Plaid sync</td>
+</tr>
+<tr>
+<td>Cards</td>
+<td><code>cards/</code></td>
+<td><code>GET /cards</code>, <code>POST /cards/add</code> — list all supported cards; add new cards to wallet</td>
+</tr>
+<tr>
+<td>Recommendations</td>
+<td><code>recommendations/</code></td>
+<td><code>POST /recommend</code>, <code>POST /wallet-overview</code> — categorize a merchant via rule engine and recommend the best card; fetch a summary of optimal cards per category</td>
+</tr>
+<tr>
+<td>Health</td>
+<td><code>health/</code></td>
+<td><code>GET /health</code></td>
+</tr>
+<tr>
+<td>Overrides</td>
+<td><code>overrides/</code></td>
+<td><code>POST /user/overrides</code>, <code>DELETE /user/overrides/:merchantId</code> — manage user-defined category corrections</td>
+</tr>
+<tr>
+<td>Plaid</td>
+<td><code>plaid/</code></td>
+<td><code>POST /plaid/create_link_token</code>, <code>POST /plaid/exchange_public_token</code>, <code>DELETE /plaid/connection/:itemId</code>, <code>GET /plaid/accounts</code>, <code>POST /plaid/insights</code>, <code>POST /plaid/sync-transactions</code>, <code>POST /plaid/webhook</code> — manages bank connections, transaction sync, and spending analytics</td>
+</tr>
+<tr>
+<td>Popular Categories</td>
+<td><code>popular-categories/</code></td>
+<td><code>GET /popular-categories</code> — returns pre-computed top categories</td>
+</tr>
+<tr>
+<td>User</td>
+<td><code>user/</code></td>
+<td><code>POST /user/cards</code>, <code>POST /user/settings</code>, <code>POST /user/cards/rewards</code> — update wallet, settings, and custom reward multipliers</td>
+</tr>
+</tbody></table>
+<h3>Core Logic</h3>
+<ul>
+<li><code>optimizer.ts</code>: The <a href="Card-Optimizer.html">Card-Optimizer</a> logic. Supports <strong>dynamic reward structures</strong> allowing users to override specific card multipliers (e.g., Bilt rent tiers).</li>
+<li><code>categorizer.ts</code>: Two-stage merchant categorization: (1) local brand rule engine via <code>evaluateBrand()</code>, (2) Google Places API fallback. Now integrates <strong>detailed Plaid categories</strong> for transaction processing.</li>
+<li><code>dao.ts</code>: Data Access Object layer for DynamoDB. Uses atomic <code>UpdateCommand</code> for user mutations. Implements AES-256-CBC encryption for Plaid tokens. Manages the <code>MonetInsightsCache</code> for pre-computed analytics.</li>
+</ul>
+<h3>Resources (<code>src/resources/</code>)</h3>
+<ul>
+<li><code>cardRewardsData.ts</code>: Static credit card reward multiplier definitions (the <code>CREDIT_CARDS</code> and <code>SUPPORTED_CARDS</code> arrays).</li>
+<li><code>categories.ts</code>: The <code>Category</code> enum and display name mappings.</li>
+<li><code>brandCategoryMap.ts</code>: Local rule engine data mapping ~900+ brand names/domains/substrings to categories.</li>
+<li><code>placesService.ts</code>: Google Places API integration with MCC-to-category bucket mapping.</li>
+<li><code>plaidCategoryMap.ts</code>: Maps Plaid&#39;s <code>primaryPersonalFinanceCategory</code> values to the internal <code>Category</code> enum, with high-value merchant name overrides (Uber, Lyft, Amazon, Whole Foods, streaming services, wholesale clubs).</li>
+</ul>
+<h2>Running the Backend</h2>
+<ul>
+<li>Development: <code>npm run dev</code> → <code>tsx watch src/index.ts</code> (hot-reload).</li>
+<li>Database: Local DynamoDB instance on <code>http://127.0.0.1:8000</code>, initialized via <code>npm run init-db</code>.</li>
+<li>Configurable via <code>.env</code> variables (<code>GOOGLE_CLIENT_ID</code>, <code>PLAID_CLIENT_ID</code>, <code>PLAID_SECRET</code>, <code>PLAID_ENCRYPTION_KEY</code>, <code>GOOGLE_PLACES_API_KEY</code>).</li>
+</ul>
+
+            </article>
+            
+            <div class="mt-12 flex justify-between items-center pt-6 border-t border-slate-200 text-sm text-slate-500">
+                <p>Monet Documentation</p>
+                <a href="#" class="hover:text-brand-600 transition-colors flex items-center gap-1">
+                    Back to top
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
