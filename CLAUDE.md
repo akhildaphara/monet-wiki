@@ -1,38 +1,6 @@
-# Knowledge Base Schema
+# Project Instructions for AI Agents
 
-## What This Is
-
-A knowledge base about the app Monet. A credit card rewards optimizer app.
-
-## How It's Organized
-
-- raw/ contains unprocessed source material. Never modify these files.
-- wiki/ contains the organized wiki. AI maintains this entirely.
-- outputs/ contains generated reports, answers, and analyses.
-
-## Wiki Rules
-
-- Every topic gets its own .md file in wiki/
-- Every wiki file starts with a one-paragraph summary
-- Link related topics to each other using [[topic-name]] format
-- Maintain an INDEX.md in wiki/ that lists every topic with a one-line description
-- When new raw sources are added, update the relevant wiki articles
-- A wiki sync log entry in `logs.md` MUST contain exactly 3 commit hashes representing the HEAD of all 3 repos (`croe`, `swift-app`, `website`). Always update these commit hashes when the wiki is synced. (Only evaluate main branch)
-
-## My Interests
-
-Suggest new Ideas.
-Make API efficient and scalable.
-Find bugs.
-Make UI/UX best in class.
-Do security analysis.
-Add/Update credit card rewards data.
-
-## Infrastructure Rules
-
-- **AWS CLI**: Always use `--profile dev` when running `aws` commands on this machine.
-- **Serverless**: Always use `--profile dev` or ensure the profile is correctly set in `serverless.yml`.
-- **Region**: The default AWS region for this project is `us-east-1`.
+This file provides instructions and context for AI coding agents working on this project.
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:7510c1e2 -->
 ## Beads Issue Tracker
@@ -81,3 +49,22 @@ bd close <id>         # Complete work
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 <!-- END BEADS INTEGRATION -->
+
+
+## Build & Test
+
+_Add your build and test commands here_
+
+```bash
+# Example:
+# npm install
+# npm test
+```
+
+## Architecture Overview
+
+_Add a brief overview of your project architecture_
+
+## Conventions & Patterns
+
+_Add your project-specific conventions here_
