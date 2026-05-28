@@ -1,0 +1,79 @@
+{
+  "id": {
+    "S": "108194136314866335376"
+  },
+  "customCardRewards": {
+    "M": {
+      "BILT_MASTERCARD": {
+        "M": {}
+      },
+      "CHASE_SAPPHIRE_PREFERRED": {
+        "M": {}
+      },
+      "DISCOVER_IT": {
+        "M": {}
+      },
+      "VENMO_CREDIT_CARD": {
+        "M": {}
+      },
+      "ZOLVE_CREDIT_CARD": {
+        "M": {}
+      }
+    }
+  },
+  "plaidItems": {
+    "L": [
+      {
+        "M": {
+          "accessToken": {
+            "S": "57b3424c88f999269fad8a9ca52b73ff:2c609bd1d604cb558f225defa06a5361e0a2c9030f8d5e9edd8f2fbdca10a614227df277762204702770f8f161a5463d4345a0cd7cf820ac2b74cb857503c376"
+          },
+          "cursor": {
+            "S": "CAESJW1vWkFlWEwwRTFTNkI0b2I2QXZEaGRxeTAxRWtKbkk4NWFvcEoaDAj3g7/PBhDg3fClAyIMCPeDv88GEODd8KUDKgwI94O/zwYQ4N3wpQM="
+          },
+          "itemId": {
+            "S": "BKD951LPqnuPg1B3PKLztKAYan0YDrs4QVopQ"
+          }
+        }
+      },
+      {
+        "M": {
+          "accessToken": {
+            "S": "35756426257b4ac80bd76466003425ec:f03085f3e9cbc3839e211b1cdfa265e415d64fe8b069bed9fc0a240b6e6e9cb83ce10222781e553703929743ec3314e8fecd749f6f03deb49f6a7af0886050c5"
+          },
+          "cursor": {
+            "S": "CAESJUV3OFA3d2dCcGRIeHg3S05PQk44aVhaZFAzUG9LcnRkWUs5YncaCwiL777PBhCo5LtmIgsIi+++zwYQqOS7ZioLCIvvvs8GEKjku2Y="
+          },
+          "itemId": {
+            "S": "6xqYAxkEXeFee9M01a0qcPLKe0q8DKf0mpqqO"
+          }
+        }
+      }
+    ]
+  },
+  "selectedCardIds": {
+    "L": [
+      {
+        "S": "CHASE_SAPPHIRE_PREFERRED"
+      },
+      {
+        "S": "DISCOVER_IT"
+      },
+      {
+        "S": "ZOLVE_CREDIT_CARD"
+      },
+      {
+        "S": "AMAZON_VISA"
+      },
+      {
+        "S": "VENMO_CREDIT_CARD"
+      },
+      {
+        "S": "BILT_MASTERCARD"
+      }
+    ]
+  },
+  "showGlobalBestCard": {
+    "BOOL": false
+  }
+}

@@ -335,6 +335,7 @@
 <ul>
 <li><code>optimizer.ts</code>: The <a href="Card-Optimizer.html">Card-Optimizer</a> logic. Supports <strong>dynamic reward structures</strong> allowing users to override specific card multipliers (e.g., Bilt rent tiers).</li>
 <li><code>categorizer.ts</code>: Two-stage merchant categorization: (1) local brand rule engine via <code>evaluateBrand()</code>, (2) Google Places API fallback. Now integrates <strong>detailed Plaid categories</strong> for transaction processing.</li>
+<li><code>aiCategorizer.ts</code>: Bulk transaction categorizer utilizing AWS Bedrock (foundation models like <code>amazon.nova-micro-v1:0</code>) to semantically classify unmapped/fallback transactions in a single batch LLM request.</li>
 <li><code>dao.ts</code>: Data Access Object layer for DynamoDB. Uses atomic <code>UpdateCommand</code> for user mutations. Implements AES-256-CBC encryption for Plaid tokens. Manages the <code>MonetInsightsCache</code> for pre-computed analytics.</li>
 </ul>
 <h3>Resources (<code>src/resources/</code>)</h3>

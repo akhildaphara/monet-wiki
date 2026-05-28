@@ -1,0 +1,3367 @@
+{
+    "Items": [
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.97"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "0j0xkXeBKzfr5LMpQkywuZnZ1mDvbkseBvp4x"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "16.35"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "0j0xkXeBKzfr5LMpQkywuZnZ1mDvbkseBvpqx"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "23.45"
+            },
+            "merchantName": {
+                "S": "MUSEE CITY"
+            },
+            "transactionId": {
+                "S": "1rj9mXE35oUnLDMq9Qe6hz1zBRV9gOubrgP75"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-12"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "5"
+            },
+            "merchantName": {
+                "S": "STP&SHPFUEL0001"
+            },
+            "transactionId": {
+                "S": "1rj9mXE35oUnLDMq9Qe6hz1zBRV9gOubrgP7V"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.97"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "1rj9mXE35oUnLDMq9Qe6hz1zBRV9gOubrgPx5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "5.14"
+            },
+            "merchantName": {
+                "S": "SC-COMPTOIR CHARENTO"
+            },
+            "transactionId": {
+                "S": "3a49NXVKZotjNPzq1bREhMwMbZjx9rsDMA1gD"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-14"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "38.38"
+            },
+            "merchantName": {
+                "S": "BRASSERIE PRES 4294938"
+            },
+            "transactionId": {
+                "S": "3a49NXVKZotjNPzq1bREhMwMbZjx9rsDMA1ga"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "16.29"
+            },
+            "merchantName": {
+                "S": "Parc des Princes"
+            },
+            "transactionId": {
+                "S": "3a49NXVKZotjNPzq1bREhMwMbZjx9rsDMA1qD"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "36.9"
+            },
+            "merchantName": {
+                "S": "FNM*TRENORD*APP TRENO"
+            },
+            "transactionId": {
+                "S": "4xazZXVk5OI3Qq0A56n1iNmN5jR37KuAzn348"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "9.65"
+            },
+            "merchantName": {
+                "S": "BOLT.EUO2605242010"
+            },
+            "transactionId": {
+                "S": "4xazZXVk5OI3Qq0A56n1iNmN5jR37KuAzn3o8"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "51.28"
+            },
+            "merchantName": {
+                "S": "ZAPI"
+            },
+            "transactionId": {
+                "S": "5dm9NXzA7oILRBEdN43Ps9m95rYMq7UDm4vny"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-19"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "45.54"
+            },
+            "merchantName": {
+                "S": "LA PASTA 3"
+            },
+            "transactionId": {
+                "S": "5dm9NXzA7oILRBEdN43Ps9m95rYMq7UDm4vxy"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "19.68"
+            },
+            "merchantName": {
+                "S": "CIOCCOLATITALIANI"
+            },
+            "transactionId": {
+                "S": "6wJ97XVvdohPr3zJmX4qUNLN9Mg6dDu0ZN8X1"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-15"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.41"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "6wJ97XVvdohPr3zJmX4qUNLN9Mg6dDu0ZN8z1"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-04-27"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "14.71"
+            },
+            "merchantName": {
+                "S": "TST*FLOUR BAKERY & CAFE-"
+            },
+            "transactionId": {
+                "S": "6wJ97XVvdohPr3zJmX4qUNLN9Mg6dDu0ZN8zE"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "8.09"
+            },
+            "merchantName": {
+                "S": "STR*Parka"
+            },
+            "transactionId": {
+                "S": "768ZOXV0wQtExyPJaQkMsBRBL34zOas3Z5e6B"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "5.35"
+            },
+            "merchantName": {
+                "S": "AZIENDATRAS"
+            },
+            "transactionId": {
+                "S": "768ZOXV0wQtExyPJaQkMsBRBL34zOas3Z5enB"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "LOAN_PAYMENTS"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "LOAN_PAYMENTS_CREDIT_CARD_PAYMENT"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "-481.02"
+            },
+            "merchantName": {
+                "S": "AUTOMATIC PAYMENT - THANK"
+            },
+            "transactionId": {
+                "S": "8LZOneVj6oCykXpLdZP3T6Y6nQe8KOS1kvD4r"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.96"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "8LZOneVj6oCykXpLdZP3T6Y6nQe8KOS1kvDEr"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "79.3"
+            },
+            "merchantName": {
+                "S": "OSTERIA DELLE TRE PANCHE"
+            },
+            "transactionId": {
+                "S": "9D5n8XOrLof9eknDx03yi848BO7nbLhXJx190"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "16.63"
+            },
+            "merchantName": {
+                "S": "Kokulist ehf"
+            },
+            "transactionId": {
+                "S": "9D5n8XOrLof9eknDx03yi848BO7nbLhXJx1Z0"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "177.51"
+            },
+            "merchantName": {
+                "S": "KLAY ST SAUVEUR"
+            },
+            "transactionId": {
+                "S": "AkPDRXVo7LTRLxkEKvM4C0M0Ojzry4hNxnV4n"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.96"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "AkPDRXVo7LTRLxkEKvM4C0M0Ojzry4hNxnVAn"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "104.73"
+            },
+            "merchantName": {
+                "S": "THANX GOD I'M A"
+            },
+            "transactionId": {
+                "S": "BAq1OXpbZDt8mJ9Z1Q5MHaVaXNwOADf4R7BZx"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-13"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "13.91"
+            },
+            "merchantName": {
+                "S": "TST* GEORGE HOWELL COFFEE"
+            },
+            "transactionId": {
+                "S": "BAq1OXpbZDt8mJ9Z1Q5MHaVaXNwOADf4R7BbA"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.99"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "BAq1OXpbZDt8mJ9Z1Q5MHaVaXNwOADf4R7Bbx"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "3.68"
+            },
+            "merchantName": {
+                "S": "SC-COMPTOIR CHARENTO"
+            },
+            "transactionId": {
+                "S": "D03K4po7XPIkMwqe5v7JS0z0rgMVEbhYQR5Kj"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "77.07"
+            },
+            "merchantName": {
+                "S": "AGODA.COM HOTEL CORO"
+            },
+            "transactionId": {
+                "S": "D03K4po7XPIkMwqe5v7JS0z0rgMVEbhYQR5Lj"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-11"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "39.7"
+            },
+            "merchantName": {
+                "S": "DD *DOORDASH SALONIKIG"
+            },
+            "transactionId": {
+                "S": "D03K4po7XPIkMwqe5v7JS0z0rgMVEbhYQR5Lk"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "109.65"
+            },
+            "merchantName": {
+                "S": "GALLO UOMO"
+            },
+            "transactionId": {
+                "S": "EjyY4po9Zqfdg6Eb3Ze8Up0pQEb1JKs6qnxo9"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.96"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "JM0w4pXD5kFa8qb41YEZsXVXYkJdA8c937y45"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "49.63"
+            },
+            "merchantName": {
+                "S": "RICCONE S.A.S."
+            },
+            "transactionId": {
+                "S": "JM0w4pXD5kFa8qb41YEZsXVXYkJdA8c937yD5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "7.56"
+            },
+            "merchantName": {
+                "S": "MATCHA CAFE 4076142"
+            },
+            "transactionId": {
+                "S": "Kgj64Yo1EAFKqpdzmgBDcxZxaNrDBMSdKm9gE"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.99"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "Kgj64Yo1EAFKqpdzmgBDcxZxaNrDBMSdKm9oE"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-14"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.42"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "Kgj64Yo1EAFKqpdzmgBDcxZxaNrDBMSdKm9ob"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-15"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.99"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "LMrLYNoPkvF1zpwryoOmTZXZb8Mg3esojBqO6"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-04"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "20"
+            },
+            "merchantName": {
+                "S": "LAUNDRY MOBCODE 617969434"
+            },
+            "transactionId": {
+                "S": "LMrLYNoPkvF1zpwryoOmTZXZb8Mg3esojBqOM"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "7.69"
+            },
+            "merchantName": {
+                "S": "ROMANTICA MILANO DANTE"
+            },
+            "transactionId": {
+                "S": "LMrLYNoPkvF1zpwryoOmTZXZb8Mg3esojBqX6"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "8.16"
+            },
+            "merchantName": {
+                "S": "PASTICCERIA BAR SAN FIR"
+            },
+            "transactionId": {
+                "S": "Mg4DbpEqQ0FAjy6DdvXrcnenZPdrbMSdgpoKA"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "103.82"
+            },
+            "merchantName": {
+                "S": "GUTTERIDGE G059"
+            },
+            "transactionId": {
+                "S": "Nma1XpoB5jCrqKOVwDxMuO1On3wD9LsYzLj6j"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "113.39"
+            },
+            "merchantName": {
+                "S": "BUDGET RENT-A-CAR"
+            },
+            "transactionId": {
+                "S": "Nma1XpoB5jCrqKOVwDxMuO1On3wD9LsYzLjD5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "3.65"
+            },
+            "merchantName": {
+                "S": "TRENORD SRL"
+            },
+            "transactionId": {
+                "S": "OExM4po3arUP0kMZ6N7BUZzZM4n1qVsoPgyOj"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "289.03"
+            },
+            "merchantName": {
+                "S": "APC Paris"
+            },
+            "transactionId": {
+                "S": "PgJMapoy54F3dAQ5LexMiY9Y5JDMj1Iw5A9NB"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-13"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "66.04"
+            },
+            "merchantName": {
+                "S": "RODRIGUE"
+            },
+            "transactionId": {
+                "S": "PgJMapoy54F3dAQ5LexMiY9Y5JDMj1Iw5A9Nk"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "1.16"
+            },
+            "merchantName": {
+                "S": "NAJAT JDOURI 4319504"
+            },
+            "transactionId": {
+                "S": "PgJMapoy54F3dAQ5LexMiY9Y5JDMj1Iw5A9qB"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "18.9"
+            },
+            "merchantName": {
+                "S": "BOUNCE - USEBOUNCE.COM"
+            },
+            "transactionId": {
+                "S": "Qg8M7poKdaFMxvPyn9Q1TBgBYJe1kzsyo48xn"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "13.41"
+            },
+            "merchantName": {
+                "S": "BUFFET FIRENZE S.M.N."
+            },
+            "transactionId": {
+                "S": "RgZMKXokwxFPbpeZ1z67UEwEM1R704IVrqwZk"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "9.33"
+            },
+            "merchantName": {
+                "S": "MERCATO CENTRALE FIRENZE"
+            },
+            "transactionId": {
+                "S": "VgEbxp5j1mF91anY3Pv6iAnANkK6oXHOJjVM1"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "6.34"
+            },
+            "merchantName": {
+                "S": "SAS EPICE 13 9260485"
+            },
+            "transactionId": {
+                "S": "VgEbxp5j1mF91anY3Pv6iAnANkK6oXHOJjVo1"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "39.66"
+            },
+            "merchantName": {
+                "S": "IL PEPERONCINO"
+            },
+            "transactionId": {
+                "S": "XgEbop54q6Fj9JRnKwqXh1E1P6OXg0CrjaENR"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-27"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "-45.87"
+            },
+            "merchantName": {
+                "S": "Refund Globalblue.com"
+            },
+            "transactionId": {
+                "S": "XgEbop54q6Fj9JRnKwqXh1E1P6OXg0CrjaEg8"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "8.17"
+            },
+            "merchantName": {
+                "S": "GELATERIA DE' COLTELLI"
+            },
+            "transactionId": {
+                "S": "YgEboeQaBLFX1OrYkbopT8v8m9Kpdwhe7qvMO"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-14"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "28.3"
+            },
+            "merchantName": {
+                "S": "SUZETTE ET GEORG"
+            },
+            "transactionId": {
+                "S": "YgEboeQaBLFX1OrYkbopT8v8m9Kpdwhe7qvXO"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "19.53"
+            },
+            "merchantName": {
+                "S": "BOLT.EUO2605241254"
+            },
+            "transactionId": {
+                "S": "YgEboeQaBLFX1OrYkbopT8v8m9Kpdwhe7qvXx"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-19"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "61.89"
+            },
+            "merchantName": {
+                "S": "LA FONTANA BELLAGIO"
+            },
+            "transactionId": {
+                "S": "ZgEbQO5xdDFRJweQA47mCB4B8vYm9Vs4Pkmax"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.96"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "ZgEbQO5xdDFRJweQA47mCB4B8vYm9Vs4Pkmgx"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "13.37"
+            },
+            "merchantName": {
+                "S": "SUZETTE ET GEORG"
+            },
+            "transactionId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK8Kb4AEr9Sj316A5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.39"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK8Kb4AEr9Sj316O5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "38.95"
+            },
+            "merchantName": {
+                "S": "ASIA 75013"
+            },
+            "transactionId": {
+                "S": "bLQqjpg7BkCJLOQybkZ5tk7kL9yo3gu6aDnZw"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "7.17"
+            },
+            "merchantName": {
+                "S": "BOUNCE - USEBOUNCE.COM"
+            },
+            "transactionId": {
+                "S": "bLQqjpg7BkCJLOQybkZ5tk7kL9yo3gu6aDnzw"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-15"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "184.98"
+            },
+            "merchantName": {
+                "S": "OUTLET SEVIGNE"
+            },
+            "transactionId": {
+                "S": "d1pqjO5zwvhM5Kwjqe1pTEeEYoRjVyI0PQY65"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "UBER"
+            },
+            "amount": {
+                "N": "28.97"
+            },
+            "merchantName": {
+                "S": "UBR* PENDING.UBER.COM"
+            },
+            "transactionId": {
+                "S": "d1pqjO5zwvhM5Kwjqe1pTEeEYoRjVyI0PQY6M"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "9.23"
+            },
+            "merchantName": {
+                "S": "AZIENDATRAS"
+            },
+            "transactionId": {
+                "S": "d1pqjO5zwvhM5Kwjqe1pTEeEYoRjVyI0PQYa5"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "21.7"
+            },
+            "merchantName": {
+                "S": "TRENITALIA - PT WL"
+            },
+            "transactionId": {
+                "S": "ePpBbOzQ60IP0k6bvQOoUALAB0or1kHx9bB3K"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "40.35"
+            },
+            "merchantName": {
+                "S": "BOLT.EUO2605242256"
+            },
+            "transactionId": {
+                "S": "ePpBbOzQ60IP0k6bvQOoUALAB0or1kHx9bBOX"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "6.86"
+            },
+            "merchantName": {
+                "S": "Orkan - Fitjum"
+            },
+            "transactionId": {
+                "S": "gBEdjOMQDrHBEvjqDwrAsz1zmJARP3uXEKJYE"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-20"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "17.49"
+            },
+            "merchantName": {
+                "S": "MERCATO CENTRALE FIRENZE"
+            },
+            "transactionId": {
+                "S": "gBEdjOMQDrHBEvjqDwrAsz1zmJARP3uXEKJjE"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "21.43"
+            },
+            "merchantName": {
+                "S": "MAISON LARDEUX"
+            },
+            "transactionId": {
+                "S": "jKELjO5QqxIENrzXyB1AsXNXJ1qQkAcZkjx7Y"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "21.3"
+            },
+            "merchantName": {
+                "S": "NOOM TEA"
+            },
+            "transactionId": {
+                "S": "jKELjO5QqxIENrzXyB1AsXNXJ1qQkAcZkjxnY"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.97"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "kkEDjOXQBJTXQ49PxdeDTN7N5ajnp3u9Zv5Xb"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.98"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "kkEDjOXQBJTXQ49PxdeDTN7N5ajnp3u9Zv5eb"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "1.98"
+            },
+            "merchantName": {
+                "S": "AUTOLINEE TOSCANE"
+            },
+            "transactionId": {
+                "S": "mvEX8NdQyZtJYOz74aQRtqKqvB9Ax3srEvb11"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-15"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.99"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "mvEX8NdQyZtJYOz74aQRtqKqvB9Ax3srEvbn1"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "UBER"
+            },
+            "amount": {
+                "N": "29.91"
+            },
+            "merchantName": {
+                "S": "UBER * EATS PENDING"
+            },
+            "transactionId": {
+                "S": "mvEX8NdQyZtJYOz74aQRtqKqvB9Ax3srEvbnq"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "7.09"
+            },
+            "merchantName": {
+                "S": "BOUNCE - USEBOUNCE.COM"
+            },
+            "transactionId": {
+                "S": "n0nZrNwQKdInoMzg7XJKhVkVEB5pY0SQXpzke"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-19"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "13.72"
+            },
+            "merchantName": {
+                "S": "BRIOCHE DOREE 2961838"
+            },
+            "transactionId": {
+                "S": "ojYokN6Qgwfj3E4R8VdkhxexX4w7baSJ0bwAK"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.96"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "ojYokN6Qgwfj3E4R8VdkhxexX4w7baSJ0bwEK"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-21"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "14"
+            },
+            "merchantName": {
+                "S": "HOTEL COROLLE"
+            },
+            "transactionId": {
+                "S": "prMOVbLnN6UrkMq3bNgju7v783pbwKseL4Ywv"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-13"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "38.56"
+            },
+            "merchantName": {
+                "S": "ELODIS SAS 4313907"
+            },
+            "transactionId": {
+                "S": "q4MZgbDNyLf49MYnbvmXsVeVpD736KSN5Ed0V"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "155.23"
+            },
+            "merchantName": {
+                "S": "OMIO *OMIO"
+            },
+            "transactionId": {
+                "S": "q4MZgbDNyLf49MYnbvmXsVeVpD736KSN5Ed0z"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "32.58"
+            },
+            "merchantName": {
+                "S": "PARIS SAINT-GERMAIN RESTA"
+            },
+            "transactionId": {
+                "S": "q4MZgbDNyLf49MYnbvmXsVeVpD736KSN5Ed6z"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "40.87"
+            },
+            "merchantName": {
+                "S": "JOHN BARBER S.R.L.S."
+            },
+            "transactionId": {
+                "S": "raMZRb1Y0Dta6M9ObPvAsP5P3Va0LriZjwXDb"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "21.51"
+            },
+            "merchantName": {
+                "S": "BOLT.EUO2605241254"
+            },
+            "transactionId": {
+                "S": "raMZRb1Y0Dta6M9ObPvAsP5P3Va0LriZjwXLb"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "9.24"
+            },
+            "merchantName": {
+                "S": "AZIENDATRAS"
+            },
+            "transactionId": {
+                "S": "v6M7Eb3XYBtmOM79b6w8cb7bJV6nqRSMP0Zek"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.97"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "v6M7Eb3XYBtmOM79b6w8cb7bJV6nqRSMP0Zqk"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "29.12"
+            },
+            "merchantName": {
+                "S": "TRAPIZZINO"
+            },
+            "transactionId": {
+                "S": "wLMxEbyQN3CgxM49byJph0904KnXBLhdJvQB8"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "60.54"
+            },
+            "merchantName": {
+                "S": "KEF KEFLAVIK DE"
+            },
+            "transactionId": {
+                "S": "wLMxEbyQN3CgxM49byJph0904KnXBLhdJvQz0"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-15"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "293.63"
+            },
+            "merchantName": {
+                "S": "LArtisan Parfumeur"
+            },
+            "transactionId": {
+                "S": "wLMxEbyQN3CgxM49byJph0904KnXBLhdJvQz8"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-25"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "40.69"
+            },
+            "merchantName": {
+                "S": "BOLT.EUO2605242256"
+            },
+            "transactionId": {
+                "S": "xDMVEbKQNyfmBMaoenZ0cwQwoOga3KSRpKdbV"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-18"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "60.84"
+            },
+            "merchantName": {
+                "S": "PIZZIUM SPA VIALE AND.."
+            },
+            "transactionId": {
+                "S": "xDMVEbKQNyfmBMaoenZ0cwQwoOga3KSRpKdxV"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-17"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "46.98"
+            },
+            "merchantName": {
+                "S": "L'AS DU FALLAFEL"
+            },
+            "transactionId": {
+                "S": "y1MAEbkQNKhA5M6abxmPcAnAXpDaygHXPgQBO"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-14"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "2.42"
+            },
+            "merchantName": {
+                "S": "SERVICE NAVIGO 4042878"
+            },
+            "transactionId": {
+                "S": "y1MAEbkQNKhA5M6abxmPcAnAXpDaygHXPgQBQ"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-24"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "192.01"
+            },
+            "merchantName": {
+                "S": "APC Paris"
+            },
+            "transactionId": {
+                "S": "y1MAEbkQNKhA5M6abxmPcAnAXpDaygHXPgQyO"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-14"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "18.87"
+            },
+            "merchantName": {
+                "S": "SOC EDITION PUB DIFFU"
+            },
+            "transactionId": {
+                "S": "zPMZEbAQNkIjNM9xQzoPhZEZBvrAKnsAkneDD"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-26"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": true
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "4.55"
+            },
+            "merchantName": {
+                "S": "City of Cambridge"
+            },
+            "transactionId": {
+                "S": "zPMZEbAQNkIjNM9xQzoPhZEZBvrAKnsAkneDk"
+            }
+        },
+        {
+            "date": {
+                "S": "2026-05-22"
+            },
+            "primaryPersonalFinanceCategory": {
+                "S": "OTHER"
+            },
+            "accountId": {
+                "S": "a6EyoO5gqKt6JBnA1OR5cK804MOMPbI3Jkd87v"
+            },
+            "detailedPersonalFinanceCategory": {
+                "S": "OTHER_OTHER"
+            },
+            "pendingTransactionId": {
+                "NULL": true
+            },
+            "userId": {
+                "S": "108194136314866335376"
+            },
+            "pending": {
+                "BOOL": false
+            },
+            "category": {
+                "S": "OTHER"
+            },
+            "amount": {
+                "N": "58.79"
+            },
+            "merchantName": {
+                "S": "167 Doppelganger MI duomo"
+            },
+            "transactionId": {
+                "S": "zPMZEbAQNkIjNM9xQzoPhZEZBvrAKnsAknebD"
+            }
+        }
+    ],
+    "Count": 96,
+    "ScannedCount": 107,
+    "ConsumedCapacity": null
+}

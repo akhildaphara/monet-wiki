@@ -311,15 +311,18 @@
 <ul>
 <li>Uses the <strong>Plaid Transactions Sync API</strong> (<code>/transactions/sync</code>) with cursor-based incremental syncing.</li>
 <li><strong>Unified Table</strong>: All transactions are stored in a unified <code>MonetTransactions</code> table.</li>
-<li><strong>180-Day Filter</strong>: Only transactions from the last 180 days are ingested and processed.</li>
+<li><strong>180-Day Active History</strong>: Configured via Plaid Link Token creation using <code>transactions: { days_requested: 180 }</code> to request 180 days of active history from the institution on item initialization.</li>
+<li><strong>Cursor Delta Syncing</strong>: <code>/transactions/sync</code> retrieves only the changes/deltas after the last saved cursor (<code>plaidItems.&lt;itemId&gt;.cursor</code>). It will not fetch historical transactions prior to the cursor's creation.</li>
+<li><strong>Forced Historical Backfill</strong>: To backfill missing history for an existing connection without re-linking, clearing the <code>cursor</code> field for the Plaid Item in <code>MonetUsers</code> forces Plaid to execute a full initial historical sync (up to 180 days) on the next refresh.</li>
 <li><strong>Proactive Sync</strong>: Triggered on token exchange and during user login (<code>/auth/sync</code>) to ensure data is fresh.</li>
 <li>Transactions are stored in the <code>MonetTransactions</code> DynamoDB table.</li>
 </ul>
-<h4>Plaid Category Mapping (<code>src/resources/plaidCategoryMap.ts</code>)</h4>
+<h4>Plaid Category Mapping (<code>src/resources/plaidCategoryMap.ts</code> &amp; <code>src/resources/aiCategorizer.ts</code>)</h4>
 <ul>
 <li>Maps Plaid&#39;s <code>primaryPersonalFinanceCategory</code> to internal categories.</li>
 <li>Integrates <strong>detailed Plaid categories</strong> for more granular mapping.</li>
 <li>High-value merchant name overrides for: Uber, Lyft, Amazon, Whole Foods, streaming services, wholesale clubs.</li>
+<li><strong>AWS Bedrock AI Bulk Fallback</strong>: If both local rules and Plaid's categorization map a transaction to <code>OTHER</code>, the sync pipeline gathers these transactions, extracts unique merchant names, and uses Amazon Bedrock (defaulting to the highly optimized <code>amazon.nova-micro-v1:0</code> foundation model) to resolve their true categories in a single bulk prompt. This keeps sync batches fast, cost-efficient, and highly accurate.</li>
 </ul>
 <h4>Token Encryption (<code>src/dao.ts</code>)</h4>
 <ul>
