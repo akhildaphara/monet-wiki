@@ -1,7 +1,0 @@
-{
-  "database": "dolt",
-  "backend": "dolt",
-  "dolt_mode": "embedded",
-  "dolt_database": "Monet",
-  "project_id": "376bff20-1716-4609-99b4-0481f8ce95dc"
-}

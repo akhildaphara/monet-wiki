@@ -1,11 +1,376 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=INDEX.html">
-    <title>Redirecting...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDEX - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4f6ff',
+                            100: '#e7ebff',
+                            200: '#cfd8ff',
+                            300: '#aabaff',
+                            400: '#7a92ff',
+                            500: '#4a61ff',
+                            600: '#2a36ff',
+                            700: '#1a22eb',
+                            800: '#161cbe',
+                            900: '#151a96',
+                            950: '#0d0f57',
+                        },
+                        monet: {
+                            green: '#26ab59',
+                            darkGreen: '#196638',
+                            lightGreen: 'rgba(38, 171, 89, 0.15)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .sidebar-link.active {
+            background-color: #eff6ff;
+            color: #2a36ff;
+            border-right: 3px solid #4a61ff;
+            font-weight: 600;
+        }
+
+        .topic-card {
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -8px rgba(38, 171, 89, 0.3);
+            border-color: #26ab59;
+        }
+    </style>
 </head>
-<body>
-    <p>Redirecting to <a href="INDEX.html">INDEX.html</a>...</p>
+<body class="flex h-screen overflow-hidden antialiased selection:bg-brand-200 selection:text-brand-900">
+    
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder" class="w-72 flex-shrink-0"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-[#f8fafc] relative">
+        <!-- Decorative background mesh -->
+        <div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-monet-lightGreen to-transparent -z-10"></div>
+        <div class="absolute top-10 right-10 w-96 h-96 bg-gradient-radial from-brand-100 to-transparent opacity-40 -z-10 blur-3xl"></div>
+        
+        <div class="max-w-6xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
+            
+            <!-- Welcome Header -->
+            <header class="mb-12">
+                <div class="flex items-center gap-2 text-monet-green font-semibold text-sm uppercase tracking-wider mb-2 font-display">
+                    <span class="w-2 h-2 rounded-full bg-monet-green animate-pulse"></span>
+                    Interactive Knowledge Base
+                </div>
+                <h1 class="text-4xl md:text-5xl font-display font-extrabold tracking-tight text-slate-900">
+                    Monet Documentation Hub
+                </h1>
+                <p class="text-slate-600 mt-3 text-lg max-w-3xl leading-relaxed">
+                    Explore specifications, design guidelines, high-level architectures, and API frameworks for Monet – a premium credit card rewards optimizer application.
+                </p>
+            </header>
+
+            <!-- Quick Stats Dashboard -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-monet-lightGreen text-monet-green flex items-center justify-center text-2xl">
+                        📄
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-display text-slate-800">9 Articles</div>
+                        <div class="text-xs text-slate-500 font-medium">Core Wiki Files</div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center text-2xl">
+                        🎨
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-display text-slate-800">1 Unified</div>
+                        <div class="text-xs text-slate-500 font-medium">Interactive Design System</div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-2xl">
+                        ⚡
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-display text-slate-800">3 Models</div>
+                        <div class="text-xs text-slate-500 font-medium">DynamoDB DB Entities</div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-2xl">
+                        ✅
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-display text-slate-800">100% Sync</div>
+                        <div class="text-xs text-slate-500 font-medium">Ecosystem Fully Aligned</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search and Filter Bar -->
+            <section class="mb-8">
+                <div class="relative bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden focus-within:border-monet-green focus-within:ring-2 focus-within:ring-monet-lightGreen transition-all duration-300">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Filter wiki topics instantly..." class="w-full pl-12 pr-4 py-4 text-slate-800 placeholder-slate-400 outline-none text-base font-medium">
+                </div>
+            </section>
+
+            <!-- Topics Grid -->
+            <section>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="topicsGrid">
+                    
+                    <!-- Overview -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="monet app overview overview documentation specifications system components">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-100 text-slate-600 font-display">System Overview</span>
+                                <span class="text-xl">📱</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Monet App Overview</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                The master blueprint of the Monet credit card rewards optimizer ecosystem. Details the connection between iOS clients, node backend, and web portals.
+                            </p>
+                        </div>
+                        <a href="Monet-App-Overview.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Optimizer -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="card optimizer rewards math cashback calculations rules engine category overrides">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-green-50 text-monet-green font-display">Core Logic</span>
+                                <span class="text-xl">🧠</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Card Optimizer</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                The core recommendation engine logic. Analyzes wallets and transaction contexts to compute optimal rewards, supporting custom dynamic user overrides.
+                            </p>
+                        </div>
+                        <a href="Card-Optimizer.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Croe Backend -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="croe backend server serverless node express lambda api endpoint routes">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-blue-50 text-blue-600 font-display">API Services</span>
+                                <span class="text-xl">⚡</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Croe Backend</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Express API services running on Node 20 and Serverless Lambda. Handles secure token encryption, Places API enrichment, and insights logic.
+                            </p>
+                        </div>
+                        <a href="Croe-Backend.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Database Schema -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="database schema dynamodb aws users transactions overrides insights caching relational erd">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-purple-50 text-purple-600 font-display">Data Architecture</span>
+                                <span class="text-xl">🗄️</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Database Schema</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                AWS DynamoDB multi-table schema specifications. Covers relational data maps, indexes, overrides, and optimized caching algorithms.
+                            </p>
+                        </div>
+                        <a href="Database-Schema.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Plaid Integration -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="plaid integration sync bank links linkkit transaction updates webhooks token security">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-orange-50 text-orange-600 font-display">Integrations</span>
+                                <span class="text-xl">🔗</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Plaid Integration</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Detailed setup for bank transaction syncing, secure access token generation, webhooks parsing, and user-led LinkKit client setup flows.
+                            </p>
+                        </div>
+                        <a href="Plaid-Integration.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Monet Website -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="monet website nextjs universal links web onboarding routes analytics seo">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-indigo-50 text-indigo-600 font-display">Web Apps</span>
+                                <span class="text-xl">🌐</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Monet Website</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Next.js landing and marketing website blueprints, incorporating Universal Link routing and custom onboarding mechanisms.
+                            </p>
+                        </div>
+                        <a href="Monet-Website.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Monet iOS App -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="monet ios app swiftui swiftdata client offline resilience active banner network gating">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-red-50 text-red-600 font-display">Client Apps</span>
+                                <span class="text-xl">📱</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Monet iOS App</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                The Swift/SwiftUI native iOS application documentation. Explains SwiftData storage, offline resilience, and network request state managers.
+                            </p>
+                        </div>
+                        <a href="Monet-iOS-App.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Design System -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="monet design system interactive colors typography spacing corner radii elevation components buttons toggles motions spring animation guidelines">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-emerald-50 text-emerald-600 font-display">UX & Aesthetics</span>
+                                <span class="text-xl">🎨</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">Monet Design System</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                The core visual language. Contains spacing tokens, spring curve presets, color cards, and live, interactive HTML component previews (buttons, toggles, chips, nudges).
+                            </p>
+                        </div>
+                        <a href="../design-system.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Architecture -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="system architecture diagrams context data flow erd sequence map dynamo relationships">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-teal-50 text-teal-600 font-display">System Maps</span>
+                                <span class="text-xl">🗺️</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">System Architecture</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Scannable architectural visuals using Mermaid. Includes data flows, synchronization sequence charts, and table entity relationship diagrams (ERD).
+                            </p>
+                        </div>
+                        <a href="architecture.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                    <!-- Logs -->
+                    <div class="topic-card bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between" data-title="logs sync log commit status hash history milestones">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-slate-100 text-slate-600 font-display">Timeline</span>
+                                <span class="text-xl">🕒</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 font-display mb-2">logs</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Chronological repository commit logs and sync records, tracking development milestones and git branches synchronization status.
+                            </p>
+                        </div>
+                        <a href="logs.html" class="inline-flex items-center text-sm font-semibold text-monet-green hover:text-monet-darkGreen transition-colors group">
+                            Read Specification
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Unified Sidebar Script -->
+    <script src="sidebar.js"></script>
+
+    <!-- Client-side instant filter script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("searchInput");
+            const topicCards = document.querySelectorAll(".topic-card");
+
+            searchInput.addEventListener("input", (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                topicCards.forEach(card => {
+                    const searchableText = card.getAttribute("data-title");
+                    if (searchableText.includes(query)) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
