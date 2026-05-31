@@ -356,6 +356,41 @@
             border: 1px solid var(--border);
         }
 
+        /* Callouts */
+        .callout {
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--color-primary);
+            background: var(--bg-content);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin: 20px 0;
+            font-size: 14px;
+            box-shadow: var(--card-shadow);
+        }
+        .callout.warn { border-left-color: var(--warning); }
+        .callout.danger { border-left-color: var(--destructive); }
+        .callout strong { color: var(--text-heading); }
+
+        /* Severity pills */
+        .pill {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .pill-info { background: var(--color-get-bg); color: var(--color-get); }
+        .pill-ok { background: var(--color-primary-bg); color: var(--color-primary); }
+        .pill-warn { background: rgba(249, 115, 22, 0.15); color: var(--warning); }
+        .pill-danger { background: var(--color-delete-bg); color: var(--color-delete); }
+
+        ol.steps { margin: 16px 0 16px 22px; }
+        ol.steps li { margin-bottom: 8px; font-size: 14px; }
+        ul.bullets { margin: 12px 0 20px 22px; }
+        ul.bullets li { margin-bottom: 8px; font-size: 14px; }
+
         /* Mobile Adjustments */
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); }
@@ -385,6 +420,7 @@
         <div class="nav-group">
             <div class="nav-title">Overview</div>
             <a href="#architecture" class="nav-link">System Architecture</a>
+            <a href="#auth-model" class="nav-link">Auth & Access Control</a>
             <a href="#data-flows" class="nav-link">Data Flows</a>
             <a href="#schema" class="nav-link">DynamoDB Schema</a>
         </div>
@@ -397,6 +433,14 @@
             <a href="#api-recommend" class="nav-link">Recommendations</a>
             <a href="#api-plaid" class="nav-link">Plaid Integration</a>
         </div>
+
+        <div class="nav-group">
+            <div class="nav-title">Operations & Contracts</div>
+            <a href="#monitoring" class="nav-link">Monitoring & Alarms</a>
+            <a href="#rate-limits" class="nav-link">Rate Limits & Throttling</a>
+            <a href="#coupling" class="nav-link">Backend ↔ iOS Contract</a>
+            <a href="#future" class="nav-link">Future Considerations</a>
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -407,26 +451,64 @@
         <!-- ARCHITECTURE -->
         <section id="architecture">
             <h2>System Architecture Map</h2>
-            <p>The Monet platform leverages a serverless Node.js/Express Lambda architecture deployed via AWS API Gateway. It serves both the Swift iOS application and the Next.js Web client, utilizing DynamoDB for high-speed state management and integrating tightly with Plaid for transaction intelligence.</p>
+            <p>The Monet platform leverages a serverless Node.js/Express Lambda architecture. Clients hit a <strong>CloudFront</strong> distribution (which edge-caches the public card catalog and injects an origin secret) fronting an AWS <strong>HTTP API Gateway</strong>. A dedicated <strong>Lambda authorizer</strong> validates every protected request, and the main API Lambda (29s timeout, 1536&nbsp;MB) reads/writes <strong>DynamoDB</strong>, integrates with <strong>Plaid</strong> for transactions, <strong>Google Places/Knowledge Graph</strong> for merchant resolution, and <strong>AWS Bedrock (Nova Micro)</strong> for AI bulk categorization.</p>
             
             <div class="diagram-wrapper">
                 <div class="mermaid">
                     graph TD
                         Client_iOS["📱 Swift iOS App"]
                         Client_Web["💻 Next.js Web App"]
-                        API_Gateway["🚪 API Gateway"]
-                        Lambda_Node["⚡ Node/Express Lambda"]
-                        DB_Dynamo[("🗄️ DynamoDB\n(Users, Overrides, Transactions)")]
+                        CloudFront["🌐 CloudFront\n(edge cache + X-Origin-Secret)"]
+                        API_Gateway["🚪 HTTP API Gateway"]
+                        Authorizer["🛂 Lambda Authorizer\n(Google / Apple / Guest JWT / Dev key)"]
+                        Lambda_Node["⚡ Node/Express API Lambda"]
+                        DB_Dynamo[("🗄️ DynamoDB\nUsers · Overrides · Transactions\nInsightsCache · BrandCache · PlaidItemIndex")]
                         Plaid["🏦 Plaid API"]
-                        GooglePlaces["🗺️ Google Places API"]
+                        GooglePlaces["🗺️ Google Places / KG"]
+                        Bedrock["🤖 AWS Bedrock\n(Nova Micro)"]
 
-                        Client_iOS -->|REST API| API_Gateway
-                        Client_Web -->|REST API| API_Gateway
+                        Client_iOS -->|HTTPS| CloudFront
+                        Client_Web -->|HTTPS| CloudFront
+                        CloudFront -->|origin secret| API_Gateway
+                        API_Gateway -.->|protected routes| Authorizer
                         API_Gateway --> Lambda_Node
                         Lambda_Node -->|Read/Write| DB_Dynamo
                         Lambda_Node -->|Webhooks / Sync| Plaid
                         Lambda_Node -->|Merchant Lookup| GooglePlaces
+                        Lambda_Node -->|Bulk categorize| Bedrock
                 </div>
+            </div>
+        </section>
+
+        <!-- AUTH & ACCESS CONTROL -->
+        <section id="auth-model">
+            <h2>Auth & Access Control</h2>
+            <p>A single <strong>Lambda request authorizer</strong> (<code>src/authorizer/handler.ts</code>) guards all protected routes. Auth caching is disabled (<code>resultTtlInSeconds: 0</code>) because credential types are mutually exclusive and API Gateway would otherwise 401 valid requests. The authorizer accepts four credential types:</p>
+            <table>
+                <thead>
+                    <tr><th>Credential</th><th>Header</th><th>Used by</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Google ID token</td><td><code>Authorization: Bearer</code></td><td>Signed-in users (Google)</td></tr>
+                    <tr><td>Apple JWT</td><td><code>Authorization: Bearer</code></td><td>Signed-in users (Apple)</td></tr>
+                    <tr><td>Guest JWT (<code>iss: monet-guest</code>)</td><td><code>Authorization: Bearer</code></td><td>Guests &mdash; minted by <code>POST /v1/auth/guest</code></td></tr>
+                    <tr><td>Dev API key</td><td><code>X-Dev-Api-Key</code></td><td>Postman / local dev only</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Edge / origin protection</h3>
+            <p>CloudFront injects a secret <code>X-Origin-Secret</code> header on every origin request; the authorizer rejects calls that lack it, so the API Gateway URL cannot be hit directly. Secrets (<code>MONET_GUEST_JWT_SECRET</code>, <code>MONET_DEV_API_KEY</code>, <code>MONET_ORIGIN_SECRET</code>, Plaid + Google keys) live in <strong>SSM Parameter Store</strong>. Plaid access tokens are encrypted at rest with <strong>AES-256-GCM</strong> (<code>PLAID_ENCRYPTION_KEY</code>, required at startup).</p>
+
+            <h3>Public (unauthenticated) endpoints</h3>
+            <p>These bypass the authorizer by design and are registered ahead of the catch-all:</p>
+            <ul class="bullets">
+                <li><code>GET /health</code> &mdash; liveness ping.</li>
+                <li><code>POST /v1/auth/guest</code> &mdash; the only public client-facing endpoint; mints a guest JWT.</li>
+                <li><code>POST /v1/plaid/webhook</code> &mdash; Plaid verifies via its own payload signature, not a user token.</li>
+                <li><code>GET /v1/cards</code> &amp; <code>GET /v1/popular-categories</code> &mdash; public, edge-cached (no PII, identical for all users). Kept public so CloudFront's <code>CachingOptimized</code> policy can cache without forwarding <code>Authorization</code>.</li>
+            </ul>
+            <div class="callout">
+                <span class="pill pill-info">Client note</span> The iOS app degrades gracefully without a session: it supports a <strong>guest</strong> flow and an <strong>on-device recommender</strong> (<code>LocalRecommender</code> + <code>PlacesCache</code>) so search/recommendations still work offline or before sign-in.
             </div>
         </section>
 
@@ -664,6 +746,15 @@
                     </tr>
                 </tbody>
             </table>
+
+            <h3>MonetBrandCache</h3>
+            <p>Caches resolved merchant&rarr;category decisions to avoid repeat Places/Bedrock calls. PK <code>brandName</code>. TTLs: confident mappings <strong>365 days</strong>; <code>OTHER</code>/low-confidence (&lt;0.5) <strong>7 days</strong>.</p>
+
+            <h3>MonetPlaidItemIndex</h3>
+            <p>Reverse index <code>itemId</code> (PK) &rarr; <code>userId</code>. Avoids a full-table scan in <code>getUserByItemId</code> on every Plaid webhook (<code>plaidItems</code> is a nested Map and cannot be a GSI key).</p>
+
+            <h3>Secondary indexes (Transactions)</h3>
+            <p><code>MonetTransactions</code> carries an LSI <code>DateIndex</code> (userId + date) plus GSIs <code>MerchantNameIndex</code> and <code>CategoryIndex</code> (each ranged by <code>date</code>). <code>MonetOverrides</code> has a <code>MerchantIdIndex</code> GSI. All tables are <code>PAY_PER_REQUEST</code>.</p>
         </section>
 
         <!-- API REGISTRY -->
@@ -1065,6 +1156,177 @@
                 </div>
             </div>
 
+            <h3 id="api-more">Additional Endpoints</h3>
+            <p>Compact reference for routes not expanded above (clients call these; payloads in <code>routeRegistry.ts</code> and iOS <code>APIClient.swift</code>).</p>
+            <table>
+                <thead>
+                    <tr><th>Method</th><th>Path</th><th>Purpose</th><th>Auth</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (public).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/popular-categories</code></td><td>Static brand&rarr;category seed for client cache (public, edge-cached).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/user/settings</code></td><td>Toggle <code>showGlobalBestCard</code>.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/plaid/webhook</code></td><td>Plaid-initiated sync trigger; verified by Plaid signature, not a user token (public).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/plaid/sync-transactions</code></td><td>Pull latest transactions for the user.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/status</code></td><td>Connection / item health.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/accounts</code></td><td>Linked accounts list.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/transactions</code></td><td>Stored transactions.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>DELETE</code></td><td><code>/v1/plaid/connection/:itemId</code></td><td>Unlink a bank item.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                </tbody>
+            </table>
+            <div class="callout warn">
+                <span class="pill pill-warn">Stale</span> <code>docs/ApiDocs.md</code> lists <code>GET /v1/categorize</code>, which no longer exists &mdash; categorization is folded into <code>POST /v1/recommend</code>.
+            </div>
+        </section>
+
+        <!-- MONITORING -->
+        <section id="monitoring">
+            <h2>Monitoring & Alarms</h2>
+            <p>Observability is defined in <code>serverless.yml</code>. All alarms publish to an SNS topic (<code>monet-&lt;stage&gt;-croe-lambda-alerts</code>) that emails the on-call address.</p>
+            <table>
+                <thead>
+                    <tr><th>Alarm / Filter</th><th>Trigger</th><th>Why it exists</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>LambdaFailureAlarm</code></td><td>&ge;1 Lambda <code>Errors</code> in 5&nbsp;min</td><td>Hard invocation failures.</td></tr>
+                    <tr><td><code>LambdaErrorRateAlarm</code></td><td>Error rate &ge;5% in 5&nbsp;min (metric math)</td><td>Degradation under load.</td></tr>
+                    <tr><td><code>CroeErrorLogMetricFilter</code> &rarr; <code>CroeErrorLogAlarm</code></td><td>Any <code>{ level: "ERROR" }</code> log line in 60&nbsp;s</td><td><span class="pill pill-warn">Key</span> Catches <strong>handled</strong> failures that return 200 &mdash; notably swallowed <strong>Bedrock <code>ThrottlingException</code></strong>, which never shows up in the AWS Lambda <code>Errors</code> metric.</td></tr>
+                    <tr><td>Bedrock invocation logging</td><td>n/a</td><td>Dedicated log group (14-day retention) + IAM role for model-invocation audit.</td></tr>
+                </tbody>
+            </table>
+            <div class="callout">
+                <span class="pill pill-info">Gap</span> Alarms cover the API Lambda only. There are <strong>no alarms on Plaid/Google failure rates, DynamoDB throttling, or CloudFront 5xx</strong>, and the SNS topic has a single email subscriber (no Slack/PagerDuty). Tracked in <a href="#future">Future Considerations</a>.
+            </div>
+        </section>
+
+        <!-- RATE LIMITS -->
+        <section id="rate-limits">
+            <h2>Rate Limits & Throttling</h2>
+            <p>Throttling today lives entirely in the Express layer (<code>src/middleware/rateLimit.ts</code>). Limits are <strong>per client IP</strong> on a <strong>60-second window</strong> and stored <strong>in-memory per warm Lambda instance</strong> &mdash; so effective ceilings scale with concurrency and are not globally shared. Exceeding a limit returns <code>429</code> with a <code>Retry-After: 60</code> header. Disabled when <code>NODE_ENV=test</code> or <code>DISABLE_RATE_LIMIT=true</code>.</p>
+
+            <h3>Application Limiters</h3>
+            <table>
+                <thead>
+                    <tr><th>Limiter</th><th>Limit</th><th>Applies To</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>globalRateLimiter</code></td><td>120 / min</td><td>Every request (<code>app.use</code>). <code>/health</code> is registered first and stays unthrottled.</td></tr>
+                    <tr><td><code>recommendRateLimiter</code></td><td>40 / min</td><td><code>POST /v1/recommend</code></td></tr>
+                    <tr><td><code>brandSearchRateLimiter</code></td><td>30 / min</td><td><code>GET /v1/brands/search</code></td></tr>
+                    <tr><td><code>guestTokenRateLimiter</code></td><td>10 / min</td><td><code>POST /v1/auth/guest</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>External Dependencies</h3>
+            <table>
+                <thead>
+                    <tr><th>Dependency</th><th>Protection</th><th>On Failure</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Google Places / Knowledge Graph</td><td>5s abort timeout. No 429/backoff. Shielded indirectly by recommend/search limiters.</td><td>Returns <code>Category.OTHER</code> or <code>null</code>.</td></tr>
+                    <tr><td>Plaid API</td><td>No backoff. Items sync in parallel via <code>Promise.allSettled</code>; specific codes handled (<code>ITEM_LOGIN_REQUIRED</code>, pagination mutation).</td><td>Skips item, retries on next webhook.</td></tr>
+                    <tr><td>AWS Bedrock (bulk categorization)</td><td><code>maxAttempts: 4</code>, <code>retryMode: "adaptive"</code>.</td><td>Merchant left uncached &rarr; retried on next sync.</td></tr>
+                    <tr><td>DynamoDB BatchGet/Write</td><td>Exponential backoff (50ms base for BatchGet; 3 retries ~200/400/800ms + jitter for BatchWrite).</td><td>Unprocessed keys re-queued.</td></tr>
+                </tbody>
+            </table>
+
+            <div class="callout warn">
+                <span class="pill pill-warn">Watch</span> <strong>No API Gateway / CloudFront throttling is configured</strong> in <code>serverless.yml</code>. The Express limits are the only guardrail, and they reset per cold start and are not shared across concurrent Lambda instances. See <a href="#future">Future Considerations</a>.
+            </div>
+        </section>
+
+        <!-- BACKEND <-> iOS CONTRACT -->
+        <section id="coupling">
+            <h2>Backend &harr; iOS Contract</h2>
+            <p>The backend (<code>croe</code>) and the iOS app (<code>swift-app</code>) share an implicit contract enforced only by matching string keys &mdash; there is <strong>no code generation</strong>. The canonical spending taxonomy lives in <strong>two hand-maintained places</strong> that must stay byte-identical on their raw values:</p>
+            <ul class="bullets">
+                <li>Backend: <code>src/resources/categories.ts</code> &mdash; <code>enum Category</code> (29 values incl. <code>OTHER</code>)</li>
+                <li>iOS: <code>MonetApp/Models/Category.swift</code> &mdash; <code>String</code>-backed <code>Category</code> enum (raw values = backend keys)</li>
+            </ul>
+
+            <div class="callout">
+                <span class="pill pill-info">Safety net</span> iOS decodes unknown category strings to <code>.other</code> (<code>Category.swift</code>), so responses never fail to parse. But a new category is invisible in UI lists, icons, labels, search, and reward maps until the iOS enum case is shipped.
+            </div>
+
+            <h3>Adding a new <code>Category</code> &mdash; required change ripple</h3>
+            <p>Adding one enum value on the backend is never self-contained. The full sequence:</p>
+            <ol class="steps">
+                <li><strong>Backend</strong> &mdash; add the case to <code>categories.ts</code>; wire <code>getDisplayName()</code> and MCC ranges in <code>getCategoryDetails()</code>/<code>categoryFromMcc()</code>.</li>
+                <li><strong>Backend mapping</strong> &mdash; map Plaid PFC and/or brand rules to it in <code>plaidCategoryMap.ts</code>, <code>brandCategoryMap.ts</code>, and Places types in <code>placesService.ts</code> &mdash; otherwise it never gets assigned.</li>
+                <li><strong>Backend rewards</strong> &mdash; reference the new key in <code>cardRewardsData.ts</code> (<code>rewards</code>, <code>specialRewards</code>, <code>allowedCategories</code>) where cards earn on it.</li>
+                <li><strong>iOS enum</strong> &mdash; add the matching case to <code>Category.swift</code> with <code>displayName</code>, <code>iconName</code>, and optional <code>synonyms</code>. <code>Category.allCases</code> drives Browse, pickers, and search.</li>
+                <li><strong>iOS search</strong> &mdash; verify <code>SearchView.swift</code> / <code>BusinessSearchService.swift</code> autocomplete (iterates <code>Category.allCases</code>); update the hardcoded offline chips if the category should appear there.</li>
+                <li><strong>iOS grouping</strong> &mdash; place the category in a group in <code>RecommendationCardView.swift</code> (Travel / Everyday / Bills) or it falls into the <code>.bills</code> catch-all.</li>
+                <li><strong>iOS brands (optional)</strong> &mdash; add merchant rows to <code>PopularBrands.swift</code> (mirrors <code>brandCategoryMap.ts</code>).</li>
+            </ol>
+
+            <h3>Other cross-repo coupling points</h3>
+            <table>
+                <thead>
+                    <tr><th>Shared contract</th><th>Backend source</th><th>iOS mirror</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Category raw keys</td><td><code>categories.ts</code></td><td><code>Category.swift</code></td></tr>
+                    <tr><td>Special-reward type strings <code>"CategorySpecial"</code> / <code>"RankedSpend"</code></td><td><code>cardRewardsData.ts</code></td><td><code>APIModels.swift</code> (<code>SpecialReward</code>)</td></tr>
+                    <tr><td>Reward / override map keys (must be valid category strings; unknown keys silently dropped)</td><td><code>cardRewardsData.ts</code></td><td><code>RewardStore.swift</code></td></tr>
+                    <tr><td>Brand &rarr; category autocomplete</td><td><code>brandCategoryMap.ts</code></td><td><code>PopularBrands.swift</code> (~160 brands)</td></tr>
+                    <tr><td>Card IDs (e.g. <code>CHASE_SAPPHIRE_PREFERRED</code>)</td><td><code>GET /v1/cards</code> catalog</td><td><code>OnboardingView.swift</code> hardcoded highlights</td></tr>
+                    <tr><td>Plaid JSON field names</td><td>Plaid passthrough + <code>syncInsights.ts</code></td><td><code>PlaidModels.swift</code> <code>CodingKeys</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Rotating / quarterly categories</h3>
+            <p>Rotating bonuses are modeled as card data, not as a scheduled system. <code>RankedSpend</code> rewards (e.g. Citi Custom Cash, Venmo, Zolve, Bilt) carry <code>allowedCategories</code> + ranked <code>tiers</code>; the <em>applied</em> tier is resolved from the user's actual spend via Plaid insights (<code>POST /v1/plaid/insights/sync</code> &rarr; iOS <code>InsightsManager.dynamicCardInsights</code>). <code>CategorySpecial</code> rewards are fixed elevated rates with optional caps. There is <strong>no quarterly schedule table, date-based rotation, or user activation flow</strong> &mdash; see below.</p>
+        </section>
+
+        <!-- FUTURE CONSIDERATIONS -->
+        <section id="future">
+            <h2>Future Considerations</h2>
+            <p>Known gaps and architectural debt to track. These are documented here as the source of truth so they are not rediscovered each session.</p>
+
+            <table>
+                <thead>
+                    <tr><th>Area</th><th>Gap</th><th>Severity</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Throttling</td>
+                        <td>No API Gateway / CloudFront throttling. Express limits are in-memory per warm instance, so real ceilings scale with Lambda concurrency and reset on cold start. Consider a shared store (DynamoDB/Redis) or a usage plan for true global limits.</td>
+                        <td><span class="pill pill-warn">Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td>Rotating categories</td>
+                        <td>Quarterly schedules exist only as code comments. <code>DISCOVER_IT</code> hardcodes only <code>GAS</code> in <code>specialRewards</code> despite a documented 4-quarter rotation; <code>CHASE_FREEDOM_FLEX</code> has <em>no</em> <code>specialRewards</code> array at all. No date-driven rotation or user "activate this quarter" model.</td>
+                        <td><span class="pill pill-danger">High</span></td>
+                    </tr>
+                    <tr>
+                        <td>Category sync</td>
+                        <td>The <code>Category</code> taxonomy is hand-duplicated across <code>categories.ts</code> and <code>Category.swift</code> with no codegen or CI check. Drift silently degrades new categories to <code>OTHER</code> on iOS.</td>
+                        <td><span class="pill pill-warn">Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td>Plaid MCC</td>
+                        <td><code>mapPlaidCategory()</code> supports an MCC step, but the sync path (<code>mapPlaidTx</code>) does not pass MCC today, so it is dead code until MCC is threaded through.</td>
+                        <td><span class="pill pill-info">Low</span></td>
+                    </tr>
+                    <tr>
+                        <td>Stale docs</td>
+                        <td><code>docs/ApiDocs.md</code> documents <code>GET /v1/categorize</code>, which no longer exists &mdash; categorization is folded into <code>POST /v1/recommend</code>.</td>
+                        <td><span class="pill pill-info">Low</span></td>
+                    </tr>
+                    <tr>
+                        <td>External resilience</td>
+                        <td>No retry/backoff for Google Places or Plaid (only a 5s Places timeout). A provider blip degrades categorization to <code>OTHER</code> rather than retrying.</td>
+                        <td><span class="pill pill-info">Low</span></td>
+                    </tr>
+                    <tr>
+                        <td>Monitoring coverage</td>
+                        <td>Alarms only watch the API Lambda. No alarms on Plaid/Google failure rates, DynamoDB throttling, or CloudFront 5xx; SNS has a single email subscriber (no Slack/PagerDuty escalation).</td>
+                        <td><span class="pill pill-warn">Medium</span></td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
     </main>

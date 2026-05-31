@@ -19,6 +19,27 @@ A knowledge base about the app Monet. A credit card rewards optimizer app.
 - When new raw sources are added, update the relevant wiki articles
 - A wiki sync log entry in `logs.md` MUST contain exactly 3 commit hashes representing the HEAD of all 3 repos (`croe`, `swift-app`, `website`). Always update these commit hashes when the wiki is synced. (Only evaluate main branch)
 
+## Source of Truth (HLD)
+
+- The High-Level Design dashboard at `wiki-html/hld-dashboard.html` is the authoritative source of truth for architecture, API contracts, rate limits, backend↔iOS coupling, and known gaps.
+- Always consult the HLD before answering architecture/design questions or making cross-cutting changes.
+- Keep the HLD **concise** — it is a high-level reference, not exhaustive documentation. Summarize; link out to detailed wiki articles for depth.
+- If you find a discrepancy between the HLD and the actual code in `raw/` (or anywhere else), **stop and inform the user** about the mismatch. Do not silently "fix" it in either direction — surface it and let the user decide.
+
+## Changelog (code repos)
+
+- Every time code is updated in `raw/swift-app` or `raw/croe`, you MUST append an entry to a `changelog.md` file at the root of that repo (`raw/swift-app/changelog.md` / `raw/croe/changelog.md`). Create the file if it does not exist.
+- Entry format — a header line `DateTime: Title` followed by a numbered list explaining the changes:
+
+  ```
+  2026-05-31 14:30: Add Utilities category to recommendation engine
+  1. Added UTILITIES case to the Category enum.
+  2. Mapped Plaid GENERAL_SERVICES primary category to UTILITIES.
+  3. Updated cardRewardsData for cards earning on utilities.
+  ```
+
+- This changelog requirement is the one sanctioned exception to "never modify `raw/`": only the `changelog.md` file (alongside the intended code change) may be written.
+
 ## My Interests
 
 Suggest new Ideas.
@@ -38,3 +59,7 @@ Add/Update credit card rewards data.
 - **AWS CLI**: Always use `--profile dev` when running `aws` commands on this machine.
 - **Serverless**: Always use `--profile dev` or ensure the profile is correctly set in `serverless.yml`.
 - **Region**: The default AWS region for this project is `us-east-1`.
+
+## Coding Guidelines
+
+- Don't add lengthy comments. The code should be self-documenting. Only add comments if you have a complex logic or a hacky solution.
