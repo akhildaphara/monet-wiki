@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication & Security - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4f6ff', 100: '#e7ebff', 200: '#cfd8ff',
+                            300: '#aabaff', 400: '#7a92ff', 500: '#4a61ff',
+                            600: '#2a36ff', 700: '#1a22eb', 800: '#161cbe',
+                            900: '#151a96', 950: '#0d0f57',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; }
+
+        /* ── Prose ── */
+        .prose h2 {
+            font-family: 'Outfit', sans-serif; font-weight: 600;
+            font-size: 1.35rem; color: #0f172a;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 0.4em;
+            margin-top: 2.5em; margin-bottom: 0.75em;
+        }
+        .prose h3 {
+            font-family: 'Outfit', sans-serif; font-weight: 600;
+            font-size: 1.05rem; color: #334155;
+            margin-top: 1.75em; margin-bottom: 0.4em;
+        }
+        .prose p { line-height: 1.75; color: #475569; margin-bottom: 1em; }
+        .prose a { color: #4a61ff; text-decoration: none; }
+        .prose code {
+            background: #f1f5f9; border-radius: 4px;
+            padding: 0.1em 0.35em; font-size: 0.82em;
+            color: #1e40af; font-family: 'Menlo', 'Consolas', monospace;
+        }
+        .prose pre { margin-bottom: 1.25em; }
+        .prose pre code { background: none; padding: 0; color: inherit; }
+        .prose ul { padding-left: 1.25em; }
+        .prose li { color: #475569; line-height: 1.7; margin-bottom: 0.3em; }
+
+        /* ── Sidebar ── */
+        .sidebar-link { font-size: 0.875rem; }
+        .sidebar-link.active { background-color: #e7ebff; color: #2a36ff; font-weight: 600; }
+        .sidebar-link.active svg { color: #4a61ff; }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 1px 7px; border-radius: 99px;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.01em;
+        }
+        .badge-blue   { background: #eff6ff; color: #1d4ed8; }
+        .badge-green  { background: #f0fdf4; color: #15803d; }
+        .badge-amber  { background: #fffbeb; color: #b45309; }
+        .badge-gray   { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .badge-purple { background: #faf5ff; color: #7c3aed; }
+
+        /* ── Cards ── */
+        .card {
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 10px; padding: 1.25rem;
+        }
+
+        /* ── Route table ── */
+        .method {
+            font-family: 'Menlo', monospace; font-size: 0.65rem; font-weight: 700;
+            padding: 2px 6px; border-radius: 4px; min-width: 42px; text-align: center;
+            display: inline-block;
+        }
+        .method-get  { background: #f0fdf4; color: #15803d; }
+        .method-post { background: #eff6ff; color: #1d4ed8; }
+        .method-any  { background: #faf5ff; color: #7c3aed; }
+
+        /* ── SVG diagram shared styles ── */
+        .node {
+            fill: white; stroke: #e2e8f0; stroke-width: 1;
+        }
+        .node-dark  { fill: #0f172a; stroke: #1e293b; stroke-width: 1; }
+        .node-blue  { fill: #1d4ed8; stroke: #1e3a8a; stroke-width: 1; }
+        .node-indigo { fill: #4a61ff; stroke: #2a36ff; stroke-width: 1; }
+        .node-green { fill: #f0fdf4; stroke: #bbf7d0; stroke-width: 1; }
+        .node-amber { fill: #fffbeb; stroke: #fde68a; stroke-width: 1; }
+        .node-slate { fill: #f8fafc; stroke: #e2e8f0; stroke-width: 1; }
+        .node-purple { fill: #faf5ff; stroke: #e9d5ff; stroke-width: 1; }
+
+        .lbl { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: #334155; }
+        .lbl-sm { font-family: 'DM Sans', sans-serif; font-size: 9px; fill: #94a3b8; }
+        .lbl-white { fill: white; }
+        .lbl-muted { fill: #94a3b8; }
+        .lbl-blue  { fill: #93c5fd; }
+        .lbl-indigo { fill: #c7d2ff; }
+
+        .arr { stroke: #cbd5e1; stroke-width: 1.2; fill: none; marker-end: url(#ah); }
+        .arr-blue { stroke: #4a61ff; stroke-width: 1.2; fill: none; marker-end: url(#ah-blue); }
+        .arr-green { stroke: #4ade80; stroke-width: 1.2; fill: none; marker-end: url(#ah-green); }
+        .arr-red   { stroke: #fca5a5; stroke-width: 1.2; fill: none; marker-end: url(#ah-red); }
+        .arr-dash  { stroke: #cbd5e1; stroke-width: 1; fill: none; stroke-dasharray: 4,3; marker-end: url(#ah); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="flex flex-1 overflow-hidden h-screen">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 lg:p-12">
+    <div class="max-w-4xl mx-auto prose">
+
+        <!-- ── Header ────────────────────────────── -->
+        <div class="mb-10">
+            <p class="text-xs font-semibold text-brand-500 uppercase tracking-widest mb-1">Security</p>
+            <h1 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-0.02em;color:#0f172a;margin:0 0 0.5em">Authentication &amp; Security</h1>
+            <p class="text-lg text-slate-400" style="margin:0">Every request flows through CloudFront → Lambda authorizer → Express. Three token types are accepted (Google, Apple, Guest JWT) plus a dev key. Guests get a real short-lived JWT so all protected routes work without signing in.</p>
+        </div>
+
+        <!-- ── Architecture ──────────────────────── -->
+        <h2>Architecture Overview</h2>
+
+        <div class="bg-white rounded-xl border border-slate-200 p-5 overflow-x-auto">
+            <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg" style="min-width:640px;width:100%;height:auto;">
+                <defs>
+                    <marker id="ah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#94a3b8"/>
+                    </marker>
+                    <marker id="ah-blue" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#4a61ff"/>
+                    </marker>
+                    <marker id="ah-green" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#4ade80"/>
+                    </marker>
+                    <marker id="ah-red" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#fca5a5"/>
+                    </marker>
+                </defs>
+
+                <!-- Clients -->
+                <rect x="10" y="36" width="120" height="40" rx="7" class="node"/>
+                <text x="70" y="52" text-anchor="middle" class="lbl" font-weight="600">iOS Guest</text>
+                <text x="70" y="67" text-anchor="middle" class="lbl-sm">Bearer guest-JWT</text>
+
+                <rect x="10" y="90" width="120" height="40" rx="7" class="node"/>
+                <text x="70" y="106" text-anchor="middle" class="lbl" font-weight="600">iOS Signed-in</text>
+                <text x="70" y="121" text-anchor="middle" class="lbl-sm">Google / Apple JWT</text>
+
+                <rect x="10" y="144" width="120" height="40" rx="7" class="node-amber"/>
+                <text x="70" y="160" text-anchor="middle" class="lbl" font-weight="600">Postman / Dev</text>
+                <text x="70" y="175" text-anchor="middle" class="lbl-sm">X-Dev-Api-Key</text>
+
+                <rect x="10" y="198" width="120" height="40" rx="7" class="node-slate"/>
+                <text x="70" y="214" text-anchor="middle" class="lbl" font-weight="600">Any Client</text>
+                <text x="70" y="229" text-anchor="middle" class="lbl-sm">public routes only</text>
+
+                <!-- arrows → CF -->
+                <line x1="130" y1="56" x2="200" y2="100" class="arr"/>
+                <line x1="130" y1="110" x2="200" y2="112" class="arr"/>
+                <line x1="130" y1="164" x2="200" y2="124" class="arr"/>
+                <line x1="130" y1="218" x2="200" y2="136" class="arr" stroke-dasharray="4,3"/>
+
+                <!-- CloudFront -->
+                <rect x="200" y="80" width="140" height="72" rx="8" class="node-blue"/>
+                <text x="270" y="104" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="13" fill="white">CloudFront</text>
+                <text x="270" y="120" text-anchor="middle" class="lbl-sm lbl-blue">Adds X-Origin-Secret</text>
+                <text x="270" y="135" text-anchor="middle" class="lbl-sm lbl-blue">Caches /v1/cards</text>
+                <text x="270" y="148" text-anchor="middle" class="lbl-sm lbl-blue">/v1/popular-categories</text>
+
+                <!-- CF → APIGW -->
+                <line x1="340" y1="116" x2="400" y2="116" class="arr"/>
+                <text x="370" y="108" text-anchor="middle" class="lbl-sm">HTTPS</text>
+
+                <!-- API Gateway -->
+                <rect x="400" y="80" width="140" height="72" rx="8" class="node-dark"/>
+                <text x="470" y="110" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="13" fill="white">API Gateway</text>
+                <text x="470" y="127" text-anchor="middle" class="lbl-sm lbl-muted">HTTP API</text>
+                <text x="470" y="142" text-anchor="middle" class="lbl-sm lbl-muted">Routes requests</text>
+
+                <!-- GW → Authorizer (protected) -->
+                <path d="M540 96 Q590 60 620 82" class="arr-blue" stroke-dasharray="4,3"/>
+                <text x="584" y="57" text-anchor="middle" class="lbl-sm" fill="#4a61ff">protected routes</text>
+
+                <!-- GW → Lambda (public) -->
+                <line x1="540" y1="136" x2="615" y2="136" class="arr-green" stroke-dasharray="4,3"/>
+                <text x="577" y="150" text-anchor="middle" class="lbl-sm" fill="#4ade80">public routes</text>
+
+                <!-- Lambda Authorizer -->
+                <rect x="618" y="52" width="190" height="62" rx="8" class="node-indigo"/>
+                <text x="713" y="77" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="12" fill="white">Lambda Authorizer</text>
+                <text x="713" y="93" text-anchor="middle" class="lbl-sm lbl-indigo">guest · Google · Apple · dev-key</text>
+                <text x="713" y="107" text-anchor="middle" class="lbl-sm lbl-indigo">returns userId in context</text>
+
+                <!-- Authorizer → Express (allow) -->
+                <path d="M713 114 Q713 136 690 136" class="arr-green"/>
+                <text x="730" y="130" text-anchor="start" class="lbl-sm" fill="#4ade80">allow</text>
+
+                <!-- Authorizer → 403 (deny) -->
+                <path d="M808 85 Q845 85 845 330 Q845 365 810 365" class="arr-red" stroke-dasharray="4,3"/>
+                <text x="854" y="248" text-anchor="middle" class="lbl-sm" fill="#fca5a5" transform="rotate(90,854,248)">403 Forbidden</text>
+
+                <!-- 403 box -->
+                <rect x="718" y="348" width="90" height="28" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+                <text x="763" y="367" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" font-weight="600" fill="#dc2626">403 / 401</text>
+
+                <!-- Express Lambda -->
+                <rect x="618" y="118" width="190" height="68" rx="8" class="node-dark"/>
+                <text x="713" y="147" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="12" fill="white">Express Lambda</text>
+                <text x="713" y="163" text-anchor="middle" class="lbl-sm lbl-muted">userId from authorizer context</text>
+                <text x="713" y="178" text-anchor="middle" class="lbl-sm lbl-muted">direct verify fallback (local dev)</text>
+
+                <!-- Express → DynamoDB -->
+                <line x1="713" y1="186" x2="713" y2="230" class="arr"/>
+
+                <!-- DynamoDB -->
+                <rect x="618" y="230" width="190" height="48" rx="8" class="node"/>
+                <text x="713" y="252" text-anchor="middle" class="lbl" font-weight="600">DynamoDB</text>
+                <text x="713" y="268" text-anchor="middle" class="lbl-sm">Users · Overrides · Transactions</text>
+
+                <!-- SSM note -->
+                <rect x="10" y="320" width="400" height="58" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="5,3"/>
+                <text x="210" y="342" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#64748b">AWS SSM Parameter Store</text>
+                <text x="210" y="358" text-anchor="middle" class="lbl-sm">/monet/dev/guest-jwt-secret · /monet/dev/dev-api-key · /monet/dev/origin-secret</text>
+                <text x="210" y="372" text-anchor="middle" class="lbl-sm">Injected as Lambda env vars at deploy time</text>
+            </svg>
+        </div>
+
+        <!-- ── Token Types ────────────────────────── -->
+        <h2>Token Types</h2>
+        <p>The Lambda authorizer checks credentials in priority order. First match wins.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 not-prose mb-8">
+
+            <div class="card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-semibold text-slate-800 text-sm">Guest JWT</span>
+                    <span class="badge badge-blue">Priority 2</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">Short-lived token from <code class="text-xs">POST /v1/auth/guest</code>. Gives unauthenticated users access to the full app without signing in.</p>
+                <div class="bg-slate-50 rounded-lg p-3 font-mono text-xs text-slate-600 space-y-1">
+                    <div><span class="text-slate-400">alg</span>  HS256</div>
+                    <div><span class="text-slate-400">iss</span>  monet-guest</div>
+                    <div><span class="text-slate-400">sub</span>  guest-&lt;uuid&gt;</div>
+                    <div><span class="text-slate-400">exp</span>  1 hour</div>
+                    <div><span class="text-slate-400">key</span>  SSM /monet/dev/guest-jwt-secret</div>
+                </div>
+                <p class="text-xs text-slate-400 mt-3">Stored in-memory only. Auto-refreshed via <code class="text-xs">onTokenExpired</code>.</p>
+            </div>
+
+            <div class="card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-semibold text-slate-800 text-sm">Google JWT</span>
+                    <span class="badge badge-green">Priority 3</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">ID token from Google Sign-In. Verified against Google's public JWKS. <code class="text-xs">sub</code> becomes the permanent userId.</p>
+                <div class="bg-slate-50 rounded-lg p-3 font-mono text-xs text-slate-600 space-y-1">
+                    <div><span class="text-slate-400">iss</span>  accounts.google.com</div>
+                    <div><span class="text-slate-400">aud</span>  monet Google client ID</div>
+                    <div><span class="text-slate-400">exp</span>  ~1 hour</div>
+                    <div><span class="text-slate-400">key</span>  Google public JWKS</div>
+                </div>
+                <p class="text-xs text-slate-400 mt-3">Silently refreshed via <code class="text-xs">GIDSignIn.refreshTokensIfNeeded()</code>.</p>
+            </div>
+
+            <div class="card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-semibold text-slate-800 text-sm">Apple JWT</span>
+                    <span class="badge badge-gray">Priority 4</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">Identity token from Sign in with Apple. Apple only provides name/email on first auth — cached in UserDefaults.</p>
+                <div class="bg-slate-50 rounded-lg p-3 font-mono text-xs text-slate-600 space-y-1">
+                    <div><span class="text-slate-400">iss</span>  https://appleid.apple.com</div>
+                    <div><span class="text-slate-400">sub</span>  stable Apple user ID</div>
+                    <div><span class="text-slate-400">key</span>  Apple public JWKS</div>
+                </div>
+                <p class="text-xs text-slate-400 mt-3"><span class="badge badge-amber">Disabled</span> Requires paid Apple Developer account.</p>
+            </div>
+
+            <div class="card">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="font-semibold text-slate-800 text-sm">X-Dev-Api-Key</span>
+                    <span class="badge badge-amber">Priority 1 — dev only</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">Shared secret for Postman / local dev. Bypasses token verification. Rejected when <code class="text-xs">NODE_ENV === "production"</code>.</p>
+                <div class="bg-slate-50 rounded-lg p-3 font-mono text-xs text-slate-600 space-y-1">
+                    <div><span class="text-slate-400">header</span>  X-Dev-Api-Key: &lt;key&gt;</div>
+                    <div><span class="text-slate-400">userId</span>  "dev-bypass"</div>
+                    <div><span class="text-slate-400">key</span>  SSM /monet/dev/dev-api-key</div>
+                    <div><span class="text-slate-400">env</span>  development / IS_LOCAL only</div>
+                </div>
+                <p class="text-xs text-slate-400 mt-3">Postman: add <code class="text-xs">X-Dev-Api-Key</code> header, skip Authorization.</p>
+            </div>
+        </div>
+
+        <!-- ── Route Table ────────────────────────── -->
+        <h2>Route Auth Matrix</h2>
+
+        <div class="not-prose bg-white rounded-xl border border-slate-200 overflow-hidden mb-4">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-slate-100">
+                        <th class="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Method</th>
+                        <th class="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Path</th>
+                        <th class="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Authorizer</th>
+                        <th class="text-left px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Reason</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-get">GET</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/health</td>
+                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Infrastructure health check</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-post">POST</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/plaid/webhook</td>
+                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Plaid signs its own payload; verified in handler</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-post">POST</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/auth/guest</td>
+                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Bootstrap endpoint — must be open so guests can get a token</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-get">GET</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/cards</td>
+                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Static catalog; <code class="text-xs">CachingOptimized</code> at CloudFront — Authorization can't be in cache key without breaking sharing</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-get">GET</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/popular-categories</td>
+                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Same as <code class="text-xs">/v1/cards</code> — static, edge-cached</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60 transition-colors">
+                        <td class="px-5 py-3"><span class="method method-any">ANY</span></td>
+                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/{proxy+}</td>
+                        <td class="px-5 py-3"><span class="badge badge-blue">monetAuthorizer</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500"><code class="text-xs">/recommend</code>, <code class="text-xs">/auth/sync</code>, <code class="text-xs">/user/*</code>, <code class="text-xs">/plaid/*</code> &amp; all others</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="not-prose bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 text-xs text-amber-800 mb-8">
+            <strong>Why /v1/cards is public:</strong> CloudFront's <code class="text-xs">CachingOptimized</code> policy caches by URL only and doesn't forward the Authorization header to the origin on cache misses. If the route were behind the Lambda authorizer, cache misses would arrive tokenless → 403. Making it public gives every user a single shared 1-hour cache entry with zero Lambda invocations on hits.
+        </div>
+
+        <!-- ── X-Origin-Secret ────────────────────── -->
+        <h2>Origin Secret</h2>
+        <p>The Lambda authorizer validates that every inbound request came via CloudFront, not directly to the raw <code>execute-api</code> URL. CloudFront adds the secret as a custom origin header; the authorizer rejects anything without it.</p>
+
+        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+            <div class="card text-xs">
+                <p class="text-slate-400 font-semibold mb-2 uppercase tracking-wider text-[10px]">CloudFront → Origin</p>
+                <div class="bg-slate-900 rounded-lg p-3 font-mono text-green-300">X-Origin-Secret: &lt;SSM value&gt;</div>
+                <p class="text-slate-500 mt-2">Added automatically to every origin request by the CloudFront distribution's <code class="text-xs">OriginCustomHeaders</code>.</p>
+            </div>
+            <div class="card text-xs">
+                <p class="text-slate-400 font-semibold mb-2 uppercase tracking-wider text-[10px]">Lambda Authorizer check</p>
+                <div class="bg-slate-900 rounded-lg p-3 font-mono text-slate-300"><span class="text-slate-500">// first check, before any token logic</span><br>if (header !== env.MONET_ORIGIN_SECRET)<br>&nbsp;&nbsp;return &#123; isAuthorized: false &#125;</div>
+                <p class="text-slate-500 mt-2">Skipped when <code class="text-xs">IS_LOCAL=true</code>.</p>
+            </div>
+        </div>
+
+        <!-- ── iOS Auth Flow ──────────────────────── -->
+        <h2>iOS Auth Flow</h2>
+
+        <h3>Guest mode — new user</h3>
+        <p>The key constraint: <code>isGuest = true</code> is set only after the token is in hand, so RootTabView never renders without a valid <code>authToken</code>.</p>
+
+        <div class="not-prose bg-white rounded-xl border border-slate-200 p-6 overflow-x-auto mb-2">
+            <svg viewBox="0 0 800 130" xmlns="http://www.w3.org/2000/svg" style="min-width:600px;width:100%;height:auto;">
+                <defs>
+                    <marker id="fah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#4a61ff"/>
+                    </marker>
+                </defs>
+
+                <!-- Step 1 -->
+                <rect x="8" y="38" width="118" height="52" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="67" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="600" fill="#334155">OnboardingView</text>
+                <text x="67" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">User taps</text>
+                <text x="67" y="87" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">"Start Exploring"</text>
+
+                <!-- arrow 1 -->
+                <line x1="126" y1="64" x2="158" y2="64" stroke="#4a61ff" stroke-width="1.2" marker-end="url(#fah)"/>
+                <text x="142" y="56" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#4a61ff">Task &#123;</text>
+                <text x="142" y="47" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#4a61ff">await &#125;</text>
+
+                <!-- Step 2 -->
+                <rect x="158" y="38" width="138" height="52" rx="7" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+                <text x="227" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="600" fill="#1d4ed8">continueAsGuest()</text>
+                <text x="227" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#3b82f6">① persist guest flag</text>
+                <text x="227" y="87" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#3b82f6">② fetch guest JWT</text>
+
+                <!-- arrow 2 -->
+                <line x1="296" y1="64" x2="328" y2="64" stroke="#4a61ff" stroke-width="1.2" marker-end="url(#fah)"/>
+                <text x="312" y="56" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">POST</text>
+                <text x="312" y="47" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">/auth/guest</text>
+
+                <!-- Step 3 -->
+                <rect x="328" y="38" width="128" height="52" rx="7" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+                <text x="392" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="600" fill="#15803d">Token minted</text>
+                <text x="392" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#16a34a">authToken set</text>
+                <text x="392" y="87" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#16a34a">in-memory only</text>
+
+                <!-- arrow 3 -->
+                <line x1="456" y1="64" x2="488" y2="64" stroke="#4a61ff" stroke-width="1.2" marker-end="url(#fah)"/>
+                <text x="472" y="56" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">isGuest</text>
+                <text x="472" y="47" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">= true</text>
+
+                <!-- Step 4 -->
+                <rect x="488" y="38" width="128" height="52" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="552" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="600" fill="#334155">RootTabView</text>
+                <text x="552" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">loadGuestCatalog()</text>
+                <text x="552" y="87" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#16a34a">token ready ✓</text>
+
+                <!-- arrow 4 -->
+                <line x1="616" y1="64" x2="648" y2="64" stroke="#4a61ff" stroke-width="1.2" marker-end="url(#fah)"/>
+
+                <!-- Step 5 -->
+                <rect x="648" y="38" width="144" height="52" rx="7" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+                <text x="720" y="60" text-anchor="middle" font-family="Outfit,sans-serif" font-size="11" font-weight="600" fill="white">API Calls</text>
+                <text x="720" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#64748b">Bearer guest-JWT</text>
+                <text x="720" y="87" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#64748b">on every request</text>
+
+                <!-- step numbers -->
+                <circle cx="67" cy="38" r="8" fill="#4a61ff"/>
+                <text x="67" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="white">1</text>
+                <circle cx="227" cy="38" r="8" fill="#4a61ff"/>
+                <text x="227" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="white">2</text>
+                <circle cx="392" cy="38" r="8" fill="#4a61ff"/>
+                <text x="392" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="white">3</text>
+                <circle cx="552" cy="38" r="8" fill="#4a61ff"/>
+                <text x="552" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="white">4</text>
+                <circle cx="720" cy="38" r="8" fill="#4a61ff"/>
+                <text x="720" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="white">5</text>
+            </svg>
+        </div>
+        <p class="text-xs text-slate-400 not-prose mb-8">Steps 2–3 happen inside the async <code class="text-xs">await continueAsGuest()</code> call. The UI doesn't advance to step 4 until the token is ready.</p>
+
+        <h3>Guest mode — app restart (restore)</h3>
+        <div class="not-prose card mb-8">
+            <ol class="space-y-1.5 text-sm text-slate-600 list-decimal list-inside">
+                <li><code class="text-xs">AuthService.init()</code> detects <code class="text-xs">isGuestSession=true</code> in UserDefaults.</li>
+                <li>Sets <code class="text-xs">isCheckingAuth = true</code> — splash screen stays visible.</li>
+                <li>Background task calls <code class="text-xs">POST /auth/guest</code> to mint a fresh token (the previous one expired after 1h).</li>
+                <li>On success: <code class="text-xs">APIClient.authToken = newToken</code> → <code class="text-xs">isGuest = true</code> → <code class="text-xs">isCheckingAuth = false</code>.</li>
+                <li>RootTabView renders, <code class="text-xs">.task</code> calls <code class="text-xs">loadGuestCatalog()</code> — token is already in place.</li>
+            </ol>
+        </div>
+
+        <h3>Token refresh (all session types)</h3>
+        <div class="not-prose bg-white rounded-xl border border-slate-200 overflow-hidden mb-8">
+            <table class="w-full text-xs">
+                <thead>
+                    <tr class="border-b border-slate-100">
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Session</th>
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">onTokenExpired action</th>
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Outcome</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-medium text-slate-700">Guest</td>
+                        <td class="px-5 py-3 font-mono">POST /auth/guest</td>
+                        <td class="px-5 py-3 text-slate-500">New 1h guest JWT, retry</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-medium text-slate-700">Google</td>
+                        <td class="px-5 py-3 font-mono">refreshTokensIfNeeded()</td>
+                        <td class="px-5 py-3 text-slate-500">New Google ID token, retry</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-medium text-slate-700">Apple</td>
+                        <td class="px-5 py-3 text-slate-400 italic">Cannot refresh silently</td>
+                        <td class="px-5 py-3 text-slate-500">onSessionExpired → signOut()</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ── AuthService State Machine ──────────── -->
+        <h2>AuthService State Machine</h2>
+
+        <div class="not-prose bg-white rounded-xl border border-slate-200 p-6 overflow-x-auto mb-8">
+            <svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" style="min-width:560px;width:100%;height:auto;">
+                <defs>
+                    <marker id="smah" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+                        <polygon points="0 0,7 2.5,0 5" fill="#94a3b8"/>
+                    </marker>
+                </defs>
+
+                <!-- Checking Auth -->
+                <rect x="270" y="8" width="160" height="44" rx="7" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+                <text x="350" y="26" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="600" font-size="11" fill="#92400e">Checking Auth</text>
+                <text x="350" y="42" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#b45309">isCheckingAuth=true · splash visible</text>
+
+                <!-- Unauthenticated -->
+                <rect x="12" y="116" width="148" height="44" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="86" y="134" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="600" font-size="11" fill="#334155">Unauthenticated</text>
+                <text x="86" y="150" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">OnboardingView shown</text>
+
+                <!-- Guest -->
+                <rect x="270" y="116" width="160" height="44" rx="7" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+                <text x="350" y="134" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="600" font-size="11" fill="#1d4ed8">Guest</text>
+                <text x="350" y="150" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#3b82f6">isGuest=true · token in memory</text>
+
+                <!-- Signed In -->
+                <rect x="540" y="116" width="160" height="44" rx="7" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+                <text x="620" y="134" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="600" font-size="11" fill="#15803d">Signed In</text>
+                <text x="620" y="150" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#16a34a">isSignedIn=true · Google/Apple JWT</text>
+
+                <!-- Checking → Unauthenticated -->
+                <path d="M 296 52 Q 220 80 160 116" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="205" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">no prior session</text>
+
+                <!-- Checking → Guest -->
+                <line x1="350" y1="52" x2="350" y2="116" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="372" y="86" text-anchor="start" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">guest token fetched</text>
+
+                <!-- Checking → Signed In -->
+                <path d="M 404 52 Q 510 80 580 116" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="508" y="72" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">Google/Apple restored</text>
+
+                <!-- Unauthenticated → Guest -->
+                <line x1="160" y1="138" x2="270" y2="138" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="215" y="130" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">continueAsGuest()</text>
+
+                <!-- Unauthenticated → Signed In -->
+                <path d="M 160 126 Q 350 92 540 126" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="360" y="100" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">signIn()</text>
+
+                <!-- Guest → Signed In -->
+                <line x1="430" y1="138" x2="540" y2="138" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)"/>
+                <text x="485" y="130" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">signIn()</text>
+
+                <!-- Signed In / Guest → Unauthenticated (sign out) -->
+                <path d="M 620 160 Q 620 220 86 210 Q 60 208 60 160" stroke="#94a3b8" stroke-width="1" fill="none" marker-end="url(#smah)" stroke-dasharray="4,3"/>
+                <text x="360" y="235" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" fill="#94a3b8">signOut() / Start Over — clears all data</text>
+
+                <!-- Token refresh loops -->
+                <path d="M 350 160 Q 350 200 395 200 Q 440 200 440 160" stroke="#4a61ff" stroke-width="1" fill="none" marker-end="url(#smah)" stroke-dasharray="3,2"/>
+                <text x="395" y="214" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#4a61ff">auto-refresh</text>
+
+                <path d="M 620 160 Q 620 245 680 245 Q 714 245 714 196 Q 714 160 700 160" stroke="#16a34a" stroke-width="1" fill="none" marker-end="url(#smah)" stroke-dasharray="3,2"/>
+                <text x="700" y="248" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" fill="#16a34a">refresh</text>
+            </svg>
+        </div>
+
+        <!-- ── Sign Out ────────────────────────────── -->
+        <h2>Sign Out &amp; Data Cleanup</h2>
+        <p><code>AuthService.signOut()</code> is shared by "Sign Out" (signed-in) and "Start Over" (guest). It fully wipes the session and all local data.</p>
+
+        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">What gets cleared</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                    <li class="flex items-center gap-2"><span class="text-slate-300">—</span> <code class="text-xs">APIClient.authToken</code> (in-memory)</li>
+                    <li class="flex items-center gap-2"><span class="text-slate-300">—</span> All SwiftData models (cards, user, overrides)</li>
+                    <li class="flex items-center gap-2"><span class="text-slate-300">—</span> UserDefaults: provider, appleToken, appleName, appleEmail, isGuestSession, lastSignedInUserId</li>
+                    <li class="flex items-center gap-2"><span class="text-slate-300">—</span> GIDSignIn session</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Trigger chain</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                    <li><code class="text-xs">signOut()</code> calls <code class="text-xs">APIClient.onAccountSwitch?() → DataStore.clearAllData()</code></li>
+                    <li><code class="text-xs">applyAccountSwitchIfNeeded()</code> wipes data when a different user signs in</li>
+                    <li><code class="text-xs">onSessionExpired</code> fires on persistent 401 → calls <code class="text-xs">signOut()</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ── Insights wall ──────────────────────── -->
+        <h2>Insights — Sign-in Wall</h2>
+        <p>The Insights tab requires a real user account (Plaid items are scoped to a stable userId) and a connected bank. Guests see a wall instead of an empty state.</p>
+
+        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Guest sees</p>
+                <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside">
+                    <li>InsightsTapestryView decoration</li>
+                    <li>"Sign in to unlock Insights"</li>
+                    <li>Primary "Sign In" button → presents SignInView sheet</li>
+                </ul>
+            </div>
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">After signing in</p>
+                <ul class="text-xs text-slate-600 space-y-1 list-disc list-inside">
+                    <li><code class="text-xs">isSignedIn</code> flips true, sheet auto-dismisses</li>
+                    <li>Wall disappears; Connect Bank flow activates</li>
+                    <li>Backend syncs via <code class="text-xs">POST /auth/sync</code></li>
+                </ul>
+            </div>
+        </div>
+        <div class="not-prose bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-xs text-slate-600 mb-8">
+            <strong>Why Insights requires sign-in:</strong> Plaid creates a persistent Item linked to a userId in DynamoDB. Guest IDs (<code class="text-xs">guest-&lt;uuid&gt;</code>) are ephemeral and regenerated each session — any Plaid Item linked to them is unrecoverable.
+        </div>
+
+        <!-- ── SSM Parameters ─────────────────────── -->
+        <h2>SSM Parameters</h2>
+        <p>Secrets live in AWS SSM (SecureString) and are injected as Lambda environment variables at deploy time.</p>
+
+        <div class="not-prose bg-white rounded-xl border border-slate-200 overflow-hidden mb-4">
+            <table class="w-full text-xs">
+                <thead>
+                    <tr class="border-b border-slate-100">
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Parameter</th>
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Env var</th>
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Used by</th>
+                        <th class="text-left px-5 py-3 text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Purpose</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-mono">/monet/dev/guest-jwt-secret</td>
+                        <td class="px-5 py-3 font-mono">MONET_GUEST_JWT_SECRET</td>
+                        <td class="px-5 py-3 text-slate-500">authorizer + api λ</td>
+                        <td class="px-5 py-3 text-slate-500">Signs and verifies guest JWTs (HS256)</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-mono">/monet/dev/dev-api-key</td>
+                        <td class="px-5 py-3 font-mono">MONET_DEV_API_KEY</td>
+                        <td class="px-5 py-3 text-slate-500">authorizer λ</td>
+                        <td class="px-5 py-3 text-slate-500">Postman / dev bypass (dev only)</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-mono">/monet/dev/origin-secret</td>
+                        <td class="px-5 py-3 font-mono">MONET_ORIGIN_SECRET</td>
+                        <td class="px-5 py-3 text-slate-500">authorizer λ + CloudFront</td>
+                        <td class="px-5 py-3 text-slate-500">Blocks direct API Gateway access</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <pre class="not-prose"><code class="language-bash"># Provision once per stage
+aws ssm put-parameter --profile dev --region us-east-1 \
+  --name "/monet/dev/guest-jwt-secret" --value "VZbYveJOmW+GdkjqgVhnKTvcuE6jLvQlMlOIv3aO6Cw=" --type SecureString
+
+aws ssm put-parameter --profile dev --region us-east-1 \
+  --name "/monet/dev/dev-api-key" --value "8d87090a3bdc0adf1e9c1b938520c4cf" --type SecureString
+
+aws ssm put-parameter --profile dev --region us-east-1 \
+  --name "/monet/dev/origin-secret" --value "HrUp6E97844uUdgBlnKzmYpVO+2LgybVeH4oQSF0F1M=" --type SecureString</code></pre>
+
+        <!-- ── Local Dev ───────────────────────────── -->
+        <h2>Local Dev vs Production</h2>
+
+        <div class="not-prose grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">iOS DEBUG build</p>
+                <p class="text-xs text-slate-600">Hits <code class="text-xs">http://&lt;LOCAL_API_HOST&gt;/v1</code> set in <code class="text-xs">Secrets.xcconfig</code>. No CloudFront or Lambda authorizer. <code class="text-xs">auth.ts</code> falls back to direct token verification.</p>
+            </div>
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">iOS RELEASE build</p>
+                <p class="text-xs text-slate-600">Hits <code class="text-xs">https://d2fbowggfpw2nf.cloudfront.net/v1</code> from <code class="text-xs">CLOUDFRONT_URL</code> in <code class="text-xs">Secrets.xcconfig → Info.plist</code>. Full stack active.</p>
+            </div>
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Backend local (<code class="text-xs">npm run dev</code>)</p>
+                <p class="text-xs text-slate-600"><code class="text-xs">IS_LOCAL=true</code> skips X-Origin-Secret check. No <code class="text-xs">req.apiGateway</code> context; <code class="text-xs">auth.ts</code> verifies tokens directly.</p>
+            </div>
+            <div class="card">
+                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Postman (deployed)</p>
+                <p class="text-xs text-slate-600">Base: <code class="text-xs">https://d2fbowggfpw2nf.cloudfront.net</code>. Add <code class="text-xs">X-Dev-Api-Key: 8d87090a...</code> header. Protected routes work without an Authorization header.</p>
+            </div>
+        </div>
+
+        <!-- ── Future ─────────────────────────────── -->
+        <h2>Future — App Attest</h2>
+        <div class="not-prose bg-slate-50 border border-slate-100 rounded-lg px-4 py-3 text-xs text-slate-600 mb-10">
+            Deferred until paid Apple Developer enrollment. When active, <code class="text-xs">POST /v1/auth/guest</code> will require an App Attest assertion before minting a guest JWT, cryptographically proving the request came from a genuine Monet binary. The <code class="text-xs">X-Dev-Api-Key</code> bypass stays for Postman/dev only.
+        </div>
+
+        <!-- Footer -->
+        <div class="border-t border-slate-100 pt-5 flex items-center justify-between text-xs text-slate-400">
+            <span>Authentication &amp; Security — Monet Wiki</span>
+            <span class="font-mono bg-slate-100 px-2 py-0.5 rounded">2026-05-31</span>
+        </div>
+
+    </div><!-- /max-w -->
+    </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script src="sidebar.js"></script>
+</body>
+</html>
