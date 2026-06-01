@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monet — Pitch Deck</title>
+  <style>
+    :root {
+      --green: #26ab59;
+      --green-dark: #1a7a40;
+      --green-glow: rgba(38, 171, 89, 0.25);
+      --bg: #0d0d0d;
+      --bg-card: #1a1a1c;
+      --bg-elevated: #242426;
+      --text: #ebebf5;
+      --text-muted: #8e8e93;
+      --border: rgba(255,255,255,0.08);
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Deck shell */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 64px 80px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(24px);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .slide-inner {
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* Typography */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 20px;
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(38, 171, 89, 0.12);
+      border: 1px solid rgba(38, 171, 89, 0.25);
+      border-radius: 999px;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    h1 .accent { color: var(--green); }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .lead { font-size: 1.15rem; color: rgba(235,235,245,0.85); line-height: 1.65; }
+
+    /* Nav */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .nav-btn:hover { background: var(--green); border-color: var(--green); color: #fff; }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn:disabled:hover { background: var(--bg-elevated); border-color: var(--border); color: var(--text); }
+
+    .slide-counter {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .progress-track {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--green);
+      transition: width 0.4s ease;
+      z-index: 101;
+    }
+
+    /* Result card — signature component */
+    .result-card {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      border-radius: 24px;
+      padding: 28px 32px;
+      color: #fff;
+      box-shadow: 0 24px 48px var(--green-glow);
+      position: relative;
+      overflow: hidden;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-card .bolt {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      opacity: 0.2;
+      font-size: 48px;
+    }
+
+    .result-card .label { font-size: 13px; opacity: 0.8; margin-bottom: 4px; }
+    .result-card .card-name { font-size: 1.75rem; font-weight: 800; }
+    .result-card .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .result-card .rate { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+    .result-card .rate span { font-size: 1rem; font-weight: 500; opacity: 0.8; }
+    .result-card .pill {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(8px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Grids */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    @media (max-width: 900px) {
+      .slide { padding: 32px 24px 88px; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Cards */
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: rgba(38, 171, 89, 0.35); }
+
+    .feature-card .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(38, 171, 89, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* Steps */
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+    }
+
+    .step-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--green);
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    .step-card h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 10px; }
+    .step-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.55; }
+
+    /* Chart bars */
+    .chart-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 32px;
+    }
+
+    .chart-row { margin-bottom: 28px; }
+    .chart-row:last-child { margin-bottom: 0; }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .chart-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .chart-label.green { color: var(--green); }
+    .chart-value { font-size: 1.5rem; font-weight: 800; }
+    .chart-value.green { color: var(--green); font-size: 2rem; }
+
+    .bar-track {
+      height: 14px;
+      background: var(--bg-elevated);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bar-fill.muted { background: rgba(235,235,245,0.2); }
+    .bar-fill.green {
+      background: var(--green);
+      box-shadow: 0 0 20px var(--green-glow);
+    }
+
+    /* Diff list */
+    .diff-item {
+      display: flex;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .diff-item:last-child { border-bottom: none; }
+
+    .diff-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(38, 171, 89, 0.15);
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .diff-item h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .diff-item p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* Stat pills */
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .stat-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .stat-pill .num { font-size: 2rem; font-weight: 900; color: var(--green); line-height: 1; }
+    .stat-pill .lbl { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* Roadmap */
+    .roadmap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      font-size: 0.95rem;
+      color: rgba(235,235,245,0.8);
+    }
+
+    .roadmap-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(249, 115, 22, 0.15);
+      color: #f97316;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* CTA */
+    .cta-box {
+      text-align: center;
+      padding: 48px;
+      background: var(--bg-card);
+      border: 1px solid rgba(38, 171, 89, 0.3);
+      border-radius: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, var(--green-glow), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 16px 40px;
+      background: var(--green);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px var(--green-glow);
+      transition: transform 0.2s;
+    }
+
+    .cta-btn:hover { transform: scale(1.03); }
+
+    /* Problem stat */
+    .problem-stat {
+      font-size: clamp(4rem, 12vw, 7rem);
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .glow-bg {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--green-glow), transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Title slide */
+    .title-slide { text-align: center; }
+    .title-slide .logo {
+      font-size: clamp(4rem, 10vw, 6rem);
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+
+    kbd {
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      padding: 2px 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-track" id="progress"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- 1. Title -->
+    <section class="slide active title-slide" data-slide="0">
+      <div class="glow-bg" style="top: 20%; left: 50%; transform: translateX(-50%);"></div>
+      <div class="slide-inner">
+        <div class="logo">Monet</div>
+        <h1>Never guess which<br><span class="accent">card to use</span> again.</h1>
+        <p class="subtitle" style="margin: 0 auto;">The credit card rewards optimizer that gives you one authoritative answer at checkout — and shows you what you left on the table after.</p>
+        <div class="stats-row" style="justify-content: center; margin-top: 48px;">
+          <div class="stat-pill"><div class="num">✓</div><div class="lbl">Growing catalog</div></div>
+          <div class="stat-pill"><div class="num">29</div><div class="lbl">Categories</div></div>
+          <div class="stat-pill"><div class="num">100+</div><div class="lbl">Brand mappings</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Problem -->
+    <section class="slide" data-slide="1">
+      <div class="slide-inner grid-2">
+        <div>
+          <span class="eyebrow">The Problem</span>
+          <h2>People leave rewards on the table every day.</h2>
+          <p class="lead">The average multi-card holder can't hold rotating 5% categories, spend caps, and merchant-specific bonuses in working memory at the register. They guess — and guess wrong.</p>
+          <ul style="margin-top: 24px; padding-left: 20px; color: var(--text-muted); line-height: 2;">
+            <li>3+ cards with conflicting reward structures</li>
+            <li>Quarterly rotations that change every 90 days</li>
+            <li>No feedback loop — you never know what you missed</li>
+          </ul>
+        </div>
+        <div style="text-align: center;">
+          <div class="problem-stat">$?</div>
+          <p style="color: var(--text-muted); margin-top: 12px; font-size: 1.1rem;">Missed cashback,<br>every month, invisible.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Solution -->
+    <section class="slide" data-slide="2">
+      <div class="slide-inner grid-2">
+        <div>
+          <span class="eyebrow">The Solution</span>
+          <h2>Monet tells you exactly which card to swipe.</h2>
+          <p class="lead">Search a merchant or category. Monet analyzes your wallet, resolves the purchase type, and returns the highest-earning card — instantly, with authority.</p>
+          <p class="lead" style="margin-top: 16px;">Connect your bank and Monet closes the loop: actual earnings vs. what your wallet could have earned.</p>
+        </div>
+        <div class="result-card">
+          <div class="bolt">⚡</div>
+          <div>
+            <div class="label">Use your</div>
+            <div class="card-name">Discover it Card</div>
+          </div>
+          <div class="bottom">
+            <div>
+              <div class="label" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.6;">Rewards</div>
+              <div class="rate">5x <span>Points</span></div>
+            </div>
+            <div class="pill">Groceries</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. How it works -->
+    <section class="slide" data-slide="3">
+      <div class="slide-inner">
+        <span class="eyebrow">How It Works</span>
+        <h2>Simple to start. Simple to use.</h2>
+        <p class="subtitle" style="margin-bottom: 40px;">Three steps to never leaving a point behind.</p>
+        <div class="grid-3">
+          <div class="step-card">
+            <div class="step-num">01 — WALLET</div>
+            <h3>Add your cards</h3>
+            <p>Select from a curated, server-driven card catalog with accurate reward data — including rotating quarterly categories and tiered bonuses.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">02 — TRANSACTIONS</div>
+            <h3>Connect via Plaid</h3>
+            <p>Link credit card accounts securely. Monet syncs transactions and maps accounts to your wallet cards.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">03 — SPEND</div>
+            <h3>Check before you pay</h3>
+            <p>Search the merchant at checkout. Monet returns the best card in your wallet — works offline too.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Key Features -->
+    <section class="slide" data-slide="4">
+      <div class="slide-inner">
+        <span class="eyebrow">Key Features</span>
+        <h2>Built for real reward complexity.</h2>
+        <div class="grid-4" style="margin-top: 32px;">
+          <div class="feature-card">
+            <div class="icon">🎯</div>
+            <h3>Best-card engine</h3>
+            <p>Merchant search, category browse, and wallet overview — ranked recommendations with full rate breakdown.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Missed rewards Insights</h3>
+            <p>Actual vs. wallet-optimal earnings per transaction, aggregated by category with upgrade suggestions.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🔄</div>
+            <h3>Rotating categories</h3>
+            <p>Discover it &amp; Freedom Flex quarterly 5% schedules resolved automatically to the current quarter.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📈</div>
+            <h3>RankedSpend tiers</h3>
+            <p>Citi Custom Cash, Venmo, Zolve — active bonus tier resolved from your real Plaid spending history.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🏪</div>
+            <h3>Merchant intelligence</h3>
+            <p>100+ brand rules, Google Places, Bedrock AI categorization, and user overrides that persist.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🔒</div>
+            <h3>Privacy-first</h3>
+            <p>Plaid tokens encrypted AES-256-GCM. Guest mode to try before sign-in. Fail-closed auth on every route.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Differentiators -->
+    <section class="slide" data-slide="5">
+      <div class="slide-inner">
+        <span class="eyebrow">Why Monet</span>
+        <h2>What makes us stand out.</h2>
+        <div style="margin-top: 24px;">
+          <div class="diff-item">
+            <div class="diff-num">1</div>
+            <div>
+              <h4>Transaction-aware, not just pre-purchase lookup</h4>
+              <p>Plaid Insights show actual vs. optimal earnings — a feedback loop competitors like CardPointers don't match at this depth.</p>
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-num">2</div>
+            <div>
+              <h4>Engine that models caps, rotations, and tiers</h4>
+              <p>Not flat multipliers. RankedSpend resolution, quarterly schedules, and per-card cap demotion from real spend data.</p>
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-num">3</div>
+            <div>
+              <h4>Authoritative UX — one answer, zero clutter</h4>
+              <p>The Result Card states "Use your Chase Sapphire Reserve" — not "you might consider." Robinhood clarity at checkout speed.</p>
+            </div>
+          </div>
+          <div class="diff-item">
+            <div class="diff-num">4</div>
+            <div>
+              <h4>Works before you commit</h4>
+              <p>Guest auth + on-device LocalRecommender deliver value before Google Sign-In or Plaid linking.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Product UI mockup -->
+    <section class="slide" data-slide="6">
+      <div class="slide-inner grid-2">
+        <div>
+          <span class="eyebrow">Product</span>
+          <h2>The Result Card.</h2>
+          <p class="lead">Every recommendation is a statement — card name, rate, and category in one glance. Merchant chips for quick switching. "Analyzing" state masks backend latency at the register.</p>
+          <div style="margin-top: 24px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <span style="padding: 8px 16px; border-radius: 999px; background: var(--green); font-size: 13px; font-weight: 700;">Whole Foods</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); font-size: 13px; color: var(--text-muted);">Starbucks</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); font-size: 13px; color: var(--text-muted);">Amazon</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); font-size: 13px; color: var(--text-muted);">Delta</span>
+          </div>
+        </div>
+        <div class="result-card" style="max-width: 380px; margin: 0 auto;">
+          <div class="bolt">⚡</div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center;">🛒</div>
+            <div style="font-size: 1.2rem; font-weight: 700;">Whole Foods Market</div>
+          </div>
+          <div>
+            <div class="label">Use your</div>
+            <div class="card-name">Discover it Card</div>
+          </div>
+          <div class="bottom">
+            <div>
+              <div class="label" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.6;">Rewards</div>
+              <div class="rate">5x <span>Points</span></div>
+            </div>
+            <div class="pill">Groceries</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Insights chart -->
+    <section class="slide" data-slide="7">
+      <div class="slide-inner grid-2">
+        <div class="chart-panel">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 28px;">
+            <div style="width: 44px; height: 44px; border-radius: 14px; background: rgba(38,171,89,0.2); display: flex; align-items: center; justify-content: center; font-size: 20px;">📊</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Monthly Insights</h3>
+          </div>
+          <div class="chart-row">
+            <div class="chart-header">
+              <span class="chart-label">Actual Earnings</span>
+              <span class="chart-value" style="color: var(--text-muted);">$42.50</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill muted" data-width="65" style="width: 0;"></div></div>
+          </div>
+          <div class="chart-row">
+            <div class="chart-header">
+              <div>
+                <span class="chart-label green">Wallet Optimal</span>
+                <div style="font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px;">+$18.20 potential gain</div>
+              </div>
+              <span class="chart-value green">$60.70</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill green" data-width="90" style="width: 0;"></div></div>
+          </div>
+        </div>
+        <div>
+          <span class="eyebrow">Intelligence</span>
+          <h2>See what you're leaving on the table.</h2>
+          <p class="lead">Monet tracks every linked transaction and cross-references it with your wallet. Category breakdowns show where habits cost you — and which card would have won.</p>
+          <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-muted);">Illustrative values from monet.app marketing; real Insights computed from Plaid transaction data.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Market -->
+    <section class="slide" data-slide="8">
+      <div class="slide-inner">
+        <span class="eyebrow">Market</span>
+        <h2>Built for the multi-card majority.</h2>
+        <div class="grid-2" style="margin-top: 32px;">
+          <div class="feature-card" style="padding: 32px;">
+            <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--green);">Primary Persona</h3>
+            <p style="font-size: 1rem; color: var(--text); line-height: 1.6; margin-bottom: 16px;"><strong>The Multi-Card Optimizer</strong></p>
+            <p>Owns 3+ credit cards. Freezes at checkout. Wants one instant, authoritative answer — not a spreadsheet. Becomes loyal once the first recommendation is right.</p>
+          </div>
+          <div class="feature-card" style="padding: 32px;">
+            <h3 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--green);">Secondary Persona</h3>
+            <p style="font-size: 1rem; color: var(--text); line-height: 1.6; margin-bottom: 16px;"><strong>The Transaction-Aware Optimizer</strong></p>
+            <p>Links bank accounts via Plaid. Reviews Insights monthly. Uses missed-earnings data to swap cards, change habits, or apply for better rewards.</p>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-pill"><div class="num">3+</div><div class="lbl">Cards per user</div></div>
+          <div class="stat-pill"><div class="num">29</div><div class="lbl">Spending categories</div></div>
+          <div class="stat-pill"><div class="num">U.S.</div><div class="lbl">Market focus</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Traction -->
+    <section class="slide" data-slide="9">
+      <div class="slide-inner">
+        <span class="eyebrow">Status</span>
+        <h2>Pre-beta. Core product built.</h2>
+        <div class="grid-3" style="margin-top: 36px;">
+          <div class="feature-card">
+            <div class="icon">📱</div>
+            <h3>iOS App</h3>
+            <p>SwiftUI app with Search, Wallet, Categories, Insights, Plaid linking, guest mode, and offline fallback.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">⚡</div>
+            <h3>Serverless Backend</h3>
+            <p>Express on AWS Lambda, DynamoDB, CloudFront, Plaid, Google Places, Bedrock — deployed and monitored.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🌐</div>
+            <h3>Marketing Site</h3>
+            <p>Next.js landing page with waitlist. Beta access opening soon via TestFlight.</p>
+          </div>
+        </div>
+        <p style="margin-top: 32px; text-align: center; color: var(--text-muted); font-size: 0.95rem;">Join the waitlist at monet.app — early testers get first access.</p>
+      </div>
+    </section>
+
+    <!-- 11. Roadmap -->
+    <section class="slide" data-slide="10">
+      <div class="slide-inner">
+        <span class="eyebrow">Roadmap</span>
+        <h2>What's next.</h2>
+        <div class="grid-2" style="margin-top: 28px;">
+          <div>
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--green); margin-bottom: 16px;">Shipped</h3>
+            <div class="roadmap-item"><span style="color: var(--green); margin-right: 8px;">✓</span> Rotating category schedules (Discover, Freedom Flex)</div>
+            <div class="roadmap-item"><span style="color: var(--green); margin-right: 8px;">✓</span> RankedSpend tier resolution via Plaid Insights</div>
+            <div class="roadmap-item"><span style="color: var(--green); margin-right: 8px;">✓</span> Per-card spend cap tracking in Insights</div>
+            <div class="roadmap-item"><span style="color: var(--green); margin-right: 8px;">✓</span> Guest auth + offline LocalRecommender</div>
+            <div class="roadmap-item"><span style="color: var(--green); margin-right: 8px;">✓</span> Hot-swappable card catalog from backend</div>
+          </div>
+          <div>
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: #f97316; margin-bottom: 16px;">Coming</h3>
+            <div class="roadmap-item"><span class="roadmap-tag">ROADMAP</span> Location-based push notifications at checkout</div>
+            <div class="roadmap-item"><span class="roadmap-tag">ROADMAP</span> Sign-up bonus spend tracking</div>
+            <div class="roadmap-item"><span class="roadmap-tag">ROADMAP</span> Bilt 2.0 rent-tier marginal utility</div>
+            <div class="roadmap-item"><span class="roadmap-tag">ROADMAP</span> iOS home screen widget</div>
+            <div class="roadmap-item"><span class="roadmap-tag">ROADMAP</span> Household shared wallet</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12. Vision -->
+    <section class="slide" data-slide="11">
+      <div class="slide-inner" style="text-align: center;">
+        <span class="eyebrow">Vision</span>
+        <h2>Every purchase,<br><span class="accent" style="color: var(--green);">mathematically optimal.</span></h2>
+        <p class="subtitle" style="margin: 24px auto 0;">Monet becomes the trusted layer between your wallet and every swipe — authoritative at checkout, honest in retrospect, and always improving as issuers change the rules.</p>
+        <div class="stats-row" style="justify-content: center; margin-top: 40px;">
+          <div class="stat-pill"><div class="num" style="font-size: 1.5rem;">Privacy</div><div class="lbl">First</div></div>
+          <div class="stat-pill"><div class="num" style="font-size: 1.5rem;">Craft</div><div class="lbl">Obsessed</div></div>
+          <div class="stat-pill"><div class="num" style="font-size: 1.5rem;">Math</div><div class="lbl">Exact</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 13. CTA -->
+    <section class="slide" data-slide="12">
+      <div class="slide-inner">
+        <div class="cta-box">
+          <div class="logo" style="font-size: 3rem; margin-bottom: 8px;">Monet</div>
+          <h2 style="margin-bottom: 12px;">Stop leaving points on the table.</h2>
+          <p class="subtitle" style="margin: 0 auto;">Join the beta and start maximizing your credit card rewards today.</p>
+          <button class="cta-btn" onclick="window.open('https://monet.app#waitlist','_blank')">Join the Waitlist</button>
+        </div>
+        <p style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-muted);">Navigate with <kbd>←</kbd> <kbd>→</kbd> or click the arrows below</p>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="nav-bar">
+    <div class="nav-logo">Monet</div>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prev" aria-label="Previous slide">←</button>
+      <span class="slide-counter" id="counter">1 / 13</span>
+      <button class="nav-btn" id="next" aria-label="Next slide">→</button>
+    </div>
+  </nav>
+
+  <script>
+    (function () {
+      const slides = document.querySelectorAll('.slide');
+      const total = slides.length;
+      let current = 0;
+
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+
+      function animateBars(slide) {
+        slide.querySelectorAll('.bar-fill[data-width]').forEach(function (bar) {
+          bar.style.width = '0';
+          requestAnimationFrame(function () {
+            setTimeout(function () {
+              bar.style.width = bar.dataset.width + '%';
+            }, 200);
+          });
+        });
+      }
+
+      function goTo(index) {
+        if (index < 0 || index >= total) return;
+        slides[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        counter.textContent = (current + 1) + ' / ' + total;
+        progress.style.width = ((current + 1) / total * 100) + '%';
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+        animateBars(slides[current]);
+      }
+
+      prevBtn.addEventListener('click', function () { goTo(current - 1); });
+      nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault();
+          goTo(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          goTo(current - 1);
+        } else if (e.key === 'Home') {
+          goTo(0);
+        } else if (e.key === 'End') {
+          goTo(total - 1);
+        }
+      });
+
+      // Touch swipe
+      var touchStartX = 0;
+      document.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      document.addEventListener('touchend', function (e) {
+        var diff = touchStartX - e.changedTouches[0].screenX;
+        if (Math.abs(diff) > 50) {
+          goTo(diff > 0 ? current + 1 : current - 1);
+        }
+      }, { passive: true });
+
+      goTo(0);
+    })();
+  </script>
+</body>
+</html>

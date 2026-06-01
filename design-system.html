@@ -1544,6 +1544,111 @@
         </section>
 
         <section>
+            <h2>Monet Guidelines</h2>
+            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: var(--space-xl); max-width: 720px; line-height: 1.6;">
+                Monet is a native iOS app with its own product identity — a financial optimizer that feels premium, native, and energetic.
+                The rules below are <em>Monet-specific decisions.
+            </p>
+            <div class="guidelines-grid">
+
+                <div class="guideline-card">
+                    <h3>Section Headers</h3>
+                    <p>Two semantically distinct styles — both purposeful, neither generic.</p>
+                    <h4>Section style <code>.section</code> — default</h4>
+                    <p>Used to divide distinct content areas within a scrollable screen (e.g. "Cards", "Preferences", "Rewards breakdown").</p>
+                    <ul>
+                        <li>Font: <code>.title3.bold()</code> — 20pt, bold</li>
+                        <li>Color: <code>.primary</code></li>
+                        <li>Case: sentence case</li>
+                    </ul>
+                    <div style="background: var(--bg-light); border-radius: 12px; padding: 16px 20px; margin: 12px 0; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Rewards breakdown</span>
+                        <span style="font-size: 14px; font-weight: 500; color: var(--primary);">See all</span>
+                    </div>
+
+                    <h4>Group style <code>.group</code> — list label</h4>
+                    <p>Introduces a grouped list. Deliberately recedes — the list content should dominate. Title-case the string at the call site.</p>
+                    <ul>
+                        <li>Font: <code>.caption.semibold</code> — 12pt, semibold</li>
+                        <li>Color: <code>.secondary</code></li>
+                        <li>Case: <strong>Title Case</strong> — capitalize each word at the call site</li>
+                    </ul>
+                    <div style="background: var(--bg-light); border-radius: 12px; padding: 16px 20px; margin: 12px 0; border: 1px solid var(--border-color);">
+                        <span style="font-size: 12px; font-weight: 600; color: #8e8e93;">Linked Institutions</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
+                        <strong>Why we differ from Wise:</strong> Wise uses a prominent group header. Monet uses a small, muted caption — visually quiet so the list takes focus, while title case keeps it readable and polished.
+                    </p>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Typography Case Rules</h3>
+                    <p>Case is intentional and consistent — no exceptions.</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
+                        <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">BUTTONS</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Sentence case — "Add a card" not "Add A Card"</span>
+                        </div>
+                        <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">NAV TITLES</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Title case — "Wallet", "Insights", "Account"</span>
+                        </div>
+                        <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">SECTION</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Sentence case — "Rewards breakdown"</span>
+                        </div>
+                        <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">GROUP</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Title Case — "Linked Institutions", "Recent"</span>
+                        </div>
+                        <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">BODY</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Sentence case. Never title case body copy.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Loading States</h3>
+                    <p>Wise: progress bars for fast tasks; spinners for stressful ones. Monet adds a third state — the Tapestry — for the most immersive transitions.</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+                        <div style="padding: 14px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Thin progress bar</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Background sync, link token fetch, short data loads (200ms–700ms). Sits at the bottom of the persistent header or below the triggering button. Never embedded inside a button label.</div>
+                        </div>
+                        <div style="padding: 14px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Spinner (<code>ProgressView()</code>)</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">Stressful / long tasks: Plaid account load, full-page cold start when no cached data exists.</div>
+                        </div>
+                        <div style="padding: 14px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">AnalyzingTapestryView</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">AI analysis, insights recalculation. Overlays the existing content (Doherty mitigation) — data stays visible, dimmed and blurred. The "magic moment" of the app.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Notifications & Feedback</h3>
+                    <h4>Snackbar</h4>
+                    <p>Non-critical, auto-dismissing confirmation. Appears bottom-anchored, above the tab bar. 3 words or less. Optional single Undo action.</p>
+                    <ul>
+                        <li>Background: near-black (<code>#1a1a1f</code>)</li>
+                        <li>Text: white, <code>.footnote.semibold</code></li>
+                        <li>Action: <code>Theme.primaryGreen</code></li>
+                        <li>Auto-dismiss: 2.4 seconds</li>
+                        <li>Only one visible at a time — new ones replace old</li>
+                    </ul>
+                    <h4>Nudge</h4>
+                    <p>Persistent, inline informational strip. Four semantic types: <code>info</code>, <code>success</code>, <code>warning</code>, <code>destructive</code>. Used inline within content, never as a toast.</p>
+                    <div style="background: rgba(38,171,89,0.1); border-radius: 10px; padding: 10px 14px; margin-top: 10px; font-size: 14px; color: #196638; font-weight: 500;">
+                        ✓ &nbsp;You're mostly optimized!
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
             <h2>Design Guidelines</h2>
             <div class="guidelines-grid">
                 <div class="guideline-card">

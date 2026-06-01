@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Guides - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        display: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f4f6ff', 100: '#e7ebff', 200: '#cfd8ff',
+                            300: '#aabaff', 400: '#7a92ff', 500: '#4a61ff',
+                            600: '#2a36ff', 700: '#1a22eb', 800: '#161cbe',
+                            900: '#151a96', 950: '#0d0f57',
+                        },
+                        monet: {
+                            green: '#26ab59',
+                            darkGreen: '#196638',
+                            lightGreen: 'rgba(38, 171, 89, 0.15)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; color: #0f172a; }
+
+        .prose h2 {
+            font-family: 'Outfit', sans-serif; font-weight: 600;
+            font-size: 1.35rem; color: #0f172a;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 0.4em;
+            margin-top: 2.5em; margin-bottom: 0.75em;
+        }
+        .prose h3 {
+            font-family: 'Outfit', sans-serif; font-weight: 600;
+            font-size: 1.05rem; color: #334155;
+            margin-top: 1.75em; margin-bottom: 0.4em;
+        }
+        .prose p { line-height: 1.75; color: #475569; margin-bottom: 1em; }
+        .prose a { color: #4a61ff; text-decoration: none; }
+        .prose a:hover { text-decoration: underline; }
+        .prose code {
+            background: #f1f5f9; border-radius: 4px;
+            padding: 0.1em 0.35em; font-size: 0.82em;
+            color: #1e40af; font-family: 'Menlo', 'Consolas', monospace;
+        }
+        .prose pre { margin-bottom: 1.25em; border-radius: 10px; overflow: hidden; }
+        .prose pre code { background: none; padding: 0; color: inherit; font-size: 0.82em; }
+        .prose ul { padding-left: 1.25em; margin-bottom: 1em; }
+        .prose li { color: #475569; line-height: 1.7; margin-bottom: 0.3em; }
+        .prose ol { padding-left: 1.25em; margin-bottom: 1em; list-style-type: decimal; }
+
+        .sidebar-link { font-size: 0.875rem; }
+        .sidebar-link.active { background-color: #e7ebff; color: #2a36ff; font-weight: 600; }
+        .sidebar-link.active svg { color: #4a61ff; }
+
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 1px 7px; border-radius: 99px;
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 0.01em;
+        }
+        .badge-green  { background: #f0fdf4; color: #15803d; }
+        .badge-blue   { background: #eff6ff; color: #1d4ed8; }
+        .badge-amber  { background: #fffbeb; color: #b45309; }
+        .badge-gray   { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+        .badge-purple { background: #faf5ff; color: #7c3aed; }
+        .badge-red    { background: #fef2f2; color: #b91c1c; }
+
+        .card {
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 12px; padding: 1.25rem;
+        }
+
+        .step-number {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #26ab59; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        th {
+            background: #f8fafc; text-align: left;
+            padding: 0.6rem 0.875rem; font-weight: 600;
+            border: 1px solid #e2e8f0; color: #334155;
+            font-family: 'Outfit', sans-serif; font-size: 0.8rem;
+        }
+        td {
+            padding: 0.6rem 0.875rem; border: 1px solid #e2e8f0;
+            color: #475569; vertical-align: top;
+        }
+        tr:hover td { background: #fafbff; }
+
+        .callout {
+            border-radius: 10px; padding: 1rem 1.25rem;
+            border-left: 4px solid; margin-bottom: 1.25em;
+        }
+        .callout-warn { background: #fffbeb; border-color: #fbbf24; }
+        .callout-tip  { background: #f0fdf4; border-color: #4ade80; }
+        .callout-info { background: #eff6ff; border-color: #60a5fa; }
+        .callout p { margin: 0; font-size: 0.875rem; }
+        .callout strong { color: #0f172a; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+<div class="flex flex-1 overflow-hidden h-screen">
+    <div id="sidebar-placeholder"></div>
+
+    <main class="flex-1 overflow-y-auto p-8 lg:p-12">
+    <div class="max-w-4xl mx-auto prose">
+
+        <!-- Header -->
+        <div class="mb-10">
+            <p class="text-xs font-semibold text-monet-green uppercase tracking-widest mb-1">Developer Operations</p>
+            <h1 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-0.02em;color:#0f172a;margin:0 0 0.5em">Setup Guides</h1>
+            <p class="text-lg text-slate-400" style="margin:0">Step-by-step how-tos for bootstrapping the Monet backend: provisioning AWS SSM secrets with the automated script, spinning up local DynamoDB, and getting the development server running from scratch.</p>
+        </div>
+
+        <!-- Quick-nav cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10 not-prose">
+            <a href="#ssm" class="card flex items-start gap-3 hover:border-monet-green transition-colors group">
+                <span class="text-2xl mt-0.5">🔐</span>
+                <div>
+                    <div class="font-semibold text-slate-800 text-sm font-display group-hover:text-monet-green">AWS SSM Bootstrap</div>
+                    <div class="text-xs text-slate-500 mt-0.5">One-command secrets provisioning</div>
+                </div>
+            </a>
+            <a href="#local-db" class="card flex items-start gap-3 hover:border-monet-green transition-colors group">
+                <span class="text-2xl mt-0.5">🗄️</span>
+                <div>
+                    <div class="font-semibold text-slate-800 text-sm font-display group-hover:text-monet-green">Local DynamoDB</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Run the database locally</div>
+                </div>
+            </a>
+            <a href="#dev-server" class="card flex items-start gap-3 hover:border-monet-green transition-colors group">
+                <span class="text-2xl mt-0.5">⚡</span>
+                <div>
+                    <div class="font-semibold text-slate-800 text-sm font-display group-hover:text-monet-green">Dev Server</div>
+                    <div class="text-xs text-slate-500 mt-0.5">Local backend for iOS development</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 1 — AWS SSM Bootstrap
+        ════════════════════════════════════════════════ -->
+        <h2 id="ssm">🔐 AWS SSM Parameter Bootstrap</h2>
+
+        <p>All secrets (API keys, Plaid credentials, encryption keys) live in AWS SSM Parameter Store under the <code>/monet/{stage}/</code> prefix. Instead of putting them manually one-by-one, use the <strong>bootstrap script</strong> at <code>raw/croe/scripts/ssm-bootstrap.sh</code>.</p>
+
+        <h3>Prerequisites</h3>
+        <ul>
+            <li>AWS CLI v2 installed (<code>aws --version</code>)</li>
+            <li>Named AWS profile with <code>ssm:PutParameter</code> and <code>kms:GenerateDataKey</code> permissions</li>
+            <li><code>openssl</code> available for auto-generating secrets</li>
+        </ul>
+
+        <h3>Run the script</h3>
+        <pre><code class="language-bash"># From the repo root
+cd raw/croe
+
+# Dev stage
+./scripts/ssm-bootstrap.sh --stage dev --profile dev
+
+# Prod stage
+./scripts/ssm-bootstrap.sh --stage prod --profile dev</code></pre>
+
+        <p>The script is interactive — it prompts for each value, shows you exactly where to find it, and auto-generates anything you leave blank (encryption key, JWT secrets, origin secret).</p>
+
+        <h3>Flags</h3>
+        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
+        <table>
+            <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><code>--stage</code></td><td><em>required</em></td><td><code>dev</code> or <code>prod</code></td></tr>
+                <tr><td><code>--profile</code></td><td><code>dev</code></td><td>AWS named profile</td></tr>
+                <tr><td><code>--region</code></td><td><code>us-east-1</code></td><td>AWS region</td></tr>
+                <tr><td><code>--overwrite</code></td><td>off</td><td>Pass to update existing params; omit to skip them safely</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Parameters provisioned</h3>
+        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
+        <table>
+            <thead><tr><th>SSM path (under <code>/monet/{stage}/</code>)</th><th>Type</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td><code>google-client-id</code></td><td>SecureString</td><td>Google OAuth iOS client ID (from GCP Console)</td></tr>
+                <tr><td><code>apple-client-id</code></td><td>SecureString</td><td>iOS bundle ID — <code>akhil.Monet</code> (prod) / <code>akhil.Monet.dev</code> (dev)</td></tr>
+                <tr><td><code>google-places-api-key</code></td><td>SecureString</td><td>Requires Places API (New) + Knowledge Graph APIs enabled</td></tr>
+                <tr><td><code>plaid-client-id</code></td><td>SecureString</td><td>Plaid Dashboard → Team Settings → Keys</td></tr>
+                <tr><td><code>plaid-secret</code></td><td>SecureString</td><td>Matches <code>plaid-env</code> (sandbox or production)</td></tr>
+                <tr><td><code>plaid-env</code></td><td>SecureString</td><td><code>sandbox</code> for dev, <code>production</code> for prod</td></tr>
+                <tr><td><code>plaid-encryption-key</code></td><td>SecureString</td><td>32-byte AES-256-GCM key — auto-generated if blank</td></tr>
+                <tr><td><code>guest-jwt-secret</code></td><td>SecureString</td><td>HMAC secret for guest JWTs — auto-generated if blank</td></tr>
+                <tr><td><code>origin-secret</code></td><td>SecureString</td><td>CloudFront → API Gateway header — auto-generated if blank</td></tr>
+                <tr><td><code>dev-api-key</code></td><td>SecureString</td><td>Postman bypass key (dev only) — auto-generated if blank</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Verify after bootstrap</h3>
+        <pre><code class="language-bash">aws ssm get-parameters-by-path \
+  --profile dev --region us-east-1 \
+  --path "/monet/dev" --recursive \
+  --query "Parameters[*].Name" --output table</code></pre>
+
+        <div class="callout callout-warn not-prose">
+            <p><strong>⚠️ Security reminders</strong><br>
+            Never reuse <code>plaid-encryption-key</code> between stages — rotating it requires re-encrypting every stored Plaid access token in DynamoDB. Restrict <code>google-places-api-key</code> to your API Gateway origin in GCP Console.</p>
+        </div>
+
+        <h3>Next steps after bootstrap</h3>
+        <ol>
+            <li>Deploy: <code>npx serverless deploy --stage dev --profile dev</code></li>
+            <li>Copy the <code>CloudFrontDomain</code> stack output into <code>Secrets.xcconfig → CLOUDFRONT_URL</code></li>
+            <li>If you auto-generated <code>origin-secret</code>, update the CloudFront origin custom header value to match it</li>
+        </ol>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 2 — Local DynamoDB
+        ════════════════════════════════════════════════ -->
+        <h2 id="local-db">🗄️ Local DynamoDB Setup</h2>
+
+        <p>The backend auto-detects local vs. Lambda by checking for <code>LAMBDA_TASK_ROOT</code>. Locally it points to <code>http://127.0.0.1:8000</code> with dummy credentials. You need a local DynamoDB running before starting the dev server.</p>
+
+        <h3>Option A — DynamoDB Local JAR (recommended)</h3>
+        <p>Download <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html" target="_blank">DynamoDB Local</a> from AWS and run it from a separate terminal:</p>
+        <pre><code class="language-bash"># In a separate terminal — keep this running
+cd ~/Desktop/dynamodb_local_latest
+java -Djava.library.path=./DynamoDBLocal_lib \
+     -jar DynamoDBLocal.jar \
+     -sharedDb \
+     -dbPath ./dynamodb_data</code></pre>
+
+        <div class="callout callout-tip not-prose">
+            <p><strong>💡 Tip:</strong> The <code>-sharedDb</code> flag makes all tables visible across credentials/regions. The <code>-dbPath</code> flag persists data between restarts so you don't need to re-seed after each restart.</p>
+        </div>
+
+        <h3>Option B — Docker</h3>
+        <pre><code class="language-bash">docker run --rm -p 8000:8000 amazon/dynamodb-local</code></pre>
+        <p>Note: Docker mode is ephemeral — tables reset on container exit.</p>
+
+        <h3>Initialize tables</h3>
+        <p>Once the database is running, create all five tables in a single command:</p>
+        <pre><code class="language-bash">cd raw/croe
+npm run init-db</code></pre>
+
+        <p>This runs <code>src/init-db.ts</code> which creates the following tables (skipping any that already exist):</p>
+
+        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
+        <table>
+            <thead><tr><th>Table</th><th>Keys</th><th>GSIs / LSIs</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td><strong>MonetUsers</strong></td>
+                    <td>PK: <code>id</code></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><strong>MonetOverrides</strong></td>
+                    <td>PK: <code>userId</code> / SK: <code>merchantId</code></td>
+                    <td>GSI: <code>MerchantIdIndex</code></td>
+                </tr>
+                <tr>
+                    <td><strong>MonetTransactions</strong></td>
+                    <td>PK: <code>userId</code> / SK: <code>transactionId</code></td>
+                    <td>LSI: <code>DateIndex</code>; GSI: <code>MerchantNameIndex</code>, <code>CategoryIndex</code></td>
+                </tr>
+                <tr>
+                    <td><strong>MonetInsightsCache</strong></td>
+                    <td>PK: <code>userId</code> / SK: <code>cacheKey</code></td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td><strong>MonetBrandCache</strong></td>
+                    <td>PK: <code>brandName</code></td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div class="callout callout-info not-prose">
+            <p><strong>ℹ️ Health check:</strong> If the dev server starts and DynamoDB is unreachable, <code>local-db-health-check.ts</code> catches the connection error and prints actionable fix instructions before exiting, so you'll know exactly what's wrong.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 3 — Dev Server
+        ════════════════════════════════════════════════ -->
+        <h2 id="dev-server">⚡ Running the Dev Server</h2>
+
+        <p>The backend is a Node 20 / Express app bundled with esbuild for Lambda, but it runs as a plain HTTP server locally on port 3000.</p>
+
+        <h3>1. Install dependencies</h3>
+        <pre><code class="language-bash">cd raw/croe
+npm install</code></pre>
+
+        <h3>2. Configure environment variables</h3>
+        <p>Copy <code>.env.example</code> to <code>.env</code> and fill in your values:</p>
+        <pre><code class="language-bash">cp .env.example .env</code></pre>
+
+        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
+        <table>
+            <thead><tr><th>Variable</th><th>Required locally</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td><code>PORT</code></td><td>No</td><td>Defaults to 3000</td></tr>
+                <tr><td><code>PLAID_CLIENT_ID</code></td><td>Yes (for Plaid features)</td><td>From Plaid Dashboard</td></tr>
+                <tr><td><code>PLAID_SECRET</code></td><td>Yes (for Plaid features)</td><td>Sandbox secret for dev</td></tr>
+                <tr><td><code>PLAID_ENV</code></td><td>Yes</td><td><code>sandbox</code> for dev</td></tr>
+                <tr><td><code>PLAID_ENCRYPTION_KEY</code></td><td>Yes</td><td>Any 32-character string locally</td></tr>
+                <tr><td><code>GOOGLE_CLIENT_ID</code></td><td>No (guest JWT works without it)</td><td>Only needed for Google Sign-In verification</td></tr>
+                <tr><td><code>APPLE_CLIENT_ID</code></td><td>No</td><td>Only needed for Apple Sign-In verification</td></tr>
+                <tr><td><code>MONET_ORIGIN_SECRET</code></td><td>No</td><td>Only enforced in deployed envs</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>3. Start local DynamoDB</h3>
+        <p>See <a href="#local-db">Local DynamoDB Setup</a> above. Run in a separate terminal window.</p>
+
+        <h3>4. Initialize tables (first run only)</h3>
+        <pre><code class="language-bash">npm run init-db</code></pre>
+
+        <h3>5. Start the dev server</h3>
+        <pre><code class="language-bash">npm run dev</code></pre>
+
+        <p>This runs <code>tsx watch src/index.ts</code> with hot-reload. The server listens on <code>http://localhost:3000</code>. The <code>predev</code> hook automatically kills any existing process on port 3000 before starting.</p>
+
+        <h3>Available npm scripts</h3>
+        <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
+        <table>
+            <thead><tr><th>Script</th><th>What it does</th></tr></thead>
+            <tbody>
+                <tr><td><code>npm run dev</code></td><td>Start dev server with hot-reload (tsx watch)</td></tr>
+                <tr><td><code>npm run init-db</code></td><td>Create all DynamoDB tables locally</td></tr>
+                <tr><td><code>npm run test</code></td><td>Run all Vitest tests</td></tr>
+                <tr><td><code>npm run lint</code></td><td>ESLint check</td></tr>
+                <tr><td><code>npm run format</code></td><td>Prettier format src, dev, tests</td></tr>
+                <tr><td><code>npm run deploy:dev</code></td><td><code>serverless deploy --stage dev</code></td></tr>
+                <tr><td><code>npm run deploy:prod</code></td><td><code>serverless deploy --stage prod</code></td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Verify the server is running</h3>
+        <pre><code class="language-bash">curl http://localhost:3000/health</code></pre>
+        <p>Expected response: <code>{"status":"ok"}</code></p>
+
+        <div class="callout callout-tip not-prose">
+            <p><strong>💡 Dev API key:</strong> For testing protected endpoints locally without signing in, set <code>MONET_DEV_API_KEY</code> in <code>.env</code> and pass it as the <code>X-Dev-Api-Key</code> header in Postman. This bypass is blocked entirely in the deployed Lambda.</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 4 — Bedrock Logging
+        ════════════════════════════════════════════════ -->
+        <h2>☁️ One-time AWS Setup Notes</h2>
+
+        <h3>Enable Bedrock Model Invocation Logging</h3>
+        <p>This is an account/region-wide setting that can't be managed via CloudFormation. Run once after your first Serverless deployment:</p>
+        <pre><code class="language-bash">aws bedrock put-model-invocation-logging-configuration \
+    --logging-config '{
+        "textDataDeliveryEnabled": true,
+        "imageDataDeliveryEnabled": false,
+        "embeddingDataDeliveryEnabled": false,
+        "videoDataDeliveryEnabled": false,
+        "audioDataDeliveryEnabled": false,
+        "cloudWatchConfig": {
+            "logGroupName": "/aws/bedrock/model-invocation-logs-dev",
+            "roleArn": "arn:aws:iam::050836710032:role/BedrockLoggingRole-dev"
+        }
+    }' \
+    --profile dev \
+    --region us-east-1</code></pre>
+
+    </div>
+    </main>
+</div>
+
+<script src="sidebar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>

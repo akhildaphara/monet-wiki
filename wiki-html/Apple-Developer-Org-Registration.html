@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>logs - Monet Wiki</title>
+    <title>Apple Developer Organization Registration - Monet Wiki</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -145,101 +144,58 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <h1>Wiki Update Logs</h1>
-<p>This file tracks synchronization between the repository&#39;s main branch and the organized wiki, incorporating historical milestones from the project log.</p>
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Commit Hash</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2026-06-01</td>
-<td><code>croe:ebbca62</code>, <code>swift:45676c9</code>, <code>web:b8c24c7</code></td>
-<td><strong>Wiki Sync</strong>: Documented Apple Developer Organization registration requirements and TestFlight pre-launch checklist details, cross-linking the new pages (<a href="Apple-Developer-Org-Registration.html">Apple-Developer-Org-Registration</a> and <a href="TestFlight-Compliance-Checklist.html">TestFlight-Compliance-Checklist</a>) in the index and sidebar.</td>
-</tr>
-<tr>
-<td>2026-05-29</td>
-<td><code>croe:f2822a2</code>, <code>swift:9f1bf36</code>, <code>web:745a8a7</code></td>
-<td><strong>Wiki Sync + Code Review</strong>: Documented webhook-driven <em>sync &amp; warm</em> background insight pre-computation and <code>plaidCardMappings</code> on user profiles. Replaced stale <code>dao.ts</code> references with the <code>src/dynamo/</code> repository layer, corrected the Plaid endpoint list (<code>POST /plaid/insights/sync</code>, <code>/plaid/status</code>, <code>/plaid/transactions</code>, <code>/plaid/institutions/:id</code>), and added Zod validation, AWS Bedrock, <code>serverless-http</code>, and <code>brandService.ts</code> to the backend docs. Also captured a full code-review findings pass (no code changes applied).</td>
-</tr>
-<tr>
-<td>2026-05-28</td>
-<td><code>croe:0dd07e4</code>, <code>swift:b1a067c</code>, <code>web:745a8a7</code></td>
-<td><strong>Wiki Sync</strong>: Documented Plaid transaction sync history length limits, the <code>days_requested: 180</code> Link Token parameter, and the DynamoDB cursor clearing workaround to force transaction history backfills in production.</td>
-</tr>
-<tr>
-<td>2026-05-09</td>
-<td><code>croe:6c62abd</code>, <code>swift:8d2d41a</code>, <code>web:44e7e60</code></td>
-<td><strong>Wiki Sync</strong>: Comprehensive update based on true raw file state (DynamoDB schemas, API routes, SwiftData models, Next.js static export).</td>
-</tr>
-<tr>
-<td>2026-05-09</td>
-<td><code>20de2dd</code></td>
-<td>docs: update website font to Inter for improved modern aesthetics and compatibility</td>
-</tr>
-<tr>
-<td>2026-05-09</td>
-<td><code>70511c4</code></td>
-<td>chore: standardize project naming, update design system documentation, and initialize wiki synchronization logs</td>
-</tr>
-<tr>
-<td>2026-05-08</td>
-<td><code>d2c7985</code></td>
-<td>refactor: rename MonetApp to swift-app and standardize component naming conventions</td>
-</tr>
-<tr>
-<td>2026-05-08</td>
-<td><code>eceeb71</code></td>
-<td>docs: update design system brand mappings and website structure while initializing the SwiftUI review checklist</td>
-</tr>
-<tr>
-<td>2026-05-08</td>
-<td><code>76e2ff6</code></td>
-<td>feat: expand design system with new brand colors</td>
-</tr>
-<tr>
-<td>2026-05-07</td>
-<td><code>6f3bb3c</code></td>
-<td>refactor: rename searchView, formatting</td>
-</tr>
-<tr>
-<td>2026-05-07</td>
-<td><code>4cea8b4</code></td>
-<td>docs: formalize Wise Design System integration and optimize backend insight fetching</td>
-</tr>
-<tr>
-<td>2026-04-28</td>
-<td><code>d08dd5c</code></td>
-<td><strong>Unified Infrastructure &amp; UI Redesign Sync</strong>: Migrated to Node 20/CJS, Serverless/AWS Lambda, unified <code>MonetTransactions</code> table, and major UI redesign with <code>Theme.swift</code>.</td>
-</tr>
-<tr>
-<td>2026-04-25</td>
-<td><code>3062f6e</code></td>
-<td><strong>Major Multi-Repo Wiki Update</strong>: Synced <code>croe</code> (modular API, Plaid sync), <code>Monet (iOS)</code> (BankConnectionsView, InsightsView), and <code>website</code> (Next.js 16 landing page).</td>
-</tr>
-<tr>
-<td>2026-04-15</td>
-<td><code>68a997b</code></td>
-<td><strong>AI-Driven Statement Analysis</strong>: Implemented PDF analysis with companion web portal and consolidated card reward structures.</td>
-</tr>
-<tr>
-<td>2026-04-14</td>
-<td><code>initial</code></td>
-<td><strong>Project Ingest</strong>: Initial summarization and creation of core wiki pages for iOS, Backend, Optimizer, and Plaid.</td>
-</tr>
-</tbody></table>
-<hr>
-<h3>Historical Milestone Summary (from root log.md)</h3>
-<ul>
-<li><strong>2026-04-15</strong>: Refactored <code>Monet-iOS-App</code> for centralized <code>DataStore.swift</code> and <code>Croe-Backend</code> for atomic DynamoDB updates.</li>
-<li><strong>2026-04-15</strong>: Bilt 2.0 research and strategy for state-aware marginal utility calculations.</li>
-<li><strong>2026-04-15</strong>: Planning for &quot;Manual Analyze&quot; AI Statement feature with companion web portal.</li>
-<li><strong>2026-04-14</strong>: Initial codebase ingestion and wiki structure creation.</li>
-</ul>
+                <h1>Apple Developer Organization Registration</h1>
+                <p>To distribute financial aggregation and reward optimization apps like Monet on the Apple App Store, Apple requires the developer account to be registered under a recognized legal entity (Organization) rather than as an Individual. This article details the structural, legal, and operational prerequisites required to successfully enroll in the Apple Developer Program as an Organization, which is critical for complying with Apple's developer guidelines and passing financial app reviews.</p>
+                
+                <h2>Registration Prerequisites</h2>
+                <p>Before starting the enrollment process, ensure that you have all of the following requirements prepared, as Apple strictly verifies this information:</p>
+                
+                <h3>1. Recognized Legal Entity Status</h3>
+                <ul>
+                    <li>The organization must be registered as a recognized legal entity (e.g., LLC, Corporation, Inc., Corp, GmbH).</li>
+                    <li>Apple does <strong>not</strong> accept Sole Proprietorships, DBAs, Fictitious Names, Trade Names, or Branches for Organization accounts.</li>
+                    <li>The legal entity name must match the name of the entity listed on your business registration papers.</li>
+                </ul>
 
+                <h3>2. D-U-N-S Number</h3>
+                <ul>
+                    <li>Your organization must have a valid 9-digit D-U-N-S (Data Universal Numbering System) number, which is a unique nine-digit identification sequence provided by Dun & Bradstreet (D&B).</li>
+                    <li>You can search for or request a D-U-N-S number for free via the Dun & Bradstreet website or through Apple's developer portal.</li>
+                    <li>The legal entity name and physical address associated with your D-U-N-S number must perfectly match the details provided in your Apple Developer application.</li>
+                </ul>
+
+                <h3>3. Legal Binding Authority</h3>
+                <ul>
+                    <li>The individual enrolling the organization must have the legal authority to bind the organization to Apple Developer Program agreements.</li>
+                    <li>You must be the owner, founder, executive team member, or an authorized employee with explicit permission from senior management.</li>
+                    <li>Apple will contact a reference/signatory at the organization to verify this authority.</li>
+                </ul>
+
+                <h3>4. Corporate Website</h3>
+                <ul>
+                    <li>A public-facing corporate website is required (e.g., <code>https://monet.app</code>).</li>
+                    <li>The domain name should be registered to the organization, and it must contain content relevant to your organization and the app being distributed.</li>
+                </ul>
+
+                <h3>5. Corporate Apple ID</h3>
+                <ul>
+                    <li>Apple recommends using a dedicated Apple ID associated with a corporate email address (e.g., <code>developer@monet.app</code>) rather than a personal one.</li>
+                    <li>Two-Factor Authentication (2FA) must be enabled on this Apple ID.</li>
+                </ul>
+
+                <h2>Step-by-Step Enrollment Flow</h2>
+                <ol>
+                    <li><strong>Verify D-U-N-S details</strong>: Ensure your Dun & Bradstreet profile is active and matches your business documents.</li>
+                    <li><strong>Create Apple ID</strong>: Establish your corporate Apple ID and secure it with 2FA.</li>
+                    <li><strong>Submit Application</strong>: Log into the Apple Developer portal and choose "Enroll as an Organization". Fill in the D-U-N-S number, legal entity name, corporate website, and authority contact info.</li>
+                    <li><strong>Verification Call</strong>: Apple support will review the application and call the organization's reference to verify binding authority.</li>
+                    <li><strong>Fee Payment</strong>: Once approved, pay the annual program fee ($99 USD or equivalent) to activate the account.</li>
+                </ol>
+
+                <h2>Related Topics</h2>
+                <ul>
+                    <li><a href="TestFlight-Compliance-Checklist.html">TestFlight-Compliance-Checklist</a></li>
+                </ul>
             </article>
             
             <div class="mt-12 flex justify-between items-center pt-6 border-t border-slate-200 text-sm text-slate-500">

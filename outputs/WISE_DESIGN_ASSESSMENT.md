@@ -128,6 +128,15 @@ We have actively started implementing these findings into the iOS codebase (`raw
 - [x] **InsightsView Refactor:** Integrated `SegmentedControl` and `Nudge` for a more professional dashboard feel.
 - [x] **Transition Refinement:** Implemented context-aware "Analyzing" overlays in `InsightsView` to eliminate UI flashing during time-range switches (Doherty Threshold mitigation).
 - [x] **AnalyzingTapestryView:** Created a signature "magic" animation for refresh states that bridges the gap between data request and reveal.
+- [x] **AppSnackbar:** Built a Wise-compliant bottom-anchored snackbar component for non-critical, auto-dismissing feedback ("Card removed", "Sync complete"). Follows the 3-words-or-less rule, supports an optional single action (e.g. Undo), and respects Reduce Motion.
+- [x] **Size Tokens:** Added `sizeXS/SM/MD/LG/XL` tokens to `Theme.swift` (24/40/48/56/72pt) aligned to the Wise size scale for icons, avatars, and interactive element heights.
+- [x] **Transitions Audit:** Confirmed all modal presentations use `.sheet` (bottom-up) and full-screen flows use `.fullScreenCover` — matching Wise's Upward/Modal distinction. `.navigationDestination` handles Sideways continuation.
+- [x] **AvatarSize enum:** Added `.xs/.sm/.md/.lg/.hero` semantic size cases using `Theme` tokens. `ProfileView` profile header updated to `.hero` (72pt — "main element on screen").
+- [x] **Sync Progress Bar:** `InsightsView.persistentHeader` bar now triggers on both `manager.isLoading` and `dataStore.isSyncing`. `WalletView` adds a thin bar in the card list during Plaid sync.
+- [x] **Snackbar wired:** `WalletView` displays "Card removed" via `AppSnackbar` after the confirmation-and-removal flow completes.
+- [x] **SectionHeader component:** Standardised `.section` / `.group` styles replace ad-hoc `Text + .title3.bold()` in `WalletView`, `CardDetailsView`, `ProfileView`, `BankConnectionsView`. Supports optional trailing action for "See more" patterns. **Monet-specific divergence:** `.group` uses ALL CAPS `.caption.semibold` (iOS native grouped header convention) rather than Wise's prominent section header — codified in `design-system.html` Monet Guidelines.
+- [x] **Plaid fetch-token feedback corrected:** Inline spinner removed from button labels; replaced with a thin indeterminate progress bar below the button (`InsightsView`, `BankConnectionsView`).
+- [x] **Post-Plaid success screen:** `InsightsView` presents a `.confirmation` `SuccessView` ("Bank connected") in a medium sheet immediately after the Plaid link + backend sync completes.
 
 ---
 
@@ -153,6 +162,62 @@ Primary navigation and global "Refresh" actions are anchored to terminal positio
 
 ---
 
+---
+
+## 6. Latest Review Findings (Round 2)
+
+### What We Learned
+
+**Transitions (`foundations/transitions.md`):**
+- Wise uses exactly three transition types on iOS: **Upward** (new flow — sheet from bottom), **Sideways** (navigation continuation — push/pop), and **Modal** (supporting content — bottom sheet).
+- **Action item (verified):** Monet already matches this pattern correctly. Full-screen flows (add card, confirmation) use `.fullScreenCover` / `.sheet`. Drill-down views use `.navigationDestination`. No corrective action needed.
+
+**Snackbar (`components/snackbar.md`):**
+- Brief, bottom-anchored, auto-dismissing feedback. "3 words or less." Never for critical info.
+- Perfect for: "Card removed", "Sync complete", "Changes saved".
+- **Action item (done):** `AppSnackbar` component built and shipped. Attach via `.appSnackbar(item: $snackbarItem)`.
+
+**Progress Bar vs. Spinner (`components/progress-bar.md`, `components/progress-spinner.md`):**
+- Progress bars → generic fast-loading tasks (navigation, background data fetching).
+- Progress spinners → stressful/long tasks (uploading, token exchange).
+- Wise's threshold rule: under 200ms = no loader; 200-700ms = determinate bar; over 700ms = indeterminate. `AnalyzingTapestryView` already handles the long case well. The short-case (100-700ms background sync) has no feedback yet.
+- **Opportunity:** Add a thin indeterminate `ProgressView()` bar at the top of `InsightsView` and `WalletView` during background Plaid sync — replacing silence with subtle reassurance.
+
+**Modal (`components/modal.md`):**
+- Key rule: never show a modal on top of another modal. Add content to the existing one or go to a new screen.
+- Button copy rule: the CTA must be self-describing — "Remove card" not just "Confirm".
+- **Action item (verified):** `ConfirmationView` already uses "Remove" (not "Confirm"). No change needed.
+
+**Size (`foundations/size.md`):**
+- Wise's size scale: 24 / 40 / 48 / 56 / 72px for icons, avatars, and interactive elements.
+- **Action item (done):** `Theme.sizeXS/SM/MD/LG/XL` tokens added. Avatar component should migrate to `Theme.sizeLG` (56pt) for list contexts and `Theme.sizeXL` (72pt) for the profile hero.
+
+### Next Opportunities to Tackle
+
+1. ~~**Thin progress bar during sync**~~ ✅ Done — `ProgressView` in `InsightsView.persistentHeader` now triggers on `dataStore.isSyncing` in addition to `manager.isLoading`. `WalletView` gets its own thin bar at the top of the card list during sync.
+2. ~~**Avatar size migration**~~ ✅ Done — `AvatarSize` enum added (`.xs/.sm/.md/.lg/.hero`), `ProfileView` hero now uses `.hero` (72pt).
+3. ~~**Snackbar integration**~~ ✅ Done — `WalletView` shows "Card removed" via `AppSnackbar` after confirmation.
+
+### Remaining Opportunities ✅ All resolved
+
+1. ~~**Section headers**~~ ✅ Done — `SectionHeader` component created (`.section` / `.group` styles, optional trailing action). Deployed to `WalletView`, `CardDetailsView`, `ProfileView`, `BankConnectionsView`.
+2. ~~**Inline progress bar for Plaid link token fetch**~~ ✅ Done — Spinner removed from inside button labels in `InsightsView` and `BankConnectionsView`. Replaced with thin indeterminate `ProgressView` bar below the button.
+3. ~~**Progress screen pattern**~~ ✅ Done — `InsightsView` shows a `.confirmation` `SuccessView` ("Bank connected") as a `.medium` sheet after the Plaid link + sync completes.
+
+### Further Horizons
+
+Looking at the remaining unchecked Wise component files, the most applicable to Monet's iOS UI:
+
+| Component | Applicability | Effort |
+|-----------|--------------|--------|
+| `components/critical-banner.md` | Urgent system-level alerts (account suspended, Plaid expired) that must persist on screen | Medium |
+| `components/inline-prompt.md` | Inline tip/help text inside forms (EditCardRewards, bank mapping) | Low |
+| `components/popover.md` | Tooltip over the optimization % ring explaining what the score means | Medium |
+| `components/screen-loader.md` | Already covered by `AnalyzingTapestryView`; no gap | — |
+| `patterns/callout-small.md` | Feature highlight cards ("You unlocked Insights!") in empty-state post-connection | Medium |
+
+---
+
 ## Appendix: Wise Design Skills File Checklist
 
 /Users/akhildaphara/Documents/wise-design-skills
@@ -174,11 +239,11 @@ Primary navigation and global "Refresh" actions are anchored to terminal positio
 - [ ] foundations/photography.md
 - [ ] foundations/promo-assets.md
 - [x] foundations/radius.md
-- [ ] foundations/size.md
+- [x] foundations/size.md
 - [x] foundations/spacing.md
 - [x] foundations/tapestries.md
 - [x] foundations/tone-of-voice.md
-- [ ] foundations/transitions.md
+- [x] foundations/transitions.md
 - [x] foundations/typography.md
 - [x] foundations/vocabulary.md
 
@@ -188,7 +253,7 @@ Primary navigation and global "Refresh" actions are anchored to terminal positio
 - [x] components/bottom-sheet.md
 - [x] components/button.md
 - [x] components/card.md
-- [ ] components/carousel-cards.md
+- [x] components/carousel-cards.md (Skipped: Web/marketing pattern, not applicable to iOS product UI)
 - [x] components/checkbox.md
 - [x] components/chip.md
 - [x] components/circular-button.md
@@ -214,22 +279,22 @@ Primary navigation and global "Refresh" actions are anchored to terminal positio
 - [x] components/list-item-switch.md
 - [x] components/list-item.md
 - [ ] components/media-button.md
-- [ ] components/modal.md
+- [x] components/modal.md
 - [ ] components/money-input.md
 - [ ] components/navigation-option.md
 - [x] components/nudge.md
 - [ ] components/password-input.md
 - [ ] components/popover.md
-- [ ] components/progress-bar.md
-- [ ] components/progress-spinner.md
+- [x] components/progress-bar.md
+- [x] components/progress-spinner.md
 - [ ] components/promo-card.md
 - [ ] components/radio.md
 - [ ] components/screen-loader.md
 - [x] components/search-input.md
-- [ ] components/section-header.md
+- [x] components/section-header.md
 - [x] components/segmented-control.md
 - [ ] components/select.md
-- [ ] components/snackbar.md
+- [x] components/snackbar.md
 - [ ] components/summary.md
 - [x] components/switch.md
 - [ ] components/table.md
@@ -267,7 +332,7 @@ Primary navigation and global "Refresh" actions are anchored to terminal positio
 - [ ] patterns/icon-socials.md
 - [ ] patterns/logo-grid.md
 - [x] patterns/notifications.md
-- [ ] patterns/progress-screen.md
+- [x] patterns/progress-screen.md
 - [ ] patterns/quote-highlight.md
 - [ ] patterns/quote-text.md
 - [x] patterns/success-screen.md

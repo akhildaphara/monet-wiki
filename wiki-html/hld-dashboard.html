@@ -864,8 +864,8 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Retrieves the complete master catalog of all available credit cards in the database.</p>
-                    <span class="api-auth-badge required">Auth: Required</span>
+                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (24-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Public</strong> and edge-cached — kept outside the authorizer so CloudFront's <code>CachingOptimized</code> policy can cache without forwarding <code>Authorization</code> (see Auth section).</p>
+                    <span class="api-auth-badge">Auth: None (public, edge-cached)</span>
                     <div class="api-details-grid">
                         <div>
                             <div class="api-section-title">Response (200 OK)</div>
@@ -1164,6 +1164,7 @@
                 </thead>
                 <tbody>
                     <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (public).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven, edge-cached.</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/popular-categories</code></td><td>Static brand&rarr;category seed for client cache (public, edge-cached).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/user/settings</code></td><td>Toggle <code>showGlobalBestCard</code>.</td><td><span class="pill pill-ok">Req</span></td></tr>
@@ -1327,6 +1328,16 @@
                         <td>Monitoring coverage</td>
                         <td>Alarms only watch the API Lambda. No alarms on Plaid/Google failure rates, DynamoDB throttling, or CloudFront 5xx; SNS has a single email subscriber (no Slack/PagerDuty escalation).</td>
                         <td><span class="pill pill-warn">Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td>Payment method</td>
+                        <td><code>APPLE_CARD</code> earns 2% via Apple Pay vs. 1% on physical swipe; the optimizer uses a flat 2% base rate with a note — no payment-method intent flag in <code>/recommend</code> yet.</td>
+                        <td><span class="pill pill-info">Low</span></td>
+                    </tr>
+                    <tr>
+                        <td>Security review drift</td>
+                        <td><code>outputs/Security-Review-Summary.md</code> (2026-05-31) predates several fixes in <code>raw/croe/changelog.md</code> (OAuth audience via SSM, guest origin-secret). Treat HLD + code as authoritative; re-audit before public launch.</td>
+                        <td><span class="pill pill-info">Low</span></td>
                     </tr>
                 </tbody>
             </table>
