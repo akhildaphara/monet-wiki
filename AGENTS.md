@@ -26,6 +26,11 @@ A knowledge base about the app Monet. A credit card rewards optimizer app.
 - Keep the HLD **concise** — it is a high-level reference, not exhaustive documentation. Summarize; link out to detailed wiki articles for depth.
 - If you find a discrepancy between the HLD and the actual code in `raw/` (or anywhere else), **stop and inform the user** about the mismatch. Do not silently "fix" it in either direction — surface it and let the user decide.
 
+## Source of Truth (Design System)
+
+- The Design System reference dashboard at `design-system.html` is the authoritative source of truth for the Monet design language, component specs, spacing/corner tokens, typography weights/cases, and UI guidelines.
+- Always consult `design-system.html` before modifying, adding, or evaluating user interface screens, elements, buttons, and layouts to ensure conformity with the visual identity.
+
 ## Changelog (code repos)
 
 - Every time code is updated in `raw/swift-app` or `raw/croe`, you MUST append an entry to a `changelog.md` file at the root of that repo (`raw/swift-app/changelog.md` / `raw/croe/changelog.md`). Create the file if it does not exist.
