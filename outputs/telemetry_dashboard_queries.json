@@ -1,0 +1,241 @@
+{
+  "title": "Monet Telemetry Analytics Dashboard",
+  "insights": [
+    {
+      "title": "Daily Active Users (DAU)",
+      "type": "timeseries",
+      "displayMode": "lineChart",
+      "groupBy": "day",
+      "isExpanded": true,
+      "uniqueUser": true,
+      "customQuery": {
+        "queryType": "timeseries",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "day",
+        "aggregations": [
+          {
+            "name": "unique_users",
+            "type": "userCount"
+          }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Onboarding Funnel Steps",
+      "type": "topN",
+      "displayMode": "barChart",
+      "groupBy": "all",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "breakdownKey": "step",
+      "customQuery": {
+        "queryType": "groupBy",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "all",
+        "dimensions": [
+          { "dimension": "step", "outputName": "onboarding_step", "type": "default" }
+        ],
+        "aggregations": [
+          { "name": "sessions", "type": "count" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "onboarding_step_viewed" },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Most Recommended Credit Cards",
+      "type": "topN",
+      "displayMode": "barChart",
+      "groupBy": "all",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "breakdownKey": "recommended_card_id",
+      "customQuery": {
+        "queryType": "topN",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "all",
+        "dimension": { "dimension": "recommended_card_id", "outputName": "card_id", "type": "default" },
+        "metric": { "metric": "count", "type": "numeric" },
+        "threshold": 15,
+        "aggregations": [
+          { "name": "count", "type": "count" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "recommendation_viewed" },
+            { "type": "selector", "dimension": "has_result", "value": "true" },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Most Searched Merchant Categories",
+      "type": "topN",
+      "displayMode": "pieChart",
+      "groupBy": "all",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "breakdownKey": "category",
+      "customQuery": {
+        "queryType": "topN",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "all",
+        "dimension": { "dimension": "category", "outputName": "resolved_category", "type": "default" },
+        "metric": { "metric": "count", "type": "numeric" },
+        "threshold": 10,
+        "aggregations": [
+          { "name": "count", "type": "count" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "recommendation_viewed" },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Search Mode Breakdown",
+      "type": "topN",
+      "displayMode": "pieChart",
+      "groupBy": "all",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "breakdownKey": "mode",
+      "customQuery": {
+        "queryType": "groupBy",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "all",
+        "dimensions": [
+          { "dimension": "mode", "outputName": "search_mode", "type": "default" }
+        ],
+        "aggregations": [
+          { "name": "count", "type": "count" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "search_performed" },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "User Wallet Size Distribution",
+      "type": "topN",
+      "displayMode": "barChart",
+      "groupBy": "all",
+      "isExpanded": true,
+      "uniqueUser": true,
+      "breakdownKey": "card_count",
+      "customQuery": {
+        "queryType": "groupBy",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "all",
+        "dimensions": [
+          { "dimension": "card_count", "outputName": "cards_in_wallet", "type": "default" }
+        ],
+        "aggregations": [
+          { "name": "unique_users", "type": "userCount" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "API & Network Failure Rates",
+      "type": "timeseries",
+      "displayMode": "lineChart",
+      "groupBy": "day",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "customQuery": {
+        "queryType": "timeseries",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "day",
+        "aggregations": [
+          { "name": "errors_count", "type": "count" }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            {
+              "type": "or",
+              "fields": [
+                { "type": "selector", "dimension": "type", "value": "api_error" },
+                { "type": "selector", "dimension": "type", "value": "network_error" }
+              ]
+            },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    }
+  ],
+  "_exportMetadata": {
+    "version": 1,
+    "exportedAt": "2026-06-03T02:12:00.000Z",
+    "dynamicFields": []
+  }
+}

@@ -505,7 +505,6 @@
                 <li><code>GET /health</code> &mdash; liveness ping.</li>
                 <li><code>POST /v1/auth/guest</code> &mdash; the only public client-facing endpoint; mints a guest JWT.</li>
                 <li><code>POST /v1/plaid/webhook</code> &mdash; Plaid verifies via its own payload signature, not a user token.</li>
-                <li><code>GET /v1/cards</code> &amp; <code>GET /v1/popular-categories</code> &mdash; public, edge-cached (no PII, identical for all users). Kept public so CloudFront's <code>CachingOptimized</code> policy can cache without forwarding <code>Authorization</code>.</li>
             </ul>
             <div class="callout">
                 <span class="pill pill-info">Client note</span> The iOS app degrades gracefully without a session: it supports a <strong>guest</strong> flow and an <strong>on-device recommender</strong> (<code>LocalRecommender</code> + <code>PlacesCache</code>) so search/recommendations still work offline or before sign-in.
@@ -580,6 +579,37 @@
                         end
                         
                         API-->>Client: { summary, categories, transactions }
+                </div>
+            </div>
+
+            <h3>4. Client Request Execution & Failure Recovery</h3>
+            <p>The client-side API execution path in <code>APIClient.swift</code> which orchestrates retries, token refresh handshakes, rate limiting backoffs (dropping to offline <code>LocalRecommender</code> calculations), and server health checking loops.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    graph TD
+                        Request["📱 Execute API Request"] --> NetworkCheck{"Network Connected?"}
+                        NetworkCheck -->|No| OfflineFallback["⚠️ Drop to Offline / LocalRecommender"]
+                        NetworkCheck -->|Yes| Send["🌐 Send HTTP Request"]
+                        
+                        Send --> Response{"HTTP Status?"}
+                        Response -->|2xx OK| Success["✅ Return Success Payload"]
+                        
+                        Response -->|401 Unauthorized| TokenRefresh{"First attempt?"}
+                        TokenRefresh -->|Yes| Refresh["🔑 Invoke onTokenExpired"]
+                        Refresh --> SuccessToken{"Refresh Success?"}
+                        SuccessToken -->|Yes| Retry["🔄 Re-send Request with New Token"]
+                        SuccessToken -->|No| Expire["🔒 Session Expired / Force Sign-in"]
+                        TokenRefresh -->|No| Expire
+                        
+                        Response -->|429 Too Many Requests| Limit["⏳ Trigger isRateLimited Banner & Offline Mode"]
+                        
+                        Response -->|5xx or Network Error| RetryLimit{"Retries under 3?"}
+                        RetryLimit -->|Yes| Backoff["⏳ Exponential Backoff"]
+                        Backoff --> Retry
+                        RetryLimit -->|No| HealthCheck["🏥 Trigger Server health Ping Loop"]
+                        HealthCheck --> OnlineCheck{"Server Alive?"}
+                        OnlineCheck -->|Yes| Success
+                        OnlineCheck -->|No| HealthCheck
                 </div>
             </div>
         </section>
@@ -864,8 +894,8 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (24-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Public</strong> and edge-cached — kept outside the authorizer so CloudFront's <code>CachingOptimized</code> policy can cache without forwarding <code>Authorization</code> (see Auth section).</p>
-                    <span class="api-auth-badge">Auth: None (public, edge-cached)</span>
+                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (24-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Authenticated</strong> &mdash; requests are routed through the authorizer to protect the curated catalog structure from public scraping (see Auth section).</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid">
                         <div>
                             <div class="api-section-title">Response (200 OK)</div>
@@ -1163,10 +1193,9 @@
                     <tr><th>Method</th><th>Path</th><th>Purpose</th><th>Auth</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (public).</td><td><span class="pill pill-info">Public</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven, edge-cached.</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven. Bypasses edge cache to protect catalog content.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/popular-categories</code></td><td>Static brand&rarr;category seed for client cache (public, edge-cached).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/user/settings</code></td><td>Toggle <code>showGlobalBestCard</code>.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/plaid/webhook</code></td><td>Plaid-initiated sync trigger; verified by Plaid signature, not a user token (public).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/plaid/sync-transactions</code></td><td>Pull latest transactions for the user.</td><td><span class="pill pill-ok">Req</span></td></tr>

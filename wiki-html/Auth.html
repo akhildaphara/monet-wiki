@@ -174,10 +174,9 @@
 
                 <!-- CloudFront -->
                 <rect x="200" y="80" width="140" height="72" rx="8" class="node-blue"/>
-                <text x="270" y="104" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="13" fill="white">CloudFront</text>
-                <text x="270" y="120" text-anchor="middle" class="lbl-sm lbl-blue">Adds X-Origin-Secret</text>
-                <text x="270" y="135" text-anchor="middle" class="lbl-sm lbl-blue">Caches /v1/cards</text>
-                <text x="270" y="148" text-anchor="middle" class="lbl-sm lbl-blue">/v1/popular-categories</text>
+                <text x="270" y="106" text-anchor="middle" font-family="Outfit,sans-serif" font-weight="700" font-size="13" fill="white">CloudFront</text>
+                <text x="270" y="124" text-anchor="middle" class="lbl-sm lbl-blue">Adds X-Origin-Secret</text>
+                <text x="270" y="139" text-anchor="middle" class="lbl-sm lbl-blue">Enforces HTTPS</text>
 
                 <!-- CF → APIGW -->
                 <line x1="340" y1="116" x2="400" y2="116" class="arr"/>
@@ -334,19 +333,13 @@
                         <td class="px-5 py-3"><span class="method method-post">POST</span></td>
                         <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/auth/guest</td>
                         <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
-                        <td class="px-5 py-3 text-xs text-slate-500">Bootstrap endpoint — must be open so guests can get a token</td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Bootstrap endpoint — requires valid <code>X-Monet-App-Key</code> header to prevent non-app client token minting</td>
                     </tr>
                     <tr class="hover:bg-slate-50/60 transition-colors">
                         <td class="px-5 py-3"><span class="method method-get">GET</span></td>
                         <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/cards</td>
-                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
-                        <td class="px-5 py-3 text-xs text-slate-500">Static catalog; <code class="text-xs">CachingOptimized</code> at CloudFront — Authorization can't be in cache key without breaking sharing</td>
-                    </tr>
-                    <tr class="hover:bg-slate-50/60 transition-colors">
-                        <td class="px-5 py-3"><span class="method method-get">GET</span></td>
-                        <td class="px-5 py-3 font-mono text-xs text-slate-700">/v1/popular-categories</td>
-                        <td class="px-5 py-3"><span class="badge badge-gray">None</span></td>
-                        <td class="px-5 py-3 text-xs text-slate-500">Same as <code class="text-xs">/v1/cards</code> — static, edge-cached</td>
+                        <td class="px-5 py-3"><span class="badge badge-blue">monetAuthorizer</span></td>
+                        <td class="px-5 py-3 text-xs text-slate-500">Curated master catalog; accessible to authenticated users (including guests) to protect proprietary reward metadata</td>
                     </tr>
                     <tr class="hover:bg-slate-50/60 transition-colors">
                         <td class="px-5 py-3"><span class="method method-any">ANY</span></td>
@@ -359,7 +352,7 @@
         </div>
 
         <div class="not-prose bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 text-xs text-amber-800 mb-8">
-            <strong>Why /v1/cards is public:</strong> CloudFront's <code class="text-xs">CachingOptimized</code> policy caches by URL only and doesn't forward the Authorization header to the origin on cache misses. If the route were behind the Lambda authorizer, cache misses would arrive tokenless → 403. Making it public gives every user a single shared 1-hour cache entry with zero Lambda invocations on hits.
+            <strong>Card Catalog Security:</strong> The <code>/v1/cards</code> route requires authentication (valid Guest or Registered JWT) and is excluded from edge-caching to prevent public scraping of Monet's highly curated credit card rewards taxonomy.
         </div>
 
         <!-- ── X-Origin-Secret ────────────────────── -->
