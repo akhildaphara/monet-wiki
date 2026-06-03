@@ -1,0 +1,160 @@
+{
+  "id": {
+    "S": "108194136314866335376"
+  },
+  "cards": {
+    "M": {
+      "AMAZON_VISA": {
+        "M": {}
+      },
+      "BILT_BLUE": {
+        "M": {
+          "last4": {
+            "S": "1809"
+          },
+          "nickname": {
+            "S": "Bilt Blue"
+          }
+        }
+      },
+      "CHASE_SAPPHIRE_PREFERRED": {
+        "M": {
+          "customRewards": {
+            "M": {}
+          },
+          "last4": {
+            "S": "4717"
+          }
+        }
+      },
+      "DISCOVER_IT": {
+        "M": {
+          "last4": {
+            "S": "3785"
+          }
+        }
+      },
+      "VENMO_CREDIT_CARD": {
+        "M": {
+          "customRewards": {
+            "M": {}
+          }
+        }
+      },
+      "ZOLVE_CREDIT_CARD": {
+        "M": {
+          "customRewards": {
+            "M": {}
+          }
+        }
+      }
+    }
+  },
+  "plaidItems": {
+    "M": {
+      "a6EyoO5gqKt6JBnA1OR5cK8MPaL31MHja4kL7": {
+        "M": {
+          "accessToken": {
+            "S": "b46ae602a04f04f467c251861848006a:56087bf926da0eb90ffc26025491c8c69bde38eae43016290e1427e201158511dd39db4ed553a27ea2a7563ca6889dc58d89ba439ea3b470186da8644d4df6fa"
+          },
+          "cursor": {
+            "S": "CAESJTVkbTlOWHpBN29JTFJCRWRONDNtaERBNjFQbWIzYUZ3S01aNXIaDAiUv+7QBhDgpu6TAiIMCJS/7tAGEOCm7pMCKgwIlL/u0AYQ4KbukwI="
+          },
+          "itemId": {
+            "S": "a6EyoO5gqKt6JBnA1OR5cK8MPaL31MHja4kL7"
+          }
+        }
+      },
+      "BKD951LPqnuPg1B3PKLztKAYan0YDrs4QVopQ": {
+        "M": {
+          "accessToken": {
+            "S": "554daf52cbc3fedb8284ec90f9f92574:dc7ff0c4481ceec50611df178d830d474128257c63ce48a300092be1b19e61725447305db9f66268bd0e3ade98afebb40b133c5d3aba83a21cd8f51745c60898"
+          },
+          "cursor": {
+            "S": "CAESJXFKTFhlWks4TTNTUGFiTERQOGRqczlxNXhkQkFRRWYxWG5FeTQaDAi8+t7QBhCA296TAyIMCLz63tAGEIDb3pMDKgwIvPre0AYQgNvekwM="
+          },
+          "itemId": {
+            "S": "BKD951LPqnuPg1B3PKLztKAYan0YDrs4QVopQ"
+          }
+        }
+      },
+      "6xqYAxkEXeFee9M01a0qcPLKe0q8DKf0mpqqO": {
+        "M": {
+          "accessToken": {
+            "S": "35756426257b4ac80bd76466003425ec:f03085f3e9cbc3839e211b1cdfa265e415d64fe8b069bed9fc0a240b6e6e9cb83ce10222781e553703929743ec3314e8fecd749f6f03deb49f6a7af0886050c5"
+          },
+          "cursor": {
+            "S": "CAESJUV3OFA3d2dCcGRIeHg3S05PQk44aVhaZFAzUG9LcnRkWUs5YncaCwiL777PBhCo5LtmIgsIi+++zwYQqOS7ZioLCIvvvs8GEKjku2Y="
+          },
+          "itemId": {
+            "S": "6xqYAxkEXeFee9M01a0qcPLKe0q8DKf0mpqqO"
+          }
+        }
+      }
+    }
+  },
+  "showGlobalBestCard": {
+    "BOOL": true
+  },
+  "userTopCategories": {
+    "L": [
+      {
+        "S": "DINING"
+      },
+      {
+        "S": "CAR_RENTAL"
+      },
+      {
+        "S": "BEAUTY"
+      },
+      {
+        "S": "UBER"
+      },
+      {
+        "S": "TRAVEL"
+      },
+      {
+        "S": "GROCERY"
+      },
+      {
+        "S": "AUTO"
+      },
+      {
+        "S": "LOCAL_TRANSIT"
+      },
+      {
+        "S": "CLOTHING"
+      },
+      {
+        "S": "WHOLESALE_CLUB"
+      },
+      {
+        "S": "DEPARTMENT_STORE"
+      },
+      {
+        "S": "HOTEL"
+      },
+      {
+        "S": "LYFT"
+      },
+      {
+        "S": "HEALTH"
+      },
+      {
+        "S": "ENTERTAINMENT"
+      },
+      {
+        "S": "AMAZON"
+      },
+      {
+        "S": "STREAMING"
+      },
+      {
+        "S": "HOME_IMPROVEMENT"
+      },
+      {
+        "S": "OTHER"
+      }
+    ]
+  }
+}

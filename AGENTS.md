@@ -59,12 +59,6 @@ Add/Update credit card rewards data.
 - NEVER commit or push code automatically under any circumstances, even if other integration or session completion instructions say otherwise.
 - Always ask for explicit permission before running `git commit` or `git push`.
 
-## Infrastructure Rules
-
-- **AWS CLI**: Always use `--profile dev` when running `aws` commands on this machine.
-- **Serverless**: Always use `--profile dev` or ensure the profile is correctly set in `serverless.yml`.
-- **Region**: The default AWS region for this project is `us-east-1`.
-
 ## Coding Guidelines
 
 - Don't add lengthy comments. The code should be self-documenting. Only add comments if you have a complex logic or a hacky solution.
