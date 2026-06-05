@@ -156,6 +156,11 @@
 </tr>
 </thead>
 <tbody><tr>
+<td>2026-06-04</td>
+<td><code>croe:938bcf7</code>, <code>swift:cfb478f</code>, <code>web:b8c24c7</code></td>
+<td><strong>Wiki Sync</strong>: Updated setup how-tos documentation to cover <code>MONET_CUSTOM_JWT_SECRET</code> environment variable mapping, SSM parameter bootstrap details, and the newly added <code>MonetCredentials</code> database table schema for the native email/password sign-in and sign-up flows.</td>
+</tr>
+<tr>
 <td>2026-06-03</td>
 <td><code>croe:ecf4b43</code>, <code>swift:eb24c22</code>, <code>web:e3cf6af</code></td>
 <td><strong>Wiki Sync</strong>: Cleaned up the dead <code>GET /v1/plaid/institutions/:id</code> and unused <code>GET /v1/popular-categories</code> endpoints, and removed the stale API reference file <code>ApiDocs.md</code>. Protected the curated card catalog (<code>GET /v1/cards</code>) by requiring authentication and disabling CloudFront edge caching. Implemented <code>X-Monet-App-Key</code> client-verification security on the guest token minting endpoint (<code>/v1/auth/guest</code>). Added the client-side request failure recovery flowchart to the High-Level Design dashboard and synchronized all associated route and auth security tables.</td>

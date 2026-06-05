@@ -497,7 +497,7 @@
             </table>
 
             <h3>Edge / origin protection</h3>
-            <p>CloudFront injects a secret <code>X-Origin-Secret</code> header on every origin request; the authorizer rejects calls that lack it, so the API Gateway URL cannot be hit directly. Secrets (<code>MONET_GUEST_JWT_SECRET</code>, <code>MONET_DEV_API_KEY</code>, <code>MONET_ORIGIN_SECRET</code>, Plaid + Google keys) live in <strong>SSM Parameter Store</strong>. Plaid access tokens are encrypted at rest with <strong>AES-256-GCM</strong> (<code>PLAID_ENCRYPTION_KEY</code>, required at startup).</p>
+            <p>CloudFront injects a secret <code>X-Origin-Secret</code> header on every origin request; the authorizer rejects calls that lack it, so the API Gateway URL cannot be hit directly. Secrets (<code>MONET_GUEST_JWT_SECRET</code>, <code>MONET_CUSTOM_JWT_SECRET</code>, <code>MONET_DEV_API_KEY</code>, <code>MONET_ORIGIN_SECRET</code>, Plaid + Google keys) live in <strong>SSM Parameter Store</strong>. Plaid access tokens are encrypted at rest with <strong>AES-256-GCM</strong> (<code>PLAID_ENCRYPTION_KEY</code>, required at startup).</p>
 
             <h3>Public (unauthenticated) endpoints</h3>
             <p>These bypass the authorizer by design and are registered ahead of the catch-all:</p>
@@ -1245,6 +1245,8 @@
                     <tr><td><code>recommendRateLimiter</code></td><td>40 / min</td><td><code>POST /v1/recommend</code></td></tr>
                     <tr><td><code>brandSearchRateLimiter</code></td><td>30 / min</td><td><code>GET /v1/brands/search</code></td></tr>
                     <tr><td><code>guestTokenRateLimiter</code></td><td>10 / min</td><td><code>POST /v1/auth/guest</code></td></tr>
+                    <tr><td><code>loginRateLimiter</code></td><td>10 / 15 min</td><td><code>POST /v1/auth/login</code></td></tr>
+                    <tr><td><code>signupRateLimiter</code></td><td>5 / hr</td><td><code>POST /v1/auth/signup</code></td></tr>
                 </tbody>
             </table>
 

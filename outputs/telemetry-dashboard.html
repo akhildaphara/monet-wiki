@@ -537,7 +537,7 @@
 
             <div class="library-item">
                 <div class="library-header">
-                    <h3>1. Daily Active Users (DAU) - Timeseries</h3>
+                    <h3>1. Daily Active Identities (Raw DAU) - Timeseries</h3>
                     <button class="copy-btn" onclick="copyTql('tql-dau')">Copy TQL JSON</button>
                 </div>
                 <textarea id="tql-dau" class="json-code" readonly>{
@@ -575,7 +575,7 @@
   "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
   "granularity": "all",
   "dimensions": [
-    { "dimension": "step", "outputName": "onboarding_step", "type": "default" }
+    { "dimension": "step", "outputName": "step", "type": "default" }
   ],
   "aggregations": [
     { "name": "sessions", "type": "count" }
@@ -605,7 +605,7 @@
   "queryType": "topN",
   "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
   "granularity": "all",
-  "dimension": { "dimension": "recommended_card_id", "outputName": "card_id", "type": "default" },
+  "dimension": { "dimension": "recommended_card_id", "outputName": "recommended_card_id", "type": "default" },
   "metric": { "metric": "count", "type": "numeric" },
   "threshold": 15,
   "aggregations": [
@@ -637,7 +637,7 @@
   "queryType": "topN",
   "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
   "granularity": "all",
-  "dimension": { "dimension": "category", "outputName": "resolved_category", "type": "default" },
+  "dimension": { "dimension": "category", "outputName": "category", "type": "default" },
   "metric": { "metric": "count", "type": "numeric" },
   "threshold": 10,
   "aggregations": [
@@ -669,7 +669,7 @@
   "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
   "granularity": "all",
   "dimensions": [
-    { "dimension": "mode", "outputName": "search_mode", "type": "default" }
+    { "dimension": "mode", "outputName": "mode", "type": "default" }
   ],
   "aggregations": [
     { "name": "count", "type": "count" }
@@ -700,7 +700,7 @@
   "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
   "granularity": "all",
   "dimensions": [
-    { "dimension": "card_count", "outputName": "cards_in_wallet", "type": "default" }
+    { "dimension": "card_count", "outputName": "card_count", "type": "default" }
   ],
   "aggregations": [
     { "name": "unique_users", "type": "userCount" }
@@ -742,6 +742,68 @@
           { "type": "selector", "dimension": "type", "value": "network_error" }
         ]
       },
+      { "type": "selector", "dimension": "isTestMode", "value": "false" }
+    ]
+  },
+  "relativeIntervals": [
+    {
+      "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+      "endDate": { "component": "day", "offset": 0, "position": "end" }
+    }
+  ]
+}</textarea>
+            </div>
+
+            <div class="library-item">
+                <div class="library-header">
+                    <h3>8. Clean Installed Devices - Timeseries</h3>
+                    <button class="copy-btn" onclick="copyTql('tql-installs')">Copy TQL JSON</button>
+                </div>
+                <textarea id="tql-installs" class="json-code" readonly>{
+  "queryType": "timeseries",
+  "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+  "granularity": "day",
+  "aggregations": [
+    {
+      "name": "new_installs",
+      "type": "count"
+    }
+  ],
+  "filter": {
+    "type": "and",
+    "fields": [
+      { "type": "selector", "dimension": "type", "value": "device_installed" },
+      { "type": "selector", "dimension": "isTestMode", "value": "false" }
+    ]
+  },
+  "relativeIntervals": [
+    {
+      "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+      "endDate": { "component": "day", "offset": 0, "position": "end" }
+    }
+  ]
+}</textarea>
+            </div>
+
+            <div class="library-item">
+                <div class="library-header">
+                    <h3>9. Clean Daily Active Users (DAU Pings) - Timeseries</h3>
+                    <button class="copy-btn" onclick="copyTql('tql-dau-pings')">Copy TQL JSON</button>
+                </div>
+                <textarea id="tql-dau-pings" class="json-code" readonly>{
+  "queryType": "timeseries",
+  "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+  "granularity": "day",
+  "aggregations": [
+    {
+      "name": "active_devices",
+      "type": "count"
+    }
+  ],
+  "filter": {
+    "type": "and",
+    "fields": [
+      { "type": "selector", "dimension": "type", "value": "dau_ping" },
       { "type": "selector", "dimension": "isTestMode", "value": "false" }
     ]
   },
@@ -805,7 +867,7 @@
 
                     <div class="chart-grid">
                         <div class="chart-box">
-                            <div class="chart-header">Active Users (DAU) Over Time</div>
+                            <div class="chart-header">Daily Active Identities (Raw DAU) Over Time</div>
                             <canvas id="chart-dau" height="240"></canvas>
                         </div>
                         <div class="chart-box">

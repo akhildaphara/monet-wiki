@@ -231,7 +231,7 @@
                 <!-- SSM note -->
                 <rect x="10" y="320" width="400" height="58" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="5,3"/>
                 <text x="210" y="342" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#64748b">AWS SSM Parameter Store</text>
-                <text x="210" y="358" text-anchor="middle" class="lbl-sm">/monet/dev/guest-jwt-secret · /monet/dev/dev-api-key · /monet/dev/origin-secret</text>
+                <text x="210" y="358" text-anchor="middle" class="lbl-sm">/monet/dev/guest-jwt-secret · /monet/dev/custom-jwt-secret · /monet/dev/dev-api-key · /monet/dev/origin-secret</text>
                 <text x="210" y="372" text-anchor="middle" class="lbl-sm">Injected as Lambda env vars at deploy time</text>
             </svg>
         </div>
@@ -628,6 +628,12 @@
                         <td class="px-5 py-3 font-mono">MONET_GUEST_JWT_SECRET</td>
                         <td class="px-5 py-3 text-slate-500">authorizer + api λ</td>
                         <td class="px-5 py-3 text-slate-500">Signs and verifies guest JWTs (HS256)</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/60">
+                        <td class="px-5 py-3 font-mono">/monet/dev/custom-jwt-secret</td>
+                        <td class="px-5 py-3 font-mono">MONET_CUSTOM_JWT_SECRET</td>
+                        <td class="px-5 py-3 text-slate-500">authorizer + api λ</td>
+                        <td class="px-5 py-3 text-slate-500">Signs and verifies custom user JWTs (HS256)</td>
                     </tr>
                     <tr class="hover:bg-slate-50/60">
                         <td class="px-5 py-3 font-mono">/monet/dev/dev-api-key</td>

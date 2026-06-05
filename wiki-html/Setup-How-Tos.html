@@ -205,6 +205,7 @@ cd raw/croe
                 <tr><td><code>plaid-env</code></td><td>SecureString</td><td><code>sandbox</code> for dev, <code>production</code> for prod</td></tr>
                 <tr><td><code>plaid-encryption-key</code></td><td>SecureString</td><td>32-byte AES-256-GCM key — auto-generated if blank</td></tr>
                 <tr><td><code>guest-jwt-secret</code></td><td>SecureString</td><td>HMAC secret for guest JWTs — auto-generated if blank</td></tr>
+                <tr><td><code>custom-jwt-secret</code></td><td>SecureString</td><td>256-bit base64-encoded secret for native email/password auth JWTs — auto-generated if blank</td></tr>
                 <tr><td><code>origin-secret</code></td><td>SecureString</td><td>CloudFront → API Gateway header — auto-generated if blank</td></tr>
                 <tr><td><code>dev-api-key</code></td><td>SecureString</td><td>Postman bypass key (dev only) — auto-generated if blank</td></tr>
             </tbody>
@@ -270,6 +271,11 @@ npm run init-db</code></pre>
                     <td>—</td>
                 </tr>
                 <tr>
+                    <td><strong>MonetCredentials</strong></td>
+                    <td>PK: <code>email</code></td>
+                    <td>Stores secure email/password bcrypt hashes for native auth flow</td>
+                </tr>
+                <tr>
                     <td><strong>MonetOverrides</strong></td>
                     <td>PK: <code>userId</code> / SK: <code>merchantId</code></td>
                     <td>GSI: <code>MerchantIdIndex</code></td>
@@ -323,6 +329,7 @@ npm install</code></pre>
                 <tr><td><code>PLAID_ENCRYPTION_KEY</code></td><td>Yes</td><td>Any 32-character string locally</td></tr>
                 <tr><td><code>GOOGLE_CLIENT_ID</code></td><td>No (guest JWT works without it)</td><td>Only needed for Google Sign-In verification</td></tr>
                 <tr><td><code>APPLE_CLIENT_ID</code></td><td>No</td><td>Only needed for Apple Sign-In verification</td></tr>
+                <tr><td><code>MONET_CUSTOM_JWT_SECRET</code></td><td>Yes</td><td>256-bit base64-encoded key for native auth JWT signing. Generate with: <code>openssl rand -base64 32</code></td></tr>
                 <tr><td><code>MONET_ORIGIN_SECRET</code></td><td>No</td><td>Only enforced in deployed envs</td></tr>
             </tbody>
         </table>

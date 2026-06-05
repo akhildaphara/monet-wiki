@@ -2,7 +2,7 @@
   "title": "Monet Telemetry Analytics Dashboard",
   "insights": [
     {
-      "title": "Daily Active Users (DAU)",
+      "title": "Daily Active Identities",
       "type": "timeseries",
       "displayMode": "lineChart",
       "groupBy": "day",
@@ -45,7 +45,7 @@
         "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
         "granularity": "all",
         "dimensions": [
-          { "dimension": "step", "outputName": "onboarding_step", "type": "default" }
+          { "dimension": "step", "outputName": "step", "type": "default" }
         ],
         "aggregations": [
           { "name": "sessions", "type": "count" }
@@ -77,7 +77,7 @@
         "queryType": "topN",
         "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
         "granularity": "all",
-        "dimension": { "dimension": "recommended_card_id", "outputName": "card_id", "type": "default" },
+        "dimension": { "dimension": "recommended_card_id", "outputName": "recommended_card_id", "type": "default" },
         "metric": { "metric": "count", "type": "numeric" },
         "threshold": 15,
         "aggregations": [
@@ -111,7 +111,7 @@
         "queryType": "topN",
         "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
         "granularity": "all",
-        "dimension": { "dimension": "category", "outputName": "resolved_category", "type": "default" },
+        "dimension": { "dimension": "category", "outputName": "category", "type": "default" },
         "metric": { "metric": "count", "type": "numeric" },
         "threshold": 10,
         "aggregations": [
@@ -145,7 +145,7 @@
         "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
         "granularity": "all",
         "dimensions": [
-          { "dimension": "mode", "outputName": "search_mode", "type": "default" }
+          { "dimension": "mode", "outputName": "mode", "type": "default" }
         ],
         "aggregations": [
           { "name": "count", "type": "count" }
@@ -178,7 +178,7 @@
         "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
         "granularity": "all",
         "dimensions": [
-          { "dimension": "card_count", "outputName": "cards_in_wallet", "type": "default" }
+          { "dimension": "card_count", "outputName": "card_count", "type": "default" }
         ],
         "aggregations": [
           { "name": "unique_users", "type": "userCount" }
@@ -221,6 +221,70 @@
                 { "type": "selector", "dimension": "type", "value": "network_error" }
               ]
             },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Clean Installed Devices",
+      "type": "timeseries",
+      "displayMode": "lineChart",
+      "groupBy": "day",
+      "isExpanded": false,
+      "uniqueUser": false,
+      "customQuery": {
+        "queryType": "timeseries",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "day",
+        "aggregations": [
+          {
+            "name": "new_installs",
+            "type": "count"
+          }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "device_installed" },
+            { "type": "selector", "dimension": "isTestMode", "value": "false" }
+          ]
+        },
+        "relativeIntervals": [
+          {
+            "beginningDate": { "component": "day", "offset": -30, "position": "beginning" },
+            "endDate": { "component": "day", "offset": 0, "position": "end" }
+          }
+        ]
+      }
+    },
+    {
+      "title": "Clean Daily Active Users (DAU Pings)",
+      "type": "timeseries",
+      "displayMode": "lineChart",
+      "groupBy": "day",
+      "isExpanded": true,
+      "uniqueUser": false,
+      "customQuery": {
+        "queryType": "timeseries",
+        "dataSource": "YOUR_TELEMETRYDECK_APP_ID",
+        "granularity": "day",
+        "aggregations": [
+          {
+            "name": "active_devices",
+            "type": "count"
+          }
+        ],
+        "filter": {
+          "type": "and",
+          "fields": [
+            { "type": "selector", "dimension": "type", "value": "dau_ping" },
             { "type": "selector", "dimension": "isTestMode", "value": "false" }
           ]
         },
