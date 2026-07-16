@@ -65,28 +65,24 @@ Welcome to the Monet beta! Thanks for helping shape v1. Please try:
 
 1. GETTING STARTED
    - Continue as guest (no account), OR sign in with Apple / Google.
-   - Add 3–5 of your real credit cards to your wallet.
+   - Add 3–5 of your credit cards to your wallet.
 
 2. CORE FLOW — does it pick the right card?
    - Search merchants you actually shop at (Whole Foods, Starbucks, Amazon, a local restaurant).
    - Search by category when offline (turn on Airplane Mode).
    - Tell us if any recommendation looks WRONG — that's the most valuable feedback.
 
-3. INSIGHTS (optional)
-   - Connect a bank via Plaid (this is SANDBOX in beta — use the test credentials shown, do NOT enter real bank logins).
-   - Check whether "missed rewards" numbers make sense.
+3. INSIGHTS (You can skip this for now)
 
 4. ACCOUNTS
    - Sign out and back in — does your wallet persist?
-   - Switch between Apple and Google sign-in.
 
 KNOWN LIMITATIONS
-- Card catalog is ~19 cards; tell us which card you wish was supported.
-- Bank linking uses Plaid sandbox, not your real accounts.
+- Card catalog is not huge; tell us which card you wish was supported.
+- Bilt Card management coming soon.
 
 REPORT ISSUES
-- In-app: Profile → Send Feedback (auto-attaches crash count).
-- Or email feedback@monet.app.
+- In-app: Profile → Send Feedback.
 - Please include: what you searched, what it recommended, what you expected.
 
 ---

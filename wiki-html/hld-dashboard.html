@@ -457,7 +457,7 @@
                 <div class="mermaid">
                     graph TD
                         Client_iOS["📱 Swift iOS App"]
-                        Client_Web["💻 Next.js Web App"]
+                        Client_Web["💻 Astro Web App"]
                         CloudFront["🌐 CloudFront\n(edge cache + X-Origin-Secret)"]
                         API_Gateway["🚪 HTTP API Gateway"]
                         Authorizer["🛂 Lambda Authorizer\n(Google / Apple / Guest JWT / Dev key)"]
@@ -894,7 +894,7 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (24-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Authenticated</strong> &mdash; requests are routed through the authorizer to protect the curated catalog structure from public scraping (see Auth section).</p>
+                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (1-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Authenticated</strong> &mdash; requests are routed through the authorizer to protect the curated catalog structure from public scraping (see Auth section).</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid">
                         <div>

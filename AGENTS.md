@@ -14,7 +14,7 @@
 
 ## Changelog (code repos)
 
-- Every time code is updated in `raw/swift-app` or `raw/croe`, you MUST append an entry to a `changelog.md` file at the root of that repo (`raw/swift-app/changelog.md` / `raw/croe/changelog.md`). Create the file if it does not exist.
+- Every time code is updated in `raw/swift-app` or `raw/croe` or `raw/website`, you MUST append an entry to a `changelog.md` file at the root of that repo (`raw/swift-app/changelog.md` / `raw/croe/changelog.md` / `raw/website/changelog.md`).
 - Entry format — a header line `DateTime: Title` followed by a numbered list explaining the changes:
 
   ```
@@ -34,3 +34,4 @@
 ## Coding Guidelines
 
 - Don't add lengthy comments. The code should be self-documenting. Only add comments if you have a complex logic or a hacky solution.
+- If a file has more than 400 lines of code, prefer to break it down to smaller files. Ask user if they want to refacgtor or not. New code should aumomatically be considered in separate files.

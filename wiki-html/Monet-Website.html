@@ -145,30 +145,28 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <p>The <a href="Monet-Website.html">Monet-Website</a> is the public-facing landing page for the <a href="Monet-App-Overview.html">Monet-App-Overview</a> application. Built with Next.js 16 and React 19, it showcases the app&#39;s core features and serves as the entry point for new users to join the waitlist.</p>
+                <p>The <a href="Monet-Website.html">Monet-Website</a> is the public-facing landing page for the <a href="Monet-App-Overview.html">Monet-App-Overview</a> application. Built with Astro v5, it showcases the app&#39;s core features, hosts the companion PWA client, and serves as the entry point for new users to join the waitlist.</p>
 <h2>Tech Stack</h2>
 <ul>
-<li><strong>Framework</strong>: Next.js 16.2.4 (App Router)</li>
+<li><strong>Framework</strong>: Astro v5</li>
 <li><strong>Language</strong>: TypeScript</li>
-<li><strong>UI</strong>: React 19, Tailwind CSS 4, Framer Motion (animations), Lucide React (icons)</li>
-<li><strong>Dev Server</strong>: Runs on port 3001 (<code>next dev -p 3001</code>)</li>
+<li><strong>UI</strong>: Tailwind CSS 4, Vanilla JS &amp; CSS transitions, Lucide HTML paths</li>
+<li><strong>Dev Server</strong>: Runs on port 3001 (<code>astro dev --port 3001</code>)</li>
 </ul>
 <h2>Design</h2>
 <ul>
 <li>Dark-mode-first design with an accent green (<code>accent-green</code>) color scheme.</li>
 <li>Uses <strong>Inter</strong> font family for its neutral, modern feel and broad compatibility.</li>
-<li>Smooth Framer Motion entrance animations (fade-in, slide-up, slide-in).</li>
+<li>Smooth, high-performance CSS transition entrance animations.</li>
 <li>Glassmorphic glow effects behind app screenshots.</li>
 </ul>
 <h2>Page Structure</h2>
-<p>The landing page (<code>app/page.tsx</code>) is a single-page layout with these sections:</p>
+<p>The website is built with these main pages:</p>
 <ol>
-<li><strong>Navigation</strong>: Modernized logo (Sparkles icon) + persistent theme toggle + &quot;Get Early Access&quot; button.</li>
-<li><strong>Hero Section</strong>: Headline, subheadline, and CTA buttons (&quot;Download for iOS&quot;). Features <strong>3D transform animations</strong> and refined glassmorphism on the main app screenshot.</li>
-<li><strong>App Preview</strong>: Interactive theme-aware screenshots with toggleable light/dark modes.</li>
-<li><strong>Merchant Intelligence</strong>: Interactive merchant search UI with loading states and ranked card recommendations.</li>
-<li><strong>How Monet Works</strong>: Three-step vertical timeline with updated feature icons.</li>
-<li><strong>CTA Section</strong>: Waitlist signup card integrated with <strong>Formspree</strong> for submission handling.</li>
+<li><strong>Landing Page (<code>index.astro</code>)</strong>: Single-page layout featuring navigation, theme toggle, hero section, interactive merchant search preview, a waitlist signup card (integrated with Formspree honeypot anti-spam), and waitlist success states.</li>
+<li><strong>Companion PWA Client (<code>app.astro</code>)</strong>: Interactive web app shell mounted at <code>/app</code> with search, wallet setup, and offline fallback screens. Integrated with geolocation queries and custom theme overrides.</li>
+<li><strong>Contact Page (<code>contact.astro</code>)</strong>: Help form using Formspree asynchronous POST routing.</li>
+<li><strong>Privacy &amp; Terms (<code>privacy.astro</code>, <code>terms.astro</code>)</strong>: Privacy and service agreements.</li>
 </ol>
 <h2>Universal Links</h2>
 <p>The website hosts the <code>/.well-known/apple-app-site-association</code> file, enabling <strong>Universal Links</strong> support.</p>
@@ -179,7 +177,7 @@ npm run dev   # → http://localhost:3001
 <h2>Repository &amp; Deployment</h2>
 <ul>
 <li>Hosted in the <code>raw/website</code> directory.</li>
-<li>Deployed via <strong>Firebase Hosting</strong>. The build process generates a static export (<code>next build</code> outputs to <code>/out</code>) which is deployed to Firebase.</li>
+<li>Deployed via <strong>Firebase Hosting</strong>. The build process runs static export (<code>npm run build</code> outputs to <code>/out</code>) which is deployed to Firebase.</li>
 <li>Current HEAD: <code>d2c7985</code> (Standardized component naming and design system mappings).</li>
 </ul>
 
