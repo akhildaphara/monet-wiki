@@ -1,5 +1,10 @@
 # For LLMs to follow
 
+## Component-Specific Instructions
+
+- **iOS App**: See `raw/swift-app/AGENTS.md` for simulator device, scheme, and build instructions
+- **Website**: See `raw/website/AGENTS.md` for website-specific guidelines
+
 ## Source of Truth (HLD)
 
 - The High-Level Design dashboard at `wiki-html/hld-dashboard.html` is the authoritative source of truth for architecture, API contracts, rate limits, backend↔iOS coupling, and known gaps.
@@ -11,6 +16,7 @@
 
 - The Design System reference dashboard at `design-system.html` is the authoritative source of truth for the Monet design language, component specs, spacing/corner tokens, typography weights/cases, and UI guidelines.
 - Always consult `design-system.html` before modifying, adding, or evaluating user interface screens, elements, buttons, and layouts to ensure conformity with the visual identity.
+- **Corner Radii Rule**: All standard UI elements, cards, input boxes, action/CTA buttons, modals, and section badge pills (Workflow, Intelligence, Get Started, Web App) across the website MUST strictly use `rounded-card` (`var(--radius-card)` = `16px`) to maintain a cohesive visual identity.
 
 ## Changelog (code repos)
 
