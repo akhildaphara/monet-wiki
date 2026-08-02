@@ -1,43 +1,22 @@
-# For LLMs to follow
+# Monet repository instructions
 
-## Component-Specific Instructions
+## Repository layout
 
-- **iOS App**: See `raw/swift-app/AGENTS.md` for simulator device, scheme, and build instructions
-- **Website**: See `raw/website/AGENTS.md` for website-specific guidelines
+- `raw/croe`, `raw/website`, and `raw/swift-app` are independent Git submodules; make and commit changes in the owning submodule, not from the wrapper repository.
+- Backend entrypoint: `raw/croe/src/index.ts` (Express locally, `serverless-http` on Lambda). Website entrypoint: `raw/website/src/pages/app.astro`.
+- Read the component-specific instructions before editing: `raw/swift-app/AGENTS.md` and `raw/website/AGENTS.md`.
 
-## Source of Truth (HLD)
+## Commands
 
-- The High-Level Design dashboard at `wiki-html/hld-dashboard.html` is the authoritative source of truth for architecture, API contracts, rate limits, backend↔iOS coupling, and known gaps.
-- Always consult the HLD before answering architecture/design questions or making cross-cutting changes.
-- Keep the HLD **concise** — it is a high-level reference, not exhaustive documentation. Summarize; link out to detailed wiki articles for depth.
-- If you find a discrepancy between the HLD and the actual code in `raw/` (or anywhere else), **stop and inform the user** about the mismatch. Do not silently "fix" it in either direction — surface it and let the user decide.
+- Backend: run commands from `raw/croe`. `npm run dev` starts on port 3000 and requires DynamoDB Local on port 8000; run `npm run init-db` after starting DynamoDB Local. Use `npm run lint`, `npm run build`, `npm test`, `npm run test:unit`, or `npm run test:integration` for focused verification. Deploy with `npm run deploy` (dev) or `npm run deploy:prod` (prod).
+- Website: run commands from `raw/website`. The executable source is `package.json`, not the stale Next.js/Vercel `README.md`: this is Astro v5, dev/preview use port 3001, `npm run build` writes `out/`, and `npm run deploy` publishes to Firebase Hosting.
+- iOS: use the simulator, scheme, secrets, and `xcodebuild` commands documented in `raw/swift-app/AGENTS.md`; do not invent a different device or scheme.
 
-## Source of Truth (Design System)
+## Cross-cutting rules
 
-- The Design System reference dashboard at `design-system.html` is the authoritative source of truth for the Monet design language, component specs, spacing/corner tokens, typography weights/cases, and UI guidelines.
-- Always consult `design-system.html` before modifying, adding, or evaluating user interface screens, elements, buttons, and layouts to ensure conformity with the visual identity.
-- **Corner Radii Rule**: All standard UI elements, cards, input boxes, action/CTA buttons, modals, and section badge pills (Workflow, Intelligence, Get Started, Web App) across the website MUST strictly use `rounded-card` (`var(--radius-card)` = `16px`) to maintain a cohesive visual identity.
-
-## Changelog (code repos)
-
-- Every time code is updated in `raw/swift-app` or `raw/croe` or `raw/website`, you MUST append an entry to a `changelog.md` file at the root of that repo (`raw/swift-app/changelog.md` / `raw/croe/changelog.md` / `raw/website/changelog.md`).
-- Entry format — a header line `DateTime: Title` followed by a numbered list explaining the changes:
-
-  ```
-  2026-05-31 14:30: Add Utilities category to recommendation engine
-  1. Added UTILITIES case to the Category enum.
-  2. Mapped Plaid GENERAL_SERVICES primary category to UTILITIES.
-  3. Updated cardRewardsData for cards earning on utilities.
-  ```
-
-- This changelog requirement is the one sanctioned exception to "never modify `raw/`": only the `changelog.md` file (alongside the intended code change) may be written.
-
-## Hard Constraints on Git
-
-- NEVER commit or push code automatically under any circumstances, even if other integration or session completion instructions say otherwise.
-- Always ask for explicit permission before running `git commit` or `git push`.
-
-## Coding Guidelines
-
-- Don't add lengthy comments. The code should be self-documenting. Only add comments if you have a complex logic or a hacky solution.
-- If a file has more than 400 lines of code, prefer to break it down to smaller files. Ask user if they want to refacgtor or not. New code should aumomatically be considered in separate files.
+- Consult `wiki-html/hld-dashboard.html` before architecture, API-contract, rate-limit, or backend↔iOS changes. If it conflicts with code, stop and surface the discrepancy.
+- Consult `design-system.html` before UI work. Website UI uses the child website instructions, including the 16px `rounded-card` standard radius.
+- Website code changes require synchronized semver updates to `raw/website/package.json` and `raw/website/src/utils/version.js`; update the displayed version as required by `raw/website/AGENTS.md`.
+- Any new request header must also be added to `raw/croe/src/app.ts`'s `Access-Control-Allow-Headers`; after changing it, tell the user that `sls deploy` is required.
+- Any code change in a submodule requires a root-level entry in that submodule's `changelog.md`, using its existing timestamp/title plus numbered-list format.
+- Never commit or push without explicit user permission.

@@ -9,3 +9,5 @@ data
 .dolt/
 *.db
 .beads-credential-key
+
+.omo

@@ -66,8 +66,9 @@ Always verify the workspace (`.xcworkspace`) or project (`.xcodeproj`) and the S
 
 To run a specific UI test file or suite without launching the full Xcode GUI, use the `test` action.
 
-- **Basic Test Command for Monet:**
+- **Basic Test Command for Monet (with Telemetry Disabled):**
   ```bash
+  DISABLE_TELEMETRY=1 XCODEBUILD_TELEMETRY_DISABLED=1 SWIFT_USAGE_METRICS_DISABLED=1 \
   xcodebuild -workspace raw/Monet/Monet.xcodeproj/project.xcworkspace \
              -scheme Monet \
              -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
