@@ -1,0 +1,36 @@
+{
+  "brand": "Monet",
+  "palette": {
+    "primary": "#26ab59",
+    "dark": "#196638",
+    "background": "#f2f2f7",
+    "text": "#111111"
+  },
+  "source_assets": [
+    "AppIcon.png",
+    "raw/website/public/screenshots/wallet-mobile.png",
+    "raw/website/public/screenshots/search-mobile.png"
+  ],
+  "exports": [
+    {
+      "file": "monet-hero-1600x900.jpg",
+      "format": "landing-page hero",
+      "dimensions": "1600x900"
+    },
+    {
+      "file": "monet-social-1080x1350.jpg",
+      "format": "social feed",
+      "dimensions": "1080x1350"
+    },
+    {
+      "file": "monet-story-1080x1920.jpg",
+      "format": "story",
+      "dimensions": "1080x1920"
+    },
+    {
+      "file": "monet-launch-1200x1200.jpg",
+      "format": "square launch card",
+      "dimensions": "1200x1200"
+    }
+  ]
+}

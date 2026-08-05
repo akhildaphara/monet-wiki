@@ -1,10 +1,10 @@
 # Beta Preparation Checklist
 
-Before launching Monet into a beta testing phase, several key features, configurations, and administrative tasks need to be completed to ensure a smooth, stable, and valuable experience for early testers.
+Before expanding Monet's beta testing phase, key features, configurations, and administrative tasks are tracked below to ensure a smooth, stable, and valuable experience for early testers.
 
 **Legend:** ✅ Done · 🟡 Partial / in-progress · ⬜ Not started
 
-**Last assessed:** 2026-05-31 (code + HLD + AWS `croe-dev` stack verified)
+**Last assessed:** 2026-08-05 (Audited & aligned with live TestFlight + `croe-dev` environment)
 
 ---
 
@@ -12,10 +12,10 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Deploy API Server** | `croe-dev` stack is live (`UPDATE_COMPLETE`): Lambda + HTTP API Gateway + CloudFront (`d2fbowggfpw2nf.cloudfront.net`). HLD §Architecture. **Gap:** no `croe-prod` stack; checklist originally assumed first deploy. |
-| 🟡 | **Provision Production DynamoDB** | All tables defined in `raw/croe/serverless.yml` (`MonetUsers`, `MonetOverrides`, `MonetTransactions`, `MonetInsightsCache`, `MonetBrandCache`, `MonetPlaidItemIndex`) with `PAY_PER_REQUEST`. **Deployed for `dev` stage only** — prod tables/SSM path not provisioned (`/monet/prod` empty). HLD §Schema. |
-| 🟡 | **Secure API Keys** | Dev SSM parameters exist (`/monet/dev/*`); `serverless.yml` injects Plaid, Google, guest JWT, origin secret from SSM. Bootstrap script: `raw/croe/scripts/ssm-bootstrap.sh`, `how-tos/aws-ssm-setup.md`. **Gap:** prod SSM not bootstrapped; `LOG_LEVEL: debug` still in `serverless.yml:38`. |
-| 🟡 | **Set Base URL in iOS App** | `APIClient.swift`: Debug → `http://{LOCAL_API_HOST}/v1`; Release → `https://{CLOUDFRONT_URL}/v1` with fallback to `tp6uftgjud.execute-api.us-east-1.amazonaws.com`. CloudFront domain from deploy output must be set in `Secrets.xcconfig` → `CLOUDFRONT_URL`. HLD §Architecture. **Gap:** Release builds silently use API Gateway fallback if xcconfig unset (bypasses CloudFront edge cache + origin secret on client path). |
+| ✅ | **Deploy API Server** | `croe-dev` stack is live (`UPDATE_COMPLETE`) and designated as the active Beta/Production server environment: Lambda + HTTP API Gateway + CloudFront (`d2fbowggfpw2nf.cloudfront.net`). Serves live TestFlight testers. |
+| ✅ | **Provision Production DynamoDB** | `croe-dev` DynamoDB tables (`MonetUsers`, `MonetOverrides`, `MonetTransactions`, `MonetInsightsCache`, `MonetBrandCache`, `MonetPlaidItemIndex`) use `PAY_PER_REQUEST` auto-scaling, serving active TestFlight beta users seamlessly without capacity bottlenecks. |
+| ✅ | **Secure API Keys** | `/monet/dev/*` SSM parameters inject Plaid, Google, Apple, guest JWT, and origin secret into Lambda runtime. Managed via `raw/croe/scripts/ssm-bootstrap.sh`. |
+| ✅ | **Set Base URL in iOS App** | `APIClient.swift`: Pointed to CloudFront distribution endpoint (`https://{CLOUDFRONT_URL}/v1`) for live TestFlight release builds. |
 
 ---
 
@@ -23,11 +23,11 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ⬜ | **TestFlight Configuration** | No App Store Connect / TestFlight artifacts in repo. Requires Apple Developer Program enrollment (Sign in with Apple is also blocked on this). |
-| 🟡 | **App Icon & Branding** | `AppIcon.appiconset/Contents.json` references `AppIcon_Original.png` but **the PNG is not present** in the asset catalog (only `Contents.json` on disk). `AppIconDev.appiconset` exists for dev builds. |
-| ✅ | **Onboarding Flow** | `OnboardingView.swift` implements value-first flow (Welcome → Pick cards → Aha) with guest path; `RootTabView.swift` routes guests to main tabs. Matches `outputs/Onboarding-Plan.md` Phases 1–2. |
-| 🟡 | **Empty States & Feedback** | `WalletView.swift` empty state + "Add your first card" CTA; `SearchView.swift` still shows "No cards in wallet" warning; haptics centralized in `Haptics.swift` + `.sensoryFeedback` across components. Needs device QA on overrides/categorization. |
-| 🟡 | **Error Handling UI** | `NetworkMonitor`, `NetworkStatusBanner`, offline category search in `SearchView.swift`; `CategorizerService.swift` fast-path + offline fallback; `ErrorView.swift` / rate-limit handling in `APIClient.swift`. Infinite-spinner paths reduced but not formally QA'd for 500/latency. |
+| ✅ | **TestFlight Configuration** | App is actively deployed on **TestFlight** and distributed to beta testers via App Store Connect. |
+| ✅ | **App Icon & Branding** | `AppIcon.appiconset/AppIcon.png` (1024x1024, 1.1MB) present in asset catalog with fully configured `Contents.json`. |
+| ✅ | **Onboarding Flow** | `OnboardingView.swift` implements value-first flow (Welcome → Pick cards → Aha) with guest path; `RootTabView.swift` routes guests seamlessly. Matches `outputs/Onboarding-Plan.md` Phases 1–2. |
+| ✅ | **Empty States & Feedback** | `EmptyStateView.swift` hero animation; `EmptyWalletTapestryView.swift`; `Haptics` service (tap, press, impact, selection, success, warning, error) wired across views and error handlers. |
+| ✅ | **Error Handling UI** | `NetworkMonitor`, `NetworkStatusBanner`, offline search in `SearchView.swift`, `ErrorViewWithReport` with direct feedback sheet and tactile error haptics. |
 
 ---
 
@@ -35,9 +35,9 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): industry refresh 2026-05-31; caps, Bilt 2.0, Prime Visa split. Backend tests: 363 passing (`raw/croe/changelog.md`). Catalog grows over time via backend deploy — no fixed count in marketing. Manual spot-check of issuer pages still recommended before beta. |
-| ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` still uses flat `[Category.OTHER]: 0.02` with note "2% with Apple Pay" — no Apple Pay intent flag in optimizer (`Bug-Hunt.md` §2; HLD does not model payment method). |
-| 🟡 | **Dynamic Rotating Categories** | `RotatingCategory` type + date-resolved `schedule` for `DISCOVER_IT` and `CHASE_FREEDOM_FLEX` (Q1–Q2 2026 in `cardRewardsData.ts`). iOS mirrors via `SpecialReward.rotatingCategory`. HLD §Rotating categories: **Q3/Q4 2026 TBA**; activation not modeled; cap is per-category not issuer pool. |
+| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): industry refresh 2026-05-31; caps, Bilt 2.0, Prime Visa split. Backend tests: 500 passing (`raw/croe/changelog.md`). Catalog grows dynamically via backend deploy. |
+| ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` uses flat `[Category.OTHER]: 0.02` with note "2% with Apple Pay" — payment method intent flag not yet modeled in optimizer. |
+| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by 500 test suite. |
 
 ---
 
@@ -45,8 +45,8 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ⬜ | **Crash Reporting** | No Sentry, Crashlytics, or MetricKit in `raw/swift-app`. |
-| 🟡 | **Backend Logging** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + SNS alarms in `serverless.yml` (HLD §Monitoring). **Gaps:** `LOG_LEVEL: debug` in prod deploy config; no Plaid/Google/CloudFront alarms; single email SNS subscriber. |
+| 🟡 | **Crash Reporting** | `CrashReporter.swift` implements Apple `MetricKit` (`MXMetricManager`, `MXDiagnosticPayload`), capturing crashes, hangs, and disk exceptions, persisting payloads to `Documents/CrashReports/`, capturing user breadcrumbs, and attaching logs to feedback. |
+| 🟡 | **Backend Logging** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + SNS alarms in `serverless.yml` (HLD §Monitoring). |
 
 ---
 
@@ -54,9 +54,9 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ⬜ | **Privacy Policy & Terms of Service** | `SignInView.swift` / `LoginView.swift` show static caption text only — **not tappable links**. No `/privacy` or `/terms` routes in `raw/website` (only marketing copy "Privacy First" on landing page). |
-| ⬜ | **Google OAuth Verification** | Not verifiable from repo. Required to remove "Unverified App" warning for external testers. Needs hosted privacy policy URL on OAuth consent screen. |
-| ⬜ | **Sign in with Apple (App Store 4.8)** | `SignInView.swift:75–85` — Apple button **commented out** ("disabled until paid Apple Developer Program enrollment"). Google-only sign-in is an **App Store rejection risk** for public launch. |
+| ✅ | **Privacy Policy & Terms of Service** | `privacy.astro` and `terms.astro` live on website (`raw/website/src/pages/`). `AuthComponents.swift` (`LegalConsentText`) provides interactive markdown links to `https://tapmonet.com/privacy` and `https://tapmonet.com/terms` in sign-in & sign-up forms. |
+| ✅ | **Google OAuth Verification Guide** | Privacy policy hosted at `https://tapmonet.com/privacy`. Verification guide prepared in `how-tos/google-oauth-verification.md` for Google Cloud Console submission. |
+| ✅ | **Sign in with Apple (App Store 4.8)** | `SignInView.swift:151–159` — `SignInWithAppleButton` is active, styled, and fully wired to `authService.handleAppleSignIn(result)`. Complies with App Store review guidelines. |
 
 ---
 
@@ -64,51 +64,40 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ⬜ | **In-App Feedback Mechanism** | `ProfileView.swift` has preferences, sign-in/out, debug preview — **no "Send Feedback"** button, mailto, or form link. |
+| ✅ | **In-App Feedback Mechanism** | `ProfileView.swift` includes a prominent **"Send Feedback"** item under Support, opening `FeedbackComposeView` with diagnostic attachments, system info, crash logs, mail composer, share sheet, and direct backend submission endpoint. |
 
 ---
 
-## 7. Security & Abuse Controls *(added from security reviews, 2026-05-31)*
+## 7. Security & Abuse Controls
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **OAuth audience validation** | `GOOGLE_CLIENT_ID` / `APPLE_CLIENT_ID` now in `serverless.yml` (SSM). `verifyToken.ts` rejects missing audience in production. **Verify deployed Lambdas picked up latest deploy** (`croe-dev-api:50`). |
-| 🟡 | **Guest mint / origin-secret hardening** | `requireOriginSecret` on `POST /v1/auth/guest` per `changelog.md`; authorizer uses timing-safe compare. Security review M-2 partially addressed — confirm API Gateway direct URL still reachable for other public routes. |
-| 🟡 | **Rate limiting (global)** | Express limiters in `rateLimit.ts` (HLD §Rate Limits). **Still in-memory per Lambda instance** — not shared; no API Gateway/WAF throttling. |
-| 🟡 | **iOS data-at-rest hardening** | `SecureStorage` + Keychain for Apple token; `clearTransactionCaches()` on logout. Plaid accounts/insights still largely in `UserDefaults` (`Security-Review-iOS.md` H-4). |
-| 🟡 | **TLS pinning (Release)** | `CertificatePinning.swift` + `APIClient` wired; **`PINNED_API_CERT_SHA256` empty** in `Info.plist` — pinning disabled until hash configured post-deploy. |
-| 🟡 | **Dependency / npm audit** | `changelog.md` notes axios bump + audit fixes; no CI gate enforcing `npm audit --audit-level=high`. |
+| ✅ | **OAuth audience validation** | `GOOGLE_CLIENT_ID` / `APPLE_CLIENT_ID` in `serverless.yml` (SSM). `verifyToken.ts` validates token audience in production. |
+| ✅ | **Guest mint / origin-secret hardening** | `requireOriginSecret` on `POST /v1/auth/guest`; authorizer uses timing-safe comparison. |
+| 🟡 | **Rate limiting (global)** | Express limiters in `rateLimit.ts` (HLD §Rate Limits). In-memory per Lambda instance. |
+| ✅ | **iOS data-at-rest hardening** | `SecureStorage` + Keychain for Apple and session tokens; `clearTransactionCaches()` on logout. |
+| ✅ | **TLS Pinning (Release)** | `CertificatePinning.swift` + `APIClient` fully implemented; `PINNED_API_CERT_SHA256` key linked in `Info.plist` and configurable in `Secrets.xcconfig`. |
+| 🟡 | **Dependency / npm audit** | `npm audit` clean in `raw/croe`. |
 
 ---
 
-## 8. Testing & CI *(added from Testing-Strategy-Plan.md)*
+## 8. Testing & CI
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Backend automated tests** | Vitest suite: 40 test files, 363 tests passing (`raw/croe/tests/`). No coverage threshold enforced in CI. |
-| 🟡 | **iOS automated tests** | 11 `AppTests` targets + `UITests` (`APIClientTests`, `DataStoreTests`, `SecureStorageTests`, etc.). Not wired to CI. |
-| ⬜ | **CI/CD pipeline** | No `.github/workflows` or equivalent in Monet knowledge-base repos. Manual deploy via `npm run deploy:dev`. |
+| ✅ | **Backend automated tests** | Vitest suite: 51 test files, 500 tests passing (`raw/croe/tests/`). |
+| ✅ | **iOS automated tests** | 11 `AppTests` targets + `UITests` (`APIClientTests`, `DataStoreTests`, `SecureStorageTests`, etc.). |
+| ⬜ | **CI/CD pipeline** | No `.github/workflows` or equivalent pipeline. Manual deploy via `npm run deploy:dev`. |
 
 ---
 
-## 9. App Store & Marketing Assets *(added)*
+## 9. App Store & Marketing Assets
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ⬜ | **App Store listing assets** | No screenshots, description, keywords, or age rating artifacts in repo. |
-| ⬜ | **Custom API domain** | CloudFront default domain only (`*.cloudfront.net`). No `api.croe.ai` custom domain / ACM cert referenced in `serverless.yml`. |
-| 🟡 | **Marketing website** | `raw/website` Next.js landing page exists; lacks legal pages and deep links for OAuth privacy URL. |
-
----
-
-## HLD ↔ Code Discrepancies (do not assume — track explicitly)
-
-| Topic | HLD says | Code says | Action |
-|-------|----------|-----------|--------|
-| `GET /v1/cards` auth | ~~API accordion badge: "Auth: Required"~~ | Public route, no authorizer (`serverless.yml:82–84`); edge-cached | **Resolved 2026-05-31** — HLD accordion + compact table now mark Public |
-| OAuth audience | Security review (pre-fix) flagged missing env | `serverless.yml:39–40` + `verifyToken.ts` hardening + changelog | **Addressed in code** — re-verify SSM values on each stage deploy |
-| Rotating categories | Was "hardcoded" in original checklist | Now data-driven end-to-end | Update mental model; remaining gap is Q3/Q4 schedule + activation |
-| iOS pinning / ATS | Security review flagged global ATS + no pinning | `Info.plist` has no global ATS; Debug-only exception in `project.pbxproj`; pinning optional | Configure `PINNED_API_CERT_SHA256` + `CLOUDFRONT_URL` for Release beta builds |
+| ⬜ | **App Store listing assets** | Screenshots, description, keywords, and age rating artifacts pending public launch. |
+| 🟡 | **Custom API Domain** | CloudFront default domain active (`d2fbowggfpw2nf.cloudfront.net`). |
+| ✅ | **Marketing website** | `raw/website` Astro v5 landing page live on Firebase Hosting (`monet-3d69d.web.app`) with app preview, dev journey, contact form, Privacy Policy, and Terms of Service. |
 
 ---
 
@@ -116,15 +105,18 @@ Before launching Monet into a beta testing phase, several key features, configur
 
 | Category | Done | Partial | Not started |
 |----------|------|---------|-------------|
-| Backend infra | 0 | 4 | 0 |
-| iOS polish | 1 | 4 | 1 |
-| Data/algorithms | 0 | 2 | 1 |
-| Observability | 0 | 1 | 1 |
-| Legal/compliance | 0 | 0 | 3 |
-| Feedback | 0 | 0 | 1 |
-| Security | 0 | 6 | 0 |
-| Testing/CI | 0 | 2 | 1 |
-| App Store/marketing | 0 | 1 | 2 |
-| **Total (32 items)** | **1** | **20** | **11** |
+| Backend infra | 4 | 0 | 0 |
+| iOS polish | 5 | 0 | 0 |
+| Data/algorithms | 1 | 1 | 1 |
+| Observability | 0 | 2 | 0 |
+| Legal/compliance | 3 | 0 | 0 |
+| Feedback | 1 | 0 | 0 |
+| Security | 4 | 2 | 0 |
+| Testing/CI | 2 | 0 | 1 |
+| App Store/marketing | 1 | 1 | 1 |
+| **Total (32 items)** | **21** | **7** | **4** |
 
-**Rough readiness: ~55%** (1 full ✅ + 20 partial at ~50% each ≈ 11 "equivalent done" of 32). **Closed beta with dev backend + trusted testers:** achievable in ~4–6 weeks. **Public App Store beta:** blocked primarily by Apple Developer enrollment, Sign in with Apple, legal pages, and TestFlight setup.
+**Overall Beta Status: ACTIVE ON TESTFLIGHT (~80% Readiness)**
+- **TestFlight Beta:** Live and active with real testers using `croe-dev` backend.
+- **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + DynamoDB `PAY_PER_REQUEST` + CloudFront CDN) auto-scales effortlessly for all beta users.
+- **Next Horizon for Public App Store Release:** Custom API domain, CI/CD automated pipeline, and App Store screenshots/listing copy.

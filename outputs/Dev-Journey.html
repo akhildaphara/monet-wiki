@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Building Monet — A Four-Month Development Journey</title>
+  <title>Building Monet — A Seven-Month Development Journey</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -14,6 +14,7 @@
       --ios: #26ab59;
       --backend: #A0E1E1;
       --backend-dark: #5bb8b8;
+      --website: #FFEB69;
       --yellow: #FFEB69;
       --orange: #FFC091;
       --pink: #FFD7EF;
@@ -62,7 +63,7 @@
       position: fixed;
       top: 0; left: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--green), var(--backend));
+      background: linear-gradient(90deg, var(--green), var(--backend), var(--website));
       width: 0%;
       z-index: 200;
       transition: width 0.1s linear;
@@ -155,7 +156,7 @@
 
     .stat-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 16px;
       max-width: var(--wide);
     }
@@ -186,7 +187,7 @@
     .stat-value.yellow { color: var(--yellow); }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -299,7 +300,8 @@
 
     .repo-tag.ios { background: rgba(38,171,89,0.2); color: var(--green); }
     .repo-tag.api { background: rgba(160,225,225,0.15); color: var(--backend); }
-    .repo-tag.both { background: rgba(255,235,105,0.12); color: var(--yellow); }
+    .repo-tag.web { background: rgba(255,235,105,0.15); color: var(--yellow); }
+    .repo-tag.both { background: rgba(255,192,145,0.15); color: var(--orange); }
 
     /* Timeline ribbon */
     .timeline-section {
@@ -326,7 +328,7 @@
     .timeline-inner {
       display: flex;
       gap: 0;
-      min-width: 960px;
+      min-width: 1200px;
       position: relative;
     }
 
@@ -337,7 +339,7 @@
       left: 40px;
       right: 40px;
       height: 2px;
-      background: linear-gradient(90deg, var(--green), var(--backend), var(--orange), var(--yellow));
+      background: linear-gradient(90deg, var(--green), var(--backend), var(--yellow), var(--orange));
       opacity: 0.4;
     }
 
@@ -361,8 +363,9 @@
     }
 
     .milestone.dot-api .milestone-dot { background: var(--backend); box-shadow: 0 0 0 2px rgba(160,225,225,0.4); }
-    .milestone.dot-both .milestone-dot { background: var(--yellow); box-shadow: 0 0 0 2px rgba(255,235,105,0.4); }
-    .milestone.dot-warn .milestone-dot { background: var(--orange); box-shadow: 0 0 0 2px rgba(255,192,145,0.4); }
+    .milestone.dot-web .milestone-dot { background: var(--website); box-shadow: 0 0 0 2px rgba(255,235,105,0.4); }
+    .milestone.dot-both .milestone-dot { background: var(--orange); box-shadow: 0 0 0 2px rgba(255,192,145,0.4); }
+    .milestone.dot-warn .milestone-dot { background: var(--pink); box-shadow: 0 0 0 2px rgba(255,215,239,0.4); }
 
     .milestone-date {
       font-family: var(--mono);
@@ -563,42 +566,46 @@
 
   <main>
     <header class="hero fade">
-      <span class="eyebrow">Development Retrospective · Jan–May 2026</span>
-      <h1>Four months, two repos, one question: <em>which card should I use?</em></h1>
+      <span class="eyebrow">Development Retrospective · Jan–Aug 2026</span>
+      <h1>Seven months, three repos, one question: <em>which card should I use?</em></h1>
       <p class="hero-lead">
-        Monet is a credit card rewards optimizer. You search a merchant, and it tells you which card in your wallet to pull out — the one that earns the most for that purchase. I built it solo across a SwiftUI iOS app and a serverless TypeScript backend on AWS. This is the story told through 362 commits, a lot of deleted code, and a few very honest one-liners.
+        Monet is a credit card rewards optimizer. You search a merchant, and it tells you which card in your wallet to pull out — the one that earns the most for that purchase. I built it solo across a SwiftUI iOS app, a serverless TypeScript backend on AWS, and an Astro PWA web client. This is the story told through 680 commits, 195 days, and 78,934 net lines of code across three submodules.
       </p>
       <div class="stat-row">
         <div class="stat">
-          <div class="stat-value green">362</div>
+          <div class="stat-value green">680</div>
           <div class="stat-label">Total Commits</div>
         </div>
         <div class="stat">
-          <div class="stat-value">128</div>
+          <div class="stat-value">195</div>
           <div class="stat-label">Days of History</div>
         </div>
         <div class="stat">
-          <div class="stat-value teal">48,093</div>
-          <div class="stat-label">Net Lines (Both Repos)</div>
+          <div class="stat-value teal">78,934</div>
+          <div class="stat-label">Net LOC (3 Repos)</div>
         </div>
         <div class="stat">
-          <div class="stat-value yellow">1</div>
-          <div class="stat-label">Author · 0 Tags</div>
+          <div class="stat-value yellow">3</div>
+          <div class="stat-label">Submodules · 1 Author</div>
         </div>
         <div class="stat">
-          <div class="stat-value green">225</div>
+          <div class="stat-value green">352</div>
           <div class="stat-label">iOS Commits</div>
         </div>
         <div class="stat">
-          <div class="stat-value teal">137</div>
+          <div class="stat-value teal">220</div>
           <div class="stat-label">Backend Commits</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value yellow">108</div>
+          <div class="stat-label">Website Commits</div>
         </div>
       </div>
     </header>
 
     <article id="story">
       <p class="fade">
-        I started on January 23, 2026 with an empty Xcode project and a hypothesis: if I could categorize a merchant correctly, I could tell you which credit card earns the most. Four months later, Monet has Plaid bank linking, spend insights, a recommendation engine with RankedSpend optimization, guest mode, SSL pinning, and a design system named after the app itself. No release tags. Just continuous shipping.
+        I started on January 23, 2026 with an empty Xcode project and a hypothesis: if I could categorize a merchant correctly, I could tell you which credit card earns the most. Seven months later, Monet spans an iOS native app, a AWS serverless backend, and an Astro PWA web client. It features Plaid bank linking, location-aware address resolution, Bilt housing calculators, RankedSpend optimization, guest mode with certificate pinning, and an automated merchant categorization audit engine with HTML alerts.
       </p>
 
       <!-- ACT I -->
@@ -670,7 +677,7 @@
       </div>
 
       <p class="fade">
-        May accounts for 50% of all iOS commits (113 of 225) and 44% of backend commits (60 of 137). The first two weeks were a design-system explosion: swiftui-pro first pass (<code>384e3c2</code>), a premium animated LoginView (<code>bb752ce</code>), MonetListItem and MonetCard components, iOS 18 TabView syntax, and the largest single refactor in iOS history (<code>a17d46b</code>: +1,174 / −1,305 lines, 15+ components extracted). Gemini was fully excised from both repos (<code>8f2f436</code> iOS, <code>5cbd76f</code> backend). Bilt 2.0 Blueprint landed on both sides (<code>533499c</code>, <code>58f9903</code>).
+        May brought a design-system explosion: swiftui-pro first pass (<code>384e3c2</code>), a premium animated LoginView (<code>bb752ce</code>), MonetListItem and MonetCard components, iOS 18 TabView syntax, and the largest single refactor in iOS history (<code>a17d46b</code>: +1,174 / −1,305 lines, 15+ components extracted). Gemini was fully excised from both repos (<code>8f2f436</code> iOS, <code>5cbd76f</code> backend). Bilt 2.0 Blueprint landed on both sides (<code>533499c</code>, <code>58f9903</code>).
       </p>
 
       <blockquote class="fade">
@@ -679,7 +686,7 @@
       </blockquote>
 
       <p class="fade">
-        Then, on May 10, both repos went quiet. The last iOS commit was <code>2b7ecaa</code>, and nothing followed for nearly three weeks. The honest explanation isn't an architecture pivot or a stuck bug — I went to France on vacation. The graph flatlines because I was somewhere with better food and no laptop. Best refactor of the whole project.
+        Then, on May 10, both repos went quiet for two weeks. The honest explanation isn't an architecture pivot or a stuck bug — I went to France on vacation. The graph flatlines because I was somewhere with better food and no laptop. Best refactor of the whole project.
       </p>
 
       <!-- ACT IV -->
@@ -690,11 +697,62 @@
       </div>
 
       <p class="fade">
-        The final week was a blitz. Backend: AWS Bedrock for unknown merchants (<code>0dd07e4</code>, <code>5f3aa87</code>), RankedSpend optimization (<code>4ac3214</code>), O(N) scan to O(1) index lookup for Plaid webhooks (<code>6f2fe97</code>), guest JWT auth and rate limiting (May 31), and an opus 4.8 security review pass (<code>c0bf3ae</code>, 28 files). iOS: 946 lines of unit tests (<code>820d0d8</code>), incremental Plaid sync (<code>60a1277</code>), guest mode with custom AuthService (<code>926c752</code>, +1,007 lines), SSL certificate pinning (<code>cd31565</code>), and a full day of guest-to-account merge bug fixes.
+        The final week of May was a blitz. Backend: AWS Bedrock for unknown merchants (<code>0dd07e4</code>, <code>5f3aa87</code>), RankedSpend optimization (<code>4ac3214</code>), O(N) scan to O(1) index lookup for Plaid webhooks (<code>6f2fe97</code>), guest JWT auth and rate limiting, and an opus 4.8 security review pass (<code>c0bf3ae</code>, 28 files). iOS: 946 lines of unit tests (<code>820d0d8</code>), incremental Plaid sync (<code>60a1277</code>), guest mode with custom AuthService (<code>926c752</code>, +1,007 lines), SSL certificate pinning (<code>cd31565</code>), and guest-to-account merge bug fixes.
+      </p>
+
+      <!-- ACT V -->
+      <div class="act-marker fade">
+        <span class="act-num">Act V</span>
+        <span class="act-title">"Hardening, Swift 6 Concurrency & Cloud Native Observability"</span>
+        <span class="act-dates">June 2026</span>
+      </div>
+
+      <p class="fade">
+        June focused on system resilience and developer experience across 131 commits. iOS migrated to complete Swift 6 strict concurrency compliance (<code>4a452b6</code>), centralized caching configurations inside <code>AppConfig</code> (<code>a3051cf</code>), and added a feedback composer with in-app log file export (<code>94a7637</code>). On-device telemetry expanded with TelemetryDeck integration, capturing locale, timezone, session length, and query strings.
+      </p>
+
+      <blockquote class="fade">
+        <p>"consolidate backend CloudWatch alarms into high-fidelity metric math to comply with AWS Free Tier limits"</p>
+        <cite>081ff42 · croe · 2026-06-18 · +43 / −112 lines</cite>
+      </blockquote>
+
+      <p class="fade">
+        On the backend, CloudWatch metrics were consolidated using metric math expressions to fit within AWS Free Tier limits (<code>081ff42</code>). Plaid access token logging was hardened to safely handle DB write failures during public token exchanges (<code>e0228af</code>), and best-effort JWT decoding middleware brought type-safe diagnostic logging to Express (<code>86c3af0</code>).
+      </p>
+
+      <!-- ACT VI -->
+      <div class="act-marker fade">
+        <span class="act-num">Act VI</span>
+        <span class="act-title">"The AIRLINE Split, App Widgets & Web Demo PWA Launch"</span>
+        <span class="act-dates">July 2026</span>
+      </div>
+
+      <p class="fade">
+        July brought major user-facing expansions across 74 commits. A critical category domain model overhaul introduced the dedicated <code>AIRLINE</code> category on both iOS (<code>2a3ea04</code>) and backend (<code>db86cd9</code>), separating flight purchases from general travel to accurately model multipliers like Amex Platinum 5x on flights vs. Chase Sapphire 3x on broad travel.
       </p>
 
       <p class="fade">
-        The last iOS commit on May 31: <em>feat: implement category fallback chain in RewardStore</em> (<code>93f0a75</code>). The last backend commit the same day: <em>feat: aggregate descendant category spend for cap tracking</em> (<code>8a0892b</code>). Still building. Still no tags.
+        Meanwhile, the website underwent a full rewrite, migrating from Next.js to Astro v5 (<code>f8496c7</code>) to deliver a zero-friction, lightning-fast PWA experience (<code>d91d588</code>, <code>ec4d5c3</code>). The web demo featured an interactive mock iOS lock screen hero video (<code>a34d400</code>), dynamic card catalog fetching from live API endpoints (<code>44fc37f</code>), GA4 referral tracking (<code>f450de0</code>), and offline recommendations with local fallback. On iOS, <code>WidgetCenter</code> support landed with App Groups persistence for lock screen and home screen widgets (<code>a83edae</code>).
+      </p>
+
+      <!-- ACT VII -->
+      <div class="act-marker fade">
+        <span class="act-num">Act VII</span>
+        <span class="act-title">"Location-Aware Intelligence, Category Provenance & Bilt Housing"</span>
+        <span class="act-dates">August 1 – 5, 2026</span>
+      </div>
+
+      <p class="fade">
+        The first week of August delivered Monet's most sophisticated intelligence updates across 66 commits. To prevent convenience store gas stations (e.g. 7-Eleven or Wawa) from misclassifying in-store snack purchases as 3% Gas rewards, the backend and iOS app added exact address-based resolution (<code>a566769</code>, <code>466aa43</code>) and explicit category provenance tracking (<code>categorySource</code>). Mixed-use convenience brands were reclassified to neutral <code>OTHER</code> categories, while <code>PlacesCache</code> gained TTL and LRU pruning (<code>3566505</code>).
+      </p>
+
+      <blockquote class="fade">
+        <p>"feat: add biltCalculator module to optimize everyday spend and housing rewards scenarios"</p>
+        <cite>8520436 · croe · 2026-08-03 · +482 lines</cite>
+      </blockquote>
+
+      <p class="fade">
+        Backend and iOS simultaneously launched the Bilt Housing Calculator (<code>8520436</code>, <code>5202709</code>), tracking rent point caps and evaluating everyday spend matching requirements (5 transactions/month rule). Finally, a backend transaction categorization audit system landed with 90-day TTL records and automated HTML review emails (<code>0c0d44c</code>, <code>531e0ff</code>), while raw MCC reliance was officially retired in favor of high-fidelity merchant resolution.
       </p>
     </article>
 
@@ -707,11 +765,6 @@
             <div class="milestone-date">Jan 23</div>
             <div class="milestone-dot"></div>
             <div class="milestone-label">iOS Initial Commit<br><code>44bc780</code></div>
-          </div>
-          <div class="milestone">
-            <div class="milestone-date">Jan 24</div>
-            <div class="milestone-dot"></div>
-            <div class="milestone-label">Gemini experiment<br><code>9a2d5cd</code></div>
           </div>
           <div class="milestone dot-api">
             <div class="milestone-date">Jan 28</div>
@@ -741,7 +794,7 @@
           <div class="milestone dot-both">
             <div class="milestone-date">Apr 24–29</div>
             <div class="milestone-dot"></div>
-            <div class="milestone-label">Production sprint<br>48 backend commits</div>
+            <div class="milestone-label">Production sprint<br>DynamoDB LSI</div>
           </div>
           <div class="milestone">
             <div class="milestone-date">May 5–10</div>
@@ -753,10 +806,30 @@
             <div class="milestone-dot"></div>
             <div class="milestone-label">Bedrock + RankedSpend<br><code>4ac3214</code></div>
           </div>
-          <div class="milestone dot-both">
-            <div class="milestone-date">May 31</div>
+          <div class="milestone">
+            <div class="milestone-date">Jun 15</div>
             <div class="milestone-dot"></div>
-            <div class="milestone-label">Guest mode + security<br>SSL pinning</div>
+            <div class="milestone-label">Swift 6 & Logs Export<br><code>94a7637</code></div>
+          </div>
+          <div class="milestone dot-web">
+            <div class="milestone-date">Jul 15</div>
+            <div class="milestone-dot"></div>
+            <div class="milestone-label">Astro v5 PWA Launch<br><code>f8496c7</code></div>
+          </div>
+          <div class="milestone dot-both">
+            <div class="milestone-date">Jul 25</div>
+            <div class="milestone-dot"></div>
+            <div class="milestone-label">AIRLINE Category<br>Lockscreen Widgets</div>
+          </div>
+          <div class="milestone dot-api">
+            <div class="milestone-date">Aug 3</div>
+            <div class="milestone-dot"></div>
+            <div class="milestone-label">Bilt Calculator<br>& Audit System</div>
+          </div>
+          <div class="milestone dot-both">
+            <div class="milestone-date">Aug 5</div>
+            <div class="milestone-dot"></div>
+            <div class="milestone-label">Address Resolution<br>& Provenance</div>
           </div>
         </div>
       </div>
@@ -765,7 +838,7 @@
     <!-- Charts -->
     <section class="charts-section fade" id="charts">
       <h2>The Numbers Behind the Story</h2>
-      <p class="charts-intro">All figures from git log analysis on <code>main</code>, May 31, 2026. No fabrication.</p>
+      <p class="charts-intro">All figures from git log analysis on <code>main</code> across submodules as of August 5, 2026. No fabrication.</p>
 
       <div class="chart-grid">
         <div class="chart-card">
@@ -777,6 +850,7 @@
           <div class="chart-legend-custom">
             <span class="legend-item"><span class="legend-swatch" style="background:#26ab59"></span> swift-app</span>
             <span class="legend-item"><span class="legend-swatch" style="background:#A0E1E1"></span> croe (backend)</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#FFEB69"></span> website (PWA)</span>
           </div>
         </div>
       </div>
@@ -791,7 +865,7 @@
         </div>
         <div class="chart-card">
           <h3>Cumulative Commits Over Time</h3>
-          <p class="chart-sub">Combined activity timeline</p>
+          <p class="chart-sub">Combined activity timeline across all submodules</p>
           <div class="chart-wrap">
             <canvas id="cumulativeCommitsChart"></canvas>
           </div>
@@ -801,7 +875,7 @@
       <div class="chart-grid" style="margin-top:24px">
         <div class="chart-card">
           <h3>Monthly Churn: Additions vs Deletions</h3>
-          <p class="chart-sub">Combined totals across both repos per month</p>
+          <p class="chart-sub">Combined totals across all 3 repos per month</p>
           <div class="chart-wrap tall">
             <canvas id="churnChart"></canvas>
           </div>
@@ -811,14 +885,14 @@
       <div class="chart-grid two-col" style="margin-top:24px">
         <div class="chart-card">
           <h3>iOS: Lines by Language (HEAD)</h3>
-          <p class="chart-sub">20,414 total tracked lines · application code highlighted</p>
+          <p class="chart-sub">39,707 total tracked lines · Swift application & test focus</p>
           <div class="chart-wrap">
             <canvas id="iosLocChart"></canvas>
           </div>
         </div>
         <div class="chart-card">
           <h3>Backend: Lines by Language (HEAD)</h3>
-          <p class="chart-sub">31,864 total tracked lines · TypeScript application focus</p>
+          <p class="chart-sub">39,763 total tracked lines · TypeScript application focus</p>
           <div class="chart-wrap">
             <canvas id="backendLocChart"></canvas>
           </div>
@@ -832,45 +906,45 @@
 
       <div class="aha-grid fade" style="max-width:var(--max);margin:32px auto 0;padding:0 24px">
         <div class="aha-card">
-          <h3><span class="repo-tag ios">iOS</span> The Gemini Four-Day Experiment</h3>
-          <p>Jan 24: adopted Gemini for categorization. Jan 28: pivoted to local API. Feb 18: Apple MLKSearch. Feb 23: deleted local Places/brand maps, moved categorization server-side. May 7: removed the GoogleGenerativeAI package entirely.</p>
-          <p><strong>Lesson:</strong> Categorization bounced between cloud AI, on-device heuristics, and backend API for months before settling on server-side recommendations with local <code>fastCategorize</code> for instant UX.</p>
+          <h3><span class="repo-tag both">Both</span> Exact Address Resolution & Category Provenance</h3>
+          <p>Aug 5: Introduced exact address resolution and explicit <code>categorySource</code> metadata (<code>a566769</code>, <code>466aa43</code>). Mixed-use convenience stores (like 7-Eleven gas locations) were reclassified to neutral <code>OTHER</code> categories to prevent false 3% Gas reward recommendations for non-fuel purchases.</p>
+          <p><strong>Lesson:</strong> Merchant string matching alone fails when brands span multiple purchase types. Context-dependent location resolution and explicit category provenance tracking prevent incorrect financial recommendations.</p>
+        </div>
+
+        <div class="aha-card">
+          <h3><span class="repo-tag web">Website</span> The Astro v5 Zero-Friction PWA Wedge</h3>
+          <p>Jul 15: Migrated landing and demo app from Next.js to Astro v5 (<code>f8496c7</code>). Implemented service worker offline caching, live API dynamic catalog loading, and an interactive mock iOS lock screen hero video (<code>a34d400</code>).</p>
+          <p><strong>Lesson:</strong> A ultra-fast, zero-install web application acts as an instant conversion funnel. Users test Monet's recommendation engine in browser before downloading the native iOS app.</p>
+        </div>
+
+        <div class="aha-card">
+          <h3><span class="repo-tag both">Both</span> The AIRLINE Category Domain Split</h3>
+          <p>Jul 25: Created dedicated <code>AIRLINE</code> category across backend (<code>db86cd9</code>) and iOS app (<code>2a3ea04</code>), separating flights from broad travel.</p>
+          <p><strong>Lesson:</strong> Premium cards treat flights differently than general transit or hotels. Broad travel categories caused suboptimal recommendations for cards with flight-specific bonus tiers (e.g. Amex Platinum 5x).</p>
+        </div>
+
+        <div class="aha-card">
+          <h3><span class="repo-tag api">Backend</span> O(N) → O(1) Webhook Lookup & Metric Math</h3>
+          <p>Jun–Jul: Replaced full table scans with <code>MonetPlaidItemIndex</code> lookups (<code>6f2fe97</code>). Consolidated CloudWatch alarms using metric math expressions (<code>081ff42</code>) to stay within AWS Free Tier limits.</p>
+          <p><strong>Lesson:</strong> Production serverless backends must optimize both data access patterns and cloud monitoring costs. High-fidelity metric math keeps operational visibility high and costs low.</p>
+        </div>
+
+        <div class="aha-card">
+          <h3><span class="repo-tag ios">iOS</span> Swift 6 Strict Concurrency & In-App Feedback Logs</h3>
+          <p>Jun 15: Upgraded iOS app to Swift 6 concurrency rules (<code>4a452b6</code>). Built a feedback composer that packages sanitized diagnostic logs and session state directly into email/share attachments (<code>94a7637</code>).</p>
+          <p><strong>Lesson:</strong> Compile-time thread safety combined with friction-free user log exports makes debugging offline edge cases significantly faster.</p>
         </div>
 
         <div class="aha-card">
           <h3><span class="repo-tag both">Both</span> The Plaid Yo-Yo</h3>
-          <p>Mar 9: first integration. Apr 4: Insights built on Plaid. Apr 15 00:50: <em>remove plaid</em> (−975 iOS, −598 backend). Apr 15 afternoon: SwiftData DataStore + error handling refactor. Apr 24: <em>add plaid</em> on both repos, rebuilt through DataStore and modular routes.</p>
-          <p><strong>Lesson:</strong> Not a revert. A deliberate teardown to introduce persistence-first architecture, then reintegration nine days later with multi-item support and webhooks already planned.</p>
+          <p>Mar 9: first integration. Apr 4: Insights built on Plaid. Apr 15: <em>remove plaid</em> (−975 iOS, −598 backend). Apr 24: <em>add plaid</em> on both repos, rebuilt through DataStore and modular routes.</p>
+          <p><strong>Lesson:</strong> Not a revert. A deliberate teardown to introduce persistence-first architecture, then reintegration nine days later with multi-item support and webhooks.</p>
         </div>
 
         <div class="aha-card">
-          <h3><span class="repo-tag api">Backend</span> The Schema Pivot (Same Day)</h3>
-          <p><code>9de0ed0</code>: replace transactionId with dateAndId as DynamoDB sort key. <code>13f8778</code> hours later: back to transactionId + DateIndex LSI.</p>
-          <p><strong>Lesson:</strong> Composite sort keys looked elegant for date-range queries but coupled identification to dates. The team settled on transactionId + LSI within hours of trying the alternative.</p>
-        </div>
-
-        <div class="aha-card">
-          <h3><span class="repo-tag api">Backend</span> O(N) → O(1) Webhook Lookup</h3>
-          <p><code>6f2fe97</code>: "replace O(N) full-table scan with O(1) index lookup for getUserByItemId using a new MonetPlaidItemIndex DynamoDB table."</p>
-          <p><strong>Lesson:</strong> Plaid webhooks need to resolve users by item_id. Scanning the users table doesn't scale. A dedicated index table was the fix.</p>
-        </div>
-
-        <div class="aha-card">
-          <h3><span class="repo-tag both">Both</span> The RankedSpend Bug Wave</h3>
-          <p>May 31 sequence: quarterly rotating bonuses added (<code>3adb688</code>), Zolve rewards reverted (<code>ef0a0a4</code>), fix preventing RankedSpend from claiming RotatingCategory bonuses (<code>69b8b48</code>), centralized claiming logic (<code>88dfb58</code>). iOS mirrored with rankedSpendRules refactors May 9–10.</p>
-          <p><strong>Lesson:</strong> Complex reward types interact. Category "claiming" needed explicit coordination, not implicit priority.</p>
-        </div>
-
-        <div class="aha-card">
-          <h3><span class="repo-tag ios">iOS</span> Guest Mode Whack-a-Mole</h3>
-          <p>Six related commits on May 31 alone: merge prompt added, guest sync gating, auth flash fix, alert suppression fix, spurious prompt during Google restore, <code>didSignInInteractively</code> flag, then automatic wallet union replacing alerts entirely (<code>941a55d</code>).</p>
-          <p><strong>Lesson:</strong> Distinguishing session restoration from interactive sign-in was the root cause. The fix wasn't better prompts; it was removing prompts and merging wallets automatically.</p>
-        </div>
-
-        <div class="aha-card">
-          <h3><span class="repo-tag api">Backend</span> Gemini → Bedrock</h3>
-          <p><code>5cbd76f</code>: remove gemini package. <code>0dd07e4</code>: integrate AWS Bedrock for AI-based fallback categorization of OTHER transactions. Global DynamoDB brand cache followed (<code>5f3aa87</code>).</p>
-          <p><strong>Lesson:</strong> Staying AWS-native for AI after the early Gemini experiment reduced vendor sprawl and kept categorization in the same cloud as everything else.</p>
+          <h3><span class="repo-tag api">Backend</span> Gemini → Bedrock + Categorization Audit Engine</h3>
+          <p>May 28: AWS Bedrock integration for unknown merchants (<code>0dd07e4</code>). Aug 3: Automated transaction categorization audit system with 90-day TTL records and HTML email review tables (<code>0c0d44c</code>).</p>
+          <p><strong>Lesson:</strong> Staying AWS-native for AI keeps latency minimal, while automated audit tables ensure human oversight of edge-case merchant categorizations.</p>
         </div>
       </div>
     </article>
@@ -879,21 +953,20 @@
     <article id="lessons">
       <h2 class="fade" style="max-width:var(--max);margin:0 auto;padding:0 24px">Lessons Learned</h2>
       <ul class="lesson-list fade" style="max-width:var(--max);margin:24px auto 0;padding:0 24px">
-        <li><strong>Delete bravely.</strong> The Plaid removal commits weren't failures. They made room for SwiftData and modular backend routes. 4,875 backend deletions in April alone.</li>
-        <li><strong>Couple repos intentionally.</strong> Schema changes, category renames, and Plaid yo-yos happened in both codebases within hours. Treat them as one product.</li>
-        <li><strong>Churn is feature work.</strong> May iOS: +16,842 / −8,538 lines. May backend: +20,422 / −3,371. Refactors and tests count.</li>
-        <li><strong>Incremental cache merging wasn't worth it.</strong> Backend commit <code>7818006</code> simplified insights to full-window cache hits. Simpler and correct beat clever.</li>
-        <li><strong>Security reviews find real issues.</strong> <code>c0bf3ae</code> (opus 4.8 review) touched 28 files. IAM permissions, webhook validation, and CloudFormation lifecycle gotchas surfaced in deploys, not in design docs.</li>
-        <li><strong>One-liner commits tell the truth.</strong> "can run over network." "remove sparkle." "remove plaid." "add plaid." The git log is more honest than any roadmap.</li>
-        <li><strong>Stepping away is allowed.</strong> The longest flat stretch on the graph (May 10–27) was a vacation to France, not a death march. I came back and shipped the entire beta in the final week. Rest is a feature, not a bug.</li>
+        <li><strong>Location context beats brand strings.</strong> A convenience store selling snacks shouldn't offer 3% Gas rewards just because the parent brand owns gas pumps. Exact address resolution and provenance metadata are required.</li>
+        <li><strong>Delete bravely, rebuild intentionally.</strong> Deleting Plaid in April enabled SwiftData architecture; replacing raw MCCs in August enabled audit-backed location intelligence. High deletion months reflect architecting for longevity.</li>
+        <li><strong>Submodules require synchronized discipline.</strong> Schema updates, category renames (e.g., <code>AIRLINE</code>), and Bilt calculator logic landed across iOS, backend, and web submodules within hours of each other.</li>
+        <li><strong>Zero-install web experiences drive native engagement.</strong> An Astro-powered PWA with service worker caching lets users test recommendation logic instantly, boosting trust before app installation.</li>
+        <li><strong>Security and observability reviews surface real bugs.</strong> Automated 90-day audit tables, CloudWatch metric math, and in-app log exporting surfaced edge cases far faster than manual testing.</li>
+        <li><strong>Rest fuels momentum.</strong> Taking time off in mid-May was followed by major blitzes: RankedSpend in late May, Swift 6 in June, Astro PWA in July, and Address Resolution in August.</li>
       </ul>
 
       <div class="closing fade" style="max-width:var(--max);margin:48px auto 0;padding:0 24px">
         <div style="padding:40px;background:linear-gradient(135deg,rgba(38,171,89,0.12) 0%,rgba(160,225,225,0.08) 100%);border:1px solid rgba(38,171,89,0.2);border-radius:var(--radius)">
           <h2 style="margin:0 0 16px;font-size:1.5rem">Where This Leaves Monet</h2>
-          <p>362 commits later, Monet is not shipped to the App Store with a semver tag. It is a working system: 14,647 lines of Swift, 12,057 lines of TypeScript, Plaid integrated twice, guest mode with certificate pinning, and an optimizer that understands Bilt 2.0, quarterly bonuses, spend caps, and RankedSpend tier assignment.</p>
-          <p style="margin-top:16px">The impressionist name fits. Up close, the history looks like chaotic brushstrokes: reverts that aren't reverts, schema flip-flops, six merge-prompt fixes in one day. Step back, and a coherent picture emerges: a solo founder building the tool they wished existed, learning distributed systems and SwiftUI architecture the hard way, one commit message at a time.</p>
-          <p style="margin-top:16px;color:var(--text-muted);font-size:0.9rem">Analysis generated 2026-05-31 · swift-app HEAD <code>93f0a75</code> · croe HEAD <code>8a0892b</code></p>
+          <p>680 commits later, Monet is an ecosystem: 22,040 lines of Swift on iOS, 19,233 lines of TypeScript on backend, 1,895 lines of Astro on web, location-aware address resolution, Bilt housing calculators, guest mode with SSL certificate pinning, and an audit-backed optimizer that understands quarterly bonuses, spend caps, and RankedSpend tier assignment.</p>
+          <p style="margin-top:16px">The impressionist name fits. Up close, the history looks like continuous iteration: schema evolutions, category domain splits, and address resolution refinements. Step back, and a complete system emerges: a financial rewards engine built with craft, precision, and relentless shipping.</p>
+          <p style="margin-top:16px;color:var(--text-muted);font-size:0.9rem">Analysis generated 2026-08-05 · swift-app HEAD <code>81a397b</code> · croe HEAD <code>311f3f8</code> · website HEAD <code>78dad78</code></p>
         </div>
       </div>
     </article>
@@ -923,8 +996,7 @@
     Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
     Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
 
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-    const monthKeys = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
 
     // 1. Cumulative LOC (month-end)
     new Chart(document.getElementById('locChart'), {
@@ -934,24 +1006,35 @@
         datasets: [
           {
             label: 'swift-app',
-            data: [721, 3519, 4629, 7925, 16229],
+            data: [721, 3519, 4629, 7925, 16755, 19916, 23129, 25180],
             borderColor: '#26ab59',
             backgroundColor: 'rgba(38,171,89,0.12)',
             fill: true,
             tension: 0.35,
-            pointRadius: 5,
-            pointHoverRadius: 7,
+            pointRadius: 4,
+            pointHoverRadius: 6,
             borderWidth: 2.5
           },
           {
-            label: 'croe',
-            data: [1161, 5458, 5869, 14813, 31864],
+            label: 'croe (backend)',
+            data: [1161, 5458, 5869, 14813, 32289, 34709, 35634, 39762],
             borderColor: '#A0E1E1',
             backgroundColor: 'rgba(160,225,225,0.08)',
             fill: true,
             tension: 0.35,
-            pointRadius: 5,
-            pointHoverRadius: 7,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            borderWidth: 2.5
+          },
+          {
+            label: 'website (PWA)',
+            data: [0, 0, 0, 7523, 8007, 9588, 13399, 13992],
+            borderColor: '#FFEB69',
+            backgroundColor: 'rgba(255,235,105,0.06)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 4,
+            pointHoverRadius: 6,
             borderWidth: 2.5
           }
         ]
@@ -991,7 +1074,7 @@
         datasets: [
           {
             label: 'swift-app',
-            data: [5, 30, 12, 65, 113],
+            data: [5, 30, 12, 65, 123, 75, 20, 22],
             backgroundColor: 'rgba(38,171,89,0.85)',
             borderRadius: 6,
             barPercentage: 0.7,
@@ -999,8 +1082,16 @@
           },
           {
             label: 'croe',
-            data: [7, 9, 6, 55, 60],
+            data: [7, 9, 6, 55, 62, 42, 18, 21],
             backgroundColor: 'rgba(160,225,225,0.75)',
+            borderRadius: 6,
+            barPercentage: 0.7,
+            categoryPercentage: 0.8
+          },
+          {
+            label: 'website',
+            data: [0, 0, 0, 8, 27, 14, 36, 23],
+            backgroundColor: 'rgba(255,235,105,0.75)',
             borderRadius: 6,
             barPercentage: 0.7,
             categoryPercentage: 0.8
@@ -1030,19 +1121,13 @@
 
     // 3. Cumulative commits timeline
     const combinedLabels = [
-      'Jan 24','Jan 28','Feb 7','Feb 23','Feb 24','Mar 5','Mar 9',
-      'Apr 4','Apr 15','Apr 24','Apr 25','Apr 26','Apr 27','Apr 28','Apr 29',
-      'May 5','May 7','May 8','May 9','May 10','May 27','May 28','May 29','May 30','May 31'
+      'Jan 24','Feb 7','Feb 23','Mar 9','Apr 15','Apr 24','May 10','May 31',
+      'Jun 15','Jun 30','Jul 15','Jul 25','Aug 3','Aug 5'
     ];
-    const iosKeyDates = {
-      'Jan 24': 5, 'Jan 28': 5, 'Feb 7': 5, 'Feb 23': 5, 'Feb 24': 35,
-      'Mar 5': 35, 'Mar 9': 47, 'Apr 4': 47, 'Apr 15': 47, 'Apr 24': 47,
-      'Apr 25': 47, 'Apr 26': 47, 'Apr 27': 47, 'Apr 28': 47, 'Apr 29': 112,
-      'May 5': 112, 'May 7': 112, 'May 8': 112, 'May 9': 112, 'May 10': 112,
-      'May 27': 112, 'May 28': 112, 'May 29': 112, 'May 30': 112, 'May 31': 225
-    };
-    const iosTimeline = combinedLabels.map(d => iosKeyDates[d] || 0);
-    const croeTimeline = [4,7,11,12,16,19,22,23,26,30,38,41,56,66,77,78,81,83,87,90,95,105,116,121,137];
+    
+    const iosTimeline = [5, 5, 35, 47, 47, 47, 112, 235, 290, 310, 320, 330, 345, 352];
+    const croeTimeline = [4, 11, 16, 22, 26, 30, 90, 139, 165, 181, 192, 199, 212, 220];
+    const webTimeline = [0, 0, 0, 0, 5, 8, 25, 35, 42, 49, 75, 85, 98, 108];
 
     new Chart(document.getElementById('cumulativeCommitsChart'), {
       type: 'line',
@@ -1055,8 +1140,8 @@
             borderColor: '#26ab59',
             backgroundColor: 'transparent',
             tension: 0.2,
-            pointRadius: 0,
-            pointHoverRadius: 4,
+            pointRadius: 3,
+            pointHoverRadius: 5,
             borderWidth: 2
           },
           {
@@ -1065,8 +1150,18 @@
             borderColor: '#A0E1E1',
             backgroundColor: 'transparent',
             tension: 0.2,
-            pointRadius: 0,
-            pointHoverRadius: 4,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            borderWidth: 2
+          },
+          {
+            label: 'website',
+            data: webTimeline,
+            borderColor: '#FFEB69',
+            backgroundColor: 'transparent',
+            tension: 0.2,
+            pointRadius: 3,
+            pointHoverRadius: 5,
             borderWidth: 2
           }
         ]
@@ -1090,13 +1185,9 @@
       }
     });
 
-    // 4. Churn chart (combined additions/deletions per month)
-    const iosAdd = [853, 5758, 1279, 7464, 16842];
-    const iosDel = [132, 2960, 169, 4168, 8538];
-    const croeAdd = [1306, 5188, 426, 13819, 20422];
-    const croeDel = [145, 891, 15, 4875, 3371];
-    const totalAdd = monthKeys.map((_, i) => iosAdd[i] + croeAdd[i]);
-    const totalDel = monthKeys.map((_, i) => iosDel[i] + croeDel[i]);
+    // 4. Churn chart (combined additions/deletions per month across all 3 repos)
+    const totalAdd = [2159, 10946, 1705, 28971, 39477, 18601, 10991, 10843];
+    const totalDel = [277, 3851, 184, 9208, 12687, 11439, 3042, 4071];
 
     new Chart(document.getElementById('churnChart'), {
       type: 'bar',
@@ -1154,11 +1245,11 @@
     new Chart(document.getElementById('iosLocChart'), {
       type: 'doughnut',
       data: {
-        labels: ['Swift (app)', 'Swift (tests)', 'Assets/metadata', 'Xcode project', 'Markdown', 'Other'],
+        labels: ['Swift (app)', 'Swift (tests)', 'Assets/metadata', 'Markdown', 'Xcode project', 'Other'],
         datasets: [{
-          data: [14647, 1523, 4188, 697, 404, 955],
+          data: [19951, 2089, 14527, 1382, 906, 852],
           backgroundColor: [
-            '#26ab59', 'rgba(38,171,89,0.55)', '#FFC091', '#A0E1E1', '#FFEB69', 'rgba(142,142,147,0.5)'
+            '#26ab59', 'rgba(38,171,89,0.55)', '#FFC091', '#FFEB69', '#A0E1E1', 'rgba(142,142,147,0.5)'
           ],
           borderWidth: 0,
           hoverOffset: 6
@@ -1189,7 +1280,7 @@
         labels: ['TypeScript', 'Markdown', 'JSON', 'YAML', 'Shell', 'JS', 'Python', 'Other'],
         datasets: [{
           label: 'Lines',
-          data: [12057, 10421, 8295, 526, 250, 218, 49, 48],
+          data: [19233, 10824, 8384, 878, 250, 83, 49, 62],
           backgroundColor: [
             '#A0E1E1', 'rgba(142,142,147,0.4)', 'rgba(255,235,105,0.5)',
             'rgba(38,171,89,0.4)', '#FFC091', 'rgba(255,215,239,0.6)', 'rgba(142,142,147,0.3)', 'rgba(142,142,147,0.25)'
@@ -1205,8 +1296,7 @@
           legend: { display: false },
           tooltip: {
             callbacks: {
-              label: ctx => `${ctx.parsed.x.toLocaleString()} lines`,
-              afterLabel: ctx => ctx.dataIndex === 1 ? '(~10,274 from .agents/ docs)' : ''
+              label: ctx => `${ctx.parsed.x.toLocaleString()} lines`
             }
           }
         },

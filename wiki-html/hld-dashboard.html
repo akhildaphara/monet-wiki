@@ -553,7 +553,7 @@
                         end
                         API->>DB: Get User Rewards & Overrides
                         API->>API: Evaluate Deck & Calculate Max Reward
-                        API-->>Client: { bestCard, allRates, marketBest }
+                        API-->>Client: { bestCard, preferredCard, allRates, marketBest }
                 </div>
             </div>
 
@@ -812,9 +812,6 @@
 }</pre>
                         </div>
                     </div>
-                </div>
-            </div>
-
             <div class="api-endpoint">
                 <div class="api-header" onclick="toggleEndpoint(this)">
                     <span class="api-method method-post">POST</span>
@@ -883,9 +880,6 @@
 ]</pre>
                         </div>
                     </div>
-                </div>
-            </div>
-
             <div class="api-endpoint">
                 <div class="api-header" onclick="toggleEndpoint(this)">
                     <span class="api-method method-get">GET</span>
@@ -1023,7 +1017,15 @@
                             <pre>{
   "name": "string?",
   "category": "string?",
-  "includeMarketBest": "boolean?"
+  "merchantKey": "string?",
+  "includeMarketBest": "boolean?",
+  "location": {
+    "city": "string?",
+    "state": "string?",
+    "address": "string?",
+    "latitude": "number?",
+    "longitude": "number?"
+  }
 }</pre>
                         </div>
                         <div>
@@ -1031,16 +1033,48 @@
                             <pre>{
   "name": "string?",
   "category": "string?",
+  "categorySource": "explicit | user_override | search_inference | unresolved",
+  "categoryProvider": "explicit | user_override | local_rule | brand_cache | places | none",
+  "categoryScope": "global | location | unresolved",
+  "categoryConfidence": "number",
   "bestCard": {
     "cardId": "string",
     "cardName": "string",
     "rate": "number"
   },
+  "preferredCard": "CardRate?",
   "allRates": ["CardRate"],
   "marketBestCard": "CardRate?"
 }</pre>
                         </div>
                     </div>
+                    <p><code>bestCard</code> remains the engine's highest eligible wallet rate. A signed-in user's explicit merchant choice is returned separately as <code>preferredCard</code>; it never mutates the global card catalog. Location-aware merchant searches provide MapKit latitude/longitude and an address when available. Coordinates or an exact street address identify a branch; city/state only bias text search and never unlock a context-dependent merchant. Only <code>categoryScope: global</code> results may enter a name-only cache.</p>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/user/recommendation-preferences</span>
+                    <span class="api-summary">Save a user's merchant card choice.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Stores a reversible, user-scoped preference after verifying that the selected card is in the user's wallet.</p>
+                    <span class="api-auth-badge required">Auth: Required</span>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-post">POST</span>
+                    <span class="api-path">/v1/recommendation-feedback</span>
+                    <span class="api-summary">Capture reason-coded recommendation feedback.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Records merchant key, category, cards, recommendation version, and reason. A single report never mutates global reward data.</p>
+                    <span class="api-auth-badge">Auth: Optional</span>
                 </div>
             </div>
 
@@ -1284,7 +1318,7 @@
             <h3>Adding a new <code>Category</code> &mdash; required change ripple</h3>
             <p>Adding one enum value on the backend is never self-contained. The full sequence:</p>
             <ol class="steps">
-                <li><strong>Backend</strong> &mdash; add the case to <code>categories.ts</code>; wire <code>getDisplayName()</code> and MCC ranges in <code>getCategoryDetails()</code>/<code>categoryFromMcc()</code>.</li>
+                    <li><strong>Backend</strong> &mdash; add the case to <code>categories.ts</code> and wire <code>getDisplayName()</code>/<code>getCategoryDetails()</code>.</li>
                 <li><strong>Backend mapping</strong> &mdash; map Plaid PFC and/or brand rules to it in <code>plaidCategoryMap.ts</code>, <code>brandCategoryMap.ts</code>, and Places types in <code>placesService.ts</code> &mdash; otherwise it never gets assigned.</li>
                 <li><strong>Backend rewards</strong> &mdash; reference the new key in <code>cardRewardsData.ts</code> (<code>rewards</code>, <code>specialRewards</code>, <code>allowedCategories</code>) where cards earn on it.</li>
                 <li><strong>iOS enum</strong> &mdash; add the matching case to <code>Category.swift</code> with <code>displayName</code>, <code>iconName</code>, and optional <code>synonyms</code>. <code>Category.allCases</code> drives Browse, pickers, and search.</li>
@@ -1341,8 +1375,8 @@
                         <td><span class="pill pill-warn">Medium</span></td>
                     </tr>
                     <tr>
-                        <td>Plaid MCC</td>
-                        <td><code>mapPlaidCategory()</code> supports an MCC step, but the sync path (<code>mapPlaidTx</code>) does not pass MCC today, so it is dead code until MCC is threaded through.</td>
+                        <td>Plaid taxonomy</td>
+                        <td>Transaction sync requests Personal Finance Category v2 and maps official primary/detailed values. Ambiguous primary categories remain <code>OTHER</code> until detailed or asynchronous evidence is available; removed MCC logic is not part of this path.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
