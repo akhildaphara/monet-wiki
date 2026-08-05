@@ -12,10 +12,10 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ✅ | **Deploy API Server** | `croe-dev` stack is live (`UPDATE_COMPLETE`) and designated as the active Beta/Production server environment: Lambda + HTTP API Gateway + CloudFront (`d2fbowggfpw2nf.cloudfront.net`). Serves live TestFlight testers. |
-| ✅ | **Provision Production DynamoDB** | `croe-dev` DynamoDB tables (`MonetUsers`, `MonetOverrides`, `MonetTransactions`, `MonetInsightsCache`, `MonetBrandCache`, `MonetPlaidItemIndex`) use `PAY_PER_REQUEST` auto-scaling, serving active TestFlight beta users seamlessly without capacity bottlenecks. |
+| ✅ | **Deploy API Server** | `croe-dev` stack is live (`UPDATE_COMPLETE`) and designated as the active Beta/Production server environment: Lambda + HTTP API Gateway + CloudFront (`d2fbowggfpw2nf.cloudfront.net` / `d1cc0gf8vxrzfd.cloudfront.net`). Serves live TestFlight testers. |
+| ✅ | **Provision Production DynamoDB** | `croe-dev` DynamoDB stack provisions **13 tables** (`MonetUsers`, `MonetCredentials`, `MonetOverrides`, `MonetRecommendationPreferences`, `MonetRecommendationFeedback`, `MonetTransactions`, `MonetInsightsCache`, `MonetBrandCache`, `MonetPlaidItemIndex`, `MonetMerchantEnrichment`, `MonetCategorizationAudit`, `MonetRateLimits`, `MonetFormSubmissions`) using `PAY_PER_REQUEST` auto-scaling, serving active TestFlight beta users seamlessly without capacity bottlenecks. |
 | ✅ | **Secure API Keys** | `/monet/dev/*` SSM parameters inject Plaid, Google, Apple, guest JWT, and origin secret into Lambda runtime. Managed via `raw/croe/scripts/ssm-bootstrap.sh`. |
-| ✅ | **Set Base URL in iOS App** | `APIClient.swift`: Pointed to CloudFront distribution endpoint (`https://{CLOUDFRONT_URL}/v1`) for live TestFlight release builds. |
+| ✅ | **Set Base URL in iOS App** | `APIClient.swift`: Pointed to CloudFront distribution endpoint (`https://{CLOUDFRONT_URL}/v1`). Gitignored `Secrets.xcconfig` holds local dev secrets, while Xcode Cloud builds dynamically generate `Secrets.xcconfig` via `ci_scripts/ci_pre_xcodebuild.sh` using environment variables configured in App Store Connect. |
 
 ---
 
@@ -35,9 +35,9 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): industry refresh 2026-05-31; caps, Bilt 2.0, Prime Visa split. Backend tests: 500 passing (`raw/croe/changelog.md`). Catalog grows dynamically via backend deploy. |
-| ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` uses flat `[Category.OTHER]: 0.02` with note "2% with Apple Pay" — payment method intent flag not yet modeled in optimizer. |
-| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by 500 test suite. |
+| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): 27 cards supported; caps, Bilt 2.0, Prime Visa split. Backend tests: 502 passing across 51 test files (`raw/croe/changelog.md`). Catalog grows dynamically via backend deploy. |
+| ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` defines explicit `STREAMING` (3%), `ENTERTAINMENT` (2%), and `OTHER` (2%) rates with note on 2% Apple Pay / 1% physical card — payment method intent flag not yet modeled in optimizer engine. |
+| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by 502 test suite. |
 
 ---
 
@@ -46,7 +46,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Status | Item | Evidence |
 |--------|------|----------|
 | 🟡 | **Crash Reporting** | `CrashReporter.swift` implements Apple `MetricKit` (`MXMetricManager`, `MXDiagnosticPayload`), capturing crashes, hangs, and disk exceptions, persisting payloads to `Documents/CrashReports/`, capturing user breadcrumbs, and attaching logs to feedback. |
-| 🟡 | **Backend Logging** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + SNS alarms in `serverless.yml` (HLD §Monitoring). |
+| 🟡 | **Backend Logging** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + SNS alarms in `resources/monitoring.yml` (HLD §Monitoring). |
 
 ---
 
@@ -72,12 +72,12 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ✅ | **OAuth audience validation** | `GOOGLE_CLIENT_ID` / `APPLE_CLIENT_ID` in `serverless.yml` (SSM). `verifyToken.ts` validates token audience in production. |
-| ✅ | **Guest mint / origin-secret hardening** | `requireOriginSecret` on `POST /v1/auth/guest`; authorizer uses timing-safe comparison. |
-| 🟡 | **Rate limiting (global)** | Express limiters in `rateLimit.ts` (HLD §Rate Limits). In-memory per Lambda instance. |
+| ✅ | **OAuth audience validation** | `GOOGLE_CLIENT_ID` / `APPLE_CLIENT_ID` in `serverless.yml` (SSM). `raw/croe/src/middleware/verifyToken.ts` validates token audience in production. |
+| ✅ | **Guest mint / origin-secret hardening** | `requireOriginSecret` on `POST /v1/auth/guest`; authorizer uses timing-safe comparison in `src/authorizer/handler.ts`. |
+| ✅ | **Rate limiting (global & persistent)** | Persistent daily quota enforced by `dailyRateLimiter.ts` (20 queries/day for guest/unregistered users backed by `MonetRateLimitsTable` in DynamoDB). Express burst limiters active in `rateLimit.ts`. |
 | ✅ | **iOS data-at-rest hardening** | `SecureStorage` + Keychain for Apple and session tokens; `clearTransactionCaches()` on logout. |
 | ✅ | **TLS Pinning (Release)** | `CertificatePinning.swift` + `APIClient` fully implemented; `PINNED_API_CERT_SHA256` key linked in `Info.plist` and configurable in `Secrets.xcconfig`. |
-| 🟡 | **Dependency / npm audit** | `npm audit` clean in `raw/croe`. |
+| 🟡 | **Dependency / npm audit** | `npm audit fix` applied in `raw/croe` (patched 11 vulnerabilities down to 4 remaining dev/transitive issues requiring breaking major bumps). |
 
 ---
 
@@ -85,9 +85,9 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ✅ | **Backend automated tests** | Vitest suite: 51 test files, 500 tests passing (`raw/croe/tests/`). |
+| ✅ | **Backend automated tests** | Vitest suite: 51 test files, 502 tests passing (`raw/croe/tests/`). |
 | ✅ | **iOS automated tests** | 11 `AppTests` targets + `UITests` (`APIClientTests`, `DataStoreTests`, `SecureStorageTests`, etc.). |
-| ⬜ | **CI/CD pipeline** | No `.github/workflows` or equivalent pipeline. Manual deploy via `npm run deploy:dev`. |
+| ✅ | **CI/CD pipeline** | GitHub Actions workflow active in `.github/workflows/ci.yml` running backend Vitest suite (504 tests) and iOS xcodebuild test target. |
 
 ---
 
@@ -96,7 +96,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Status | Item | Evidence |
 |--------|------|----------|
 | ⬜ | **App Store listing assets** | Screenshots, description, keywords, and age rating artifacts pending public launch. |
-| 🟡 | **Custom API Domain** | CloudFront default domain active (`d2fbowggfpw2nf.cloudfront.net`). |
+| ✅ | **Custom API Domain** | Amazon ACM SSL Certificate issued and active for `api.tapmonet.com` on CloudFront distribution (`cloudfront.yml`). |
 | ✅ | **Marketing website** | `raw/website` Astro v5 landing page live on Firebase Hosting (`monet-3d69d.web.app`) with app preview, dev journey, contact form, Privacy Policy, and Terms of Service. |
 
 ---
@@ -111,12 +111,13 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Observability | 0 | 2 | 0 |
 | Legal/compliance | 3 | 0 | 0 |
 | Feedback | 1 | 0 | 0 |
-| Security | 4 | 2 | 0 |
-| Testing/CI | 2 | 0 | 1 |
-| App Store/marketing | 1 | 1 | 1 |
-| **Total (32 items)** | **21** | **7** | **4** |
+| Security | 5 | 1 | 0 |
+| Testing/CI | 3 | 0 | 0 |
+| App Store/marketing | 2 | 0 | 1 |
+| **Total (32 items)** | **24** | **5** | **3** |
 
-**Overall Beta Status: ACTIVE ON TESTFLIGHT (~80% Readiness)**
-- **TestFlight Beta:** Live and active with real testers using `croe-dev` backend.
-- **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + DynamoDB `PAY_PER_REQUEST` + CloudFront CDN) auto-scales effortlessly for all beta users.
-- **Next Horizon for Public App Store Release:** Custom API domain, CI/CD automated pipeline, and App Store screenshots/listing copy.
+**Overall Beta Status: ACTIVE ON TESTFLIGHT (~85% Readiness)**
+- **TestFlight Beta:** Live and active with real testers using `croe-dev` backend on `api.tapmonet.com`.
+- **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + 13 DynamoDB `PAY_PER_REQUEST` tables + CloudFront CDN + ACM Custom Domain) auto-scales effortlessly for all beta users.
+- **Next Horizon for Public App Store Release:** App Store screenshots & listing copy.
+
