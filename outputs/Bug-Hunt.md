@@ -1,7 +1,7 @@
 # Bug Hunt & Code Improvements
 
-**Revalidated:** 2026-08-05 against local `main` branches.
-**Verification:** backend build passed; 52 files / 504 tests passed; website build passed. This is static/local evidence, not a deployed-environment audit.
+**Revalidated:** 2026-08-13 against local `main` branches.
+**Verification:** backend build and lint passed; 43 files / 471 unit tests passed; website build was previously verified. This is static/local evidence, not a deployed-environment audit.
 
 ## Highest-impact open findings
 
@@ -9,17 +9,17 @@
 
 The iOS Settings/Profile UI offers sign-out but no Delete Account action, and the backend exposes no account-erasure endpoint. A complete workflow must remove credentials, the user profile, Plaid connections and tokens, transactions, overrides, recommendation preferences/feedback associations, insights cache, Plaid item indexes, and local data. Retention rules are also needed for telemetry and form submissions.
 
-### 2. Verification code can reach production logs
+### 2. Verification-code logging — resolved 2026-08-13
 
-`raw/croe/src/api/auth.ts` logs the generated verification code when signup email delivery fails, with a TODO to remove it. This can expose an authentication secret in CloudWatch. Production paths should never log OTPs; any local/test disclosure should require an explicit local-only guard.
+`raw/croe/src/api/auth.ts` now emits generic delivery-failure messages without verification or reset codes. A focused unit test verifies that the code is absent when email delivery fails.
 
 ### 3. The app key is source-visible and is not client attestation
 
 The fallback `X-Monet-App-Key` value appears in backend and website source and the iOS CI template. Anything embedded in a web bundle or app can be recovered, so the key should not be described as proving a request came from an authentic client. Remove production fallback values, rotate the current key, and consider App Attest/DeviceCheck for iOS.
 
-### 4. Documentation registry does not match the live router
+### 4. Documentation registry parity — resolved 2026-08-13
 
-`raw/croe/src/api/routeRegistry.ts` omits native auth routes, forms, crash telemetry, and other live endpoints from `src/api/routes.ts` / `src/api/auth.ts`. Generate OpenAPI from the router/Zod schemas or add a parity test so clients and documentation cannot silently drift.
+`raw/croe/src/api/routeRegistry.ts` now covers the live endpoints and `tests/unit/routeRegistry.test.ts` compares it with the nested Express routers. OpenAPI generation remains a future enhancement.
 
 ### 5. Local DynamoDB bootstrap is missing one production table
 

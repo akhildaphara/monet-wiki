@@ -258,7 +258,7 @@
 <li><code>plaidCategoryMap.ts</code>: Maps Plaid&#39;s <code>primaryPersonalFinanceCategory</code> values to the internal <code>Category</code> enum, with high-value merchant name overrides (Uber, Lyft, Amazon, Whole Foods, streaming services, wholesale clubs).</li>
 </ul>
 <h2>Running the Backend</h2>
-<p><strong>Contract warning:</strong> <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code> are the live route sources. <code>src/api/routeRegistry.ts</code> currently omits several active routes and is not a complete generated API contract.</p>
+<p><strong>Contract note:</strong> <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code> are the live route sources. <code>src/api/routeRegistry.ts</code> now covers the live route set and is checked by <code>tests/unit/routeRegistry.test.ts</code>; it is a hand-maintained contract description, not generated OpenAPI.</p>
 <ul>
 <li>Development: <code>npm run dev</code> → <code>tsx watch src/index.ts</code> (hot-reload).</li>
 <li>Database: Local DynamoDB instance on <code>http://127.0.0.1:8000</code>, initialized via <code>npm run init-db</code>.</li>

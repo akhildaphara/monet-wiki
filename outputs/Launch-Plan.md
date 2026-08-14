@@ -134,7 +134,7 @@ Parallel work that does **not** block the critical path: card catalog audit, App
 |------|-------|------|
 | **Backend** | ✅ Persistent DynamoDB daily quota and API Gateway throttling shipped; load-test/tune and consider WAF for edge abuse | 1 wk |
 | **Backend** | Restrict guest JWT from Plaid write routes (Security M-6) | 0.5 wk |
-| **Backend** | Alarms: CloudFront 5xx, DynamoDB throttling, Plaid error rate (HLD §Monitoring gap) | 1 wk |
+| **Backend** | ✅ Dependency failure-rate, split DynamoDB throttle, and CloudFront 5xx alarms defined; verify deployed SNS delivery and tune thresholds under load | 1 wk |
 | **Backend** | Custom domain `api.croe.ai` + ACM (optional polish) | 0.5 wk |
 | **iOS** | Migrate remaining Plaid/insights UserDefaults caches to encrypted storage | 1 wk |
 | **iOS** | App Store assets: 6.7" screenshots, description, keywords | 1 wk |
@@ -225,7 +225,7 @@ Assumes **W1 = start now**, solo/small team, Apple Developer enrollment submitte
 |------|------------|--------|------------|
 | App Store rejection (no account deletion) | High | Blocks public launch | Add in-app Delete Account and complete backend erasure workflow |
 | Google "Unverified App" scares testers | Medium | Drops sign-in conversion | Publish privacy policy; submit OAuth verification in Phase 1 W2 |
-| API cost abuse via guest mint / Places / Bedrock | Medium | Bill shock | Origin secret, API Gateway throttling, reserved concurrency, burst limits, and DynamoDB daily quotas exist; load-test and add cost/dependency alarms |
+| API cost abuse via guest mint / Places / Bedrock | Medium | Bill shock | Origin secret, API Gateway throttling, reserved concurrency, burst limits, DynamoDB daily quotas, and dependency alarms exist; load-test and verify alert delivery |
 | Wrong card recommendations (rotating Q3, Apple Pay) | Medium | Trust erosion | Label beta; quarterly schedule update process; conservative Apple Card default |
 | Plaid sandbox vs production confusion | Medium | Broken bank link in prod | Keep closed beta on sandbox; switch Plaid env only with prod stack |
 | HLD/docs drift (e.g. `/cards` auth badge) | Low | Agent/dev confusion | Fix HLD accordion; treat `hld-dashboard.html` as SoT per AGENTS.md |

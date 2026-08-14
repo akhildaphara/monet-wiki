@@ -46,7 +46,7 @@
                     </ul>
 
                     <h2>API surface</h2>
-                    <p>The live router in <code>raw/croe/src/api/routes.ts</code> is authoritative. It covers health, forms, crash telemetry, brands, recommendations and feedback, cards, user settings/overrides/preferences, guest and registered auth, and Plaid connection/transaction/insights operations. <code>src/api/routeRegistry.ts</code> is currently incomplete and must not be treated as a generated contract.</p>
+                    <p>The live router in <code>raw/croe/src/api/routes.ts</code> is authoritative. It covers health, forms, crash telemetry, brands, recommendations and feedback, cards, user settings/overrides/preferences, guest and registered auth, and Plaid connection/transaction/insights operations. <code>src/api/routeRegistry.ts</code> now covers the live route set and has a unit-test parity check against the Express routers; it remains a hand-maintained contract description rather than generated OpenAPI.</p>
 
                     <h2>Data model</h2>
                     <p>The backend provisions 13 DynamoDB tables:</p>
@@ -73,10 +73,10 @@
                     <h2>Most important actions</h2>
                     <ol>
                         <li><strong>Implement in-app account deletion and a complete backend erasure workflow</strong> before public App Store submission.</li>
-                        <li><strong>Stop logging email verification codes</strong> on delivery failure.</li>
+                        <li><strong>Verify the deployed build</strong> includes the backend fix that removed email verification codes from production logs.</li>
                         <li><strong>Rotate/remove the source-visible app-key fallback</strong> and do not treat a key shipped in web/app clients as client attestation; use App Attest/DeviceCheck for stronger proof.</li>
-                        <li><strong>Generate or test the API contract</strong> so the router, route registry, clients, and documentation cannot silently drift.</li>
-                        <li><strong>Expand operational monitoring</strong> to dependency failures, DynamoDB throttles, CloudFront 5xx, and crash-ingestion health.</li>
+                        <li><strong>Keep the API contract parity test current</strong> as routes are added; it now fails when the live router and route registry diverge.</li>
+                        <li><strong>Verify operational alert delivery</strong> in the deployed stage; dependency failure-rate alarms, split DynamoDB throttle alarms, and CloudFront 5xx monitoring are now defined.</li>
                         <li><strong>Automate reward-data freshness</strong> and model payment method before claiming Apple Card's Apple Pay rate as a universal base rate.</li>
                         <li><strong>Add the missing local FormSubmissions table</strong> or explicitly document why local form tests should use a mocked repository.</li>
                         <li><strong>Add website lint and browser smoke tests</strong>; today the web project has build/deploy scripts but no lint/test scripts.</li>

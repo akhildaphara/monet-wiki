@@ -1240,7 +1240,7 @@
                 </tbody>
             </table>
             <div class="callout warn">
-                <span class="pill pill-warn">Contract drift</span> <code>src/api/routeRegistry.ts</code> omits active native-auth, forms, telemetry, and recommendation routes. The live sources are <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code> until the contract is generated or parity-tested.
+                <span class="pill pill-ok">Contract parity</span> <code>src/api/routeRegistry.ts</code> now covers the live native-auth, forms, telemetry, recommendation, Plaid, and catalog routes. <code>tests/unit/routeRegistry.test.ts</code> compares the registry with <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code>; generate OpenAPI separately if a machine-readable external contract is needed.
             </div>
         </section>
 
@@ -1257,10 +1257,15 @@
                     <tr><td><code>LambdaErrorRateAlarm</code></td><td>Error rate &ge;5% in 5&nbsp;min (metric math)</td><td>Degradation under load.</td></tr>
                     <tr><td><code>CroeErrorLogMetricFilter</code> &rarr; <code>CroeErrorLogAlarm</code></td><td>Any <code>{ level: "ERROR" }</code> log line in 60&nbsp;s</td><td><span class="pill pill-warn">Key</span> Catches <strong>handled</strong> failures that return 200 &mdash; notably swallowed <strong>Bedrock <code>ThrottlingException</code></strong>, which never shows up in the AWS Lambda <code>Errors</code> metric.</td></tr>
                     <tr><td>Bedrock invocation logging</td><td>n/a</td><td>Dedicated log group (14-day retention) + IAM role for model-invocation audit.</td></tr>
+                    <tr><td><code>PlaidFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Provider degradation in Plaid link, account, transaction, and connection operations.</td></tr>
+                    <tr><td><code>GoogleFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Google Places/Knowledge Graph dependency degradation.</td></tr>
+                    <tr><td><code>BedrockFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Bedrock categorization dependency degradation.</td></tr>
+                    <tr><td><code>DynamoCoreThrottleAlarm</code> + <code>DynamoAuxThrottleAlarm</code></td><td>Any throttled request in 5&nbsp;min</td><td>Covers all 13 Monet tables; split into two alarms to stay within CloudWatch metric-math limits.</td></tr>
+                    <tr><td><code>CloudFront5xxAlarm</code></td><td>5xx rate &gt;1% in 5&nbsp;min</td><td>Edge/API delivery failures.</td></tr>
                 </tbody>
             </table>
             <div class="callout">
-                <span class="pill pill-info">Gap</span> Alarms cover the API Lambda only. There are <strong>no alarms on Plaid/Google failure rates, DynamoDB throttling, or CloudFront 5xx</strong>, and the SNS topic has a single email subscriber (no Slack/PagerDuty). Tracked in <a href="#future">Future Considerations</a>.
+                <span class="pill pill-ok">Implemented</span> Provider failure-rate metrics use the low-cardinality <code>Monet/Dependency</code> namespace, and all alarms publish to the stage SNS topic. The remaining operational check is to verify the deployed subscription and run a controlled alarm test before wider launch.
             </div>
         </section>
 
@@ -1381,7 +1386,7 @@
                     </tr>
                     <tr>
                         <td>Stale docs</td>
-                        <td><code>src/api/routeRegistry.ts</code> is incomplete relative to <code>routes.ts</code> and <code>auth.ts</code>. Generate OpenAPI or enforce route-registry parity in CI.</td>
+                        <td><code>src/api/routeRegistry.ts</code> is parity-tested against <code>routes.ts</code> and <code>auth.ts</code>. Keep the test updated when routes change; generate OpenAPI later if external consumers need it.</td>
                         <td><span class="pill pill-warn">Medium</span></td>
                     </tr>
                     <tr>
@@ -1391,8 +1396,8 @@
                     </tr>
                     <tr>
                         <td>Monitoring coverage</td>
-                        <td>Alarms only watch the API Lambda. No alarms on Plaid/Google failure rates, DynamoDB throttling, or CloudFront 5xx; SNS has a single email subscriber (no Slack/PagerDuty escalation).</td>
-                        <td><span class="pill pill-warn">Medium</span></td>
+                        <td>Dependency failure-rate alarms, split core/auxiliary DynamoDB throttle alarms covering all 13 tables, and CloudFront 5xx monitoring are defined. Verify SNS delivery and add a second escalation subscriber before public launch.</td>
+                        <td><span class="pill pill-info">Medium</span></td>
                     </tr>
                     <tr>
                         <td>Payment method</td>
@@ -1401,7 +1406,7 @@
                     </tr>
                     <tr>
                         <td>Security review drift</td>
-                        <td>The native signup error path can log a generated verification code, and a fallback app key is source-visible. Remove OTP logging, rotate/remove production fallback keys, and use App Attest/DeviceCheck if strong client attestation is required.</td>
+                        <td>Verification-code logging was removed from the native signup error path. The fallback app key remains source-visible; rotate/remove production fallback keys and use App Attest/DeviceCheck if strong client attestation is required.</td>
                         <td><span class="pill pill-danger">High</span></td>
                     </tr>
                     <tr>

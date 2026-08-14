@@ -1,6 +1,6 @@
 # API Efficiency & Scalability Suggestions
 
-> Revalidated 2026-08-05. The original Lambda/caching proposals have largely shipped; open scalability work is load testing, dependency monitoring, and cache/limit tuning. See [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md).
+> Revalidated 2026-08-13. The original Lambda/caching proposals have largely shipped; dependency monitoring is now defined. Open scalability work is load testing, deployed-alert verification, and cache/limit tuning. See [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md).
 
 The `croe` Node.js backend handles DynamoDB interactions, and Google Places API calls. Here is how we can scale it effectively:
 

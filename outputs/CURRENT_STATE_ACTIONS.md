@@ -1,11 +1,11 @@
 # Monet Current-State Alignment and Action Items
 
-**Verified:** 2026-08-05  
+**Verified:** 2026-08-13
 **Scope:** local `main` branches for `croe`, `swift-app`, and `website`; executable source and infrastructure configuration. Deployed AWS, Firebase, App Store Connect, and TestFlight state were not independently queried.
 
 ## Executive summary
 
-Monet is a working three-client system: an Astro 5 marketing site and installable PWA, a SwiftUI iOS app, and a Node 20/Express API on Lambda. The backend compiles and all 504 Vitest tests pass; the website produces all six static routes. The iOS app has five tabs (Search, Insights, Calculator, Wallet, Settings), guest/Google/Apple/native email authentication, Plaid-backed insights, offline recommendation behavior, MetricKit telemetry, and a widget surface.
+Monet is a working three-client system: an Astro 5 marketing site and installable PWA, a SwiftUI iOS app, and a Node 20/Express API on Lambda. The backend compiles and the current unit suite passes (43 files / 471 tests); the website previously produced all six static routes. The iOS app has five tabs (Search, Insights, Calculator, Wallet, Settings), guest/Google/Apple/native email authentication, Plaid-backed insights, offline recommendation behavior, MetricKit telemetry, and a widget surface.
 
 The documentation had drifted most in four areas: the DynamoDB schema (13 tables, not four or five), authentication and endpoint coverage, iOS navigation/features, and infrastructure controls. Historical output files remain useful as design context, but this report and `wiki-html/Current-State.html` are the current snapshot.
 
@@ -15,21 +15,21 @@ The documentation had drifted most in four areas: the DynamoDB schema (13 tables
 
 Registered users can create native accounts and connect Plaid, but there is no in-app Delete Account control and no backend deletion endpoint. Implement an authenticated, re-confirmed deletion workflow that removes credentials, user profile, Plaid items/tokens, transactions, overrides, preferences, feedback associations, cached insights, item-index records, and local app data. Define retention for telemetry and form submissions. This is the clearest release-blocking product gap under [Apple App Review Guideline 5.1.1(v)](https://developer.apple.com/app-store/review/guidelines/) and Apple's [account-deletion guidance](https://developer.apple.com/support/offering-account-deletion-in-your-app/).
 
-### P0 — Remove verification codes from logs
+### P0 — Remove verification codes from logs — completed 2026-08-13
 
-`raw/croe/src/api/auth.ts` still contains a TODO and logs a generated email verification code when delivery fails. That creates a credential exposure path in CloudWatch. Never log production OTPs; keep deterministic test codes confined to tests or an explicit local-only branch.
+`raw/croe/src/api/auth.ts` now logs only a generic delivery failure and never includes signup, resend, or password-reset codes. A focused unit test covers the email-delivery failure path.
 
 ### P0 — Rotate and redesign the app-key control
 
 The fallback `X-Monet-App-Key` value is present in backend and website source and in the iOS CI template. A value shipped in a public web bundle or app binary cannot prove client authenticity. Remove production fallbacks, rotate the current key, and treat this header only as a low-confidence abuse signal. For stronger iOS attestation, add App Attest/DeviceCheck with server-side verification. Avoid describing the current header as a security boundary.
 
-### P1 — Make the API contract executable
+### P1 — Make the API contract executable — completed 2026-08-13
 
-`src/api/routeRegistry.ts` omits native auth, forms, crash telemetry, and some recommendation endpoints, and its auth labels do not fully describe the API Gateway authorizer plus Express middleware split. Either generate an OpenAPI document from the live router/Zod schemas or add a CI test that fails when router paths and the registry diverge. Do the same for the duplicated 33-value Category enum and cross-repository popular-brand maps.
+`src/api/routeRegistry.ts` now covers the live route set with explicit auth metadata. `tests/unit/routeRegistry.test.ts` fails when the registry and nested Express routers diverge. OpenAPI generation and the duplicated category/brand maps remain optional follow-up work.
 
-### P1 — Finish observability before wider launch
+### P1 — Finish observability before wider launch — alert definitions completed 2026-08-13
 
-The backend has structured logs, API Lambda alarms, MetricKit ingestion, persistent daily quotas, API Gateway throttling, and reserved Lambda concurrency. Remaining gaps are dependency-specific alerting and operations: Plaid/Google/Bedrock error rates, DynamoDB throttles, CloudFront 5xx, crash ingestion health, a verified alert escalation path, and a short incident/runbook checklist.
+The backend now includes Plaid/Google/Bedrock failure-rate alarms, core and auxiliary DynamoDB throttle alarms covering all 13 tables, CloudFront 5xx monitoring, and an operations runbook. Remaining work is deployed-stage verification of SNS delivery, crash-ingestion health, and escalation ownership.
 
 ### P1 — Audit catalog correctness and automate time-sensitive rewards
 
@@ -53,7 +53,7 @@ The Astro site builds successfully but has no lint or test scripts. Add at least
 | iOS | SwiftUI/SwiftData, five tabs, guest/Google/Apple/email auth, Plaid Link and Insights, offline/local recommender, Calculator, widget UI, MetricKit crash capture |
 | Website | Astro 5, Tailwind 4, vanilla modules, six routes, Firebase static output, PWA guest flow, local wallet, search and category overview |
 | Catalog | 26 supported cards; 32 backend/iOS category values |
-| Verification | Backend TypeScript build passed; 52 files / 504 Vitest tests passed; website Astro build passed with six generated pages |
+| Verification | Backend TypeScript build, lint, and unit suite passed; 43 files / 471 unit tests passed; website Astro build previously passed with six generated pages |
 
 ## Documentation policy
 
