@@ -35,9 +35,9 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): 27 cards supported; caps, Bilt 2.0, Prime Visa split. Backend tests: 502 passing across 51 test files (`raw/croe/changelog.md`). Catalog grows dynamically via backend deploy. |
+| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): 26 cards supported; caps, Bilt 2.0, Prime Visa split. Backend tests: 504 passing across 52 test files (verified locally 2026-08-05). Catalog grows via backend deploy. |
 | ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` defines explicit `STREAMING` (3%), `ENTERTAINMENT` (2%), and `OTHER` (2%) rates with note on 2% Apple Pay / 1% physical card — payment method intent flag not yet modeled in optimizer engine. |
-| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by 502 test suite. |
+| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by the 504-test suite. |
 
 ---
 
@@ -85,7 +85,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ✅ | **Backend automated tests** | Vitest suite: 51 test files, 502 tests passing (`raw/croe/tests/`). |
+| ✅ | **Backend automated tests** | Vitest suite: 52 test files, 504 tests passing locally on 2026-08-05 (`raw/croe/tests/`). |
 | ✅ | **iOS automated tests** | 11 `AppTests` targets + `UITests` (`APIClientTests`, `DataStoreTests`, `SecureStorageTests`, etc.). |
 | ✅ | **CI/CD pipeline** | GitHub Actions workflow active in `.github/workflows/ci.yml` running backend Vitest suite (504 tests) and iOS xcodebuild test target. |
 
@@ -120,4 +120,3 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 - **TestFlight Beta:** Live and active with real testers using `croe-dev` backend on `api.tapmonet.com`.
 - **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + 13 DynamoDB `PAY_PER_REQUEST` tables + CloudFront CDN + ACM Custom Domain) auto-scales effortlessly for all beta users.
 - **Next Horizon for Public App Store Release:** App Store screenshots & listing copy.
-

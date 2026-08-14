@@ -1,3 +1,7 @@
+# Improvements
+
+> Historical suggestions, reviewed 2026-08-05. Endpoint references and priorities in this file may be superseded by [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md).
+
 ## swift-app (iOS)
 
 ### Suggested Improvements
@@ -10,4 +14,4 @@
 ### Suggested Improvements
 
 1.  **Refactor `syncInsights.ts`**: The `syncInsights` function is very long and has a high level of complexity. It would be beneficial to break it down into smaller, more focused functions. For example, the dynamic rewards calculation could be extracted into a separate module.
-2.  **Optimize Best Card Calculation**: The `/categorize` endpoint calculates the user's best card for a given category on every request. This could be optimized by pre-calculating and caching the best card for each category for each user. This would reduce the response time of the endpoint.
+2.  **Optimize Best Card Calculation**: `POST /v1/recommend` calculates the user's best card for a merchant/category. Measure latency and cache only if profiling shows optimizer work—not Places/brand resolution—is material; wallet-overview and insights already have cache-oriented paths.

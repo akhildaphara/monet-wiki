@@ -213,7 +213,7 @@
 <td>Returns pre-computed (cached) or on-demand spending insights for a time window and the supplied card mappings.</td>
 </tr>
 </tbody></table>
-<p>* <strong>Known issue:</strong> the API Gateway HTTP API attaches the Google JWT authorizer to the <code>/{proxy+}</code> route, so the otherwise-public webhook currently also requires a JWT. The webhook route should be exempted from the authorizer and Plaid webhook signature verification added.</p>
+<p><strong>Current state:</strong> <code>POST /v1/plaid/webhook</code> has a dedicated public API Gateway event. The handler verifies the <code>Plaid-Verification</code> JWT, rejects stale verification tokens, and validates the request-body hash before processing.</p>
 <h4>Transaction Sync (<code>src/api/plaid/utils.ts</code>)</h4>
 <ul>
 <li>Uses the <strong>Plaid Transactions Sync API</strong> (<code>/transactions/sync</code>) with cursor-based incremental syncing.</li>
@@ -233,7 +233,7 @@
 </ul>
 <h4>Token Encryption (<code>src/dynamo/repository/UserRepository.ts</code>)</h4>
 <ul>
-<li>All Plaid <code>access_token</code>s are encrypted at rest using <strong>AES-256-CBC</strong> (key derived from <code>PLAID_ENCRYPTION_KEY</code>).</li>
+<li>New Plaid <code>access_token</code> ciphertext uses <strong>AES-256-GCM</strong>. A legacy AES-256-CBC decrypt path remains for existing records and migration.</li>
 <li>Redacts sensitive tokens from logs to prevent exposure.</li>
 </ul>
 <h3>Insights Engine</h3>

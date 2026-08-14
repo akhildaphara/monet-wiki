@@ -145,7 +145,7 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <p>The <a href="Card-Optimizer.html">Card-Optimizer</a> is a core logic component of the <a href="Croe-Backend.html">Croe-Backend</a> that determines the credit card offering the highest return for a specific transaction category. Its primary purpose is to cross-reference the user&#39;s available cards against known reward structures to maximize cashback or points. It is used both in real-time merchant search (via the <code>/v1/categorize</code> endpoint) and in the <a href="Plaid-Integration%7CInsights-Engine.html">Plaid-Integration|Insights Engine</a> for retrospective analysis of actual vs. optimal spending.</p>
+                <p>The <a href="Card-Optimizer.html">Card-Optimizer</a> is a core logic component of the <a href="Croe-Backend.html">Croe-Backend</a> that ranks cards for a transaction category. It powers merchant/category recommendations through <code>POST /v1/recommend</code>, category summaries through <code>POST /v1/wallet-overview</code>, and retrospective actual-vs-optimal <a href="Plaid-Integration.html">Plaid insights</a>.</p>
 <h2>How It Works</h2>
 <p>The optimizer functions by evaluating a transaction&#39;s category and comparing it to the reward profiles of the cards in the user&#39;s wallet.</p>
 <ol>
@@ -161,7 +161,7 @@
 <li><strong>Wallet Filtering</strong>: When <code>findBestCardsForUser</code> is invoked with a user&#39;s wallet, it filters to valid cards and iterates over all categories to determine the highest yielding card.</li>
 </ol>
 <h2>Usage in Insights Engine</h2>
-<p>The optimizer is also used by the <a href="Plaid-Integration%7CInsights-Engine.html">Plaid-Integration|Insights Engine</a> to compute:</p>
+<p>The optimizer is also used by the <a href="Plaid-Integration.html">Plaid Insights Engine</a> to compute:</p>
 <ul>
 <li><strong>Actual Earnings</strong>: Based on real transaction data and user-defined card mappings.</li>
 <li><strong>Wallet Optimal</strong>: The best rate across the user&#39;s current wallet.</li>

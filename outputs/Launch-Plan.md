@@ -1,8 +1,10 @@
 # Monet Launch Plan & Timeline
 
-**Prepared:** 2026-05-31 · **Last updated:** 2026-05-31 19:32  
+**Prepared:** 2026-05-31 · **Current-state review:** 2026-08-05
 **Baseline:** [beta-preparation.md](./beta-preparation.md) (annotated checklist)  
 **Architecture source of truth:** [wiki-html/hld-dashboard.html](../wiki-html/hld-dashboard.html)
+
+> Historical plan: several milestones below have shipped since preparation (including Sign in with Apple, persistent daily quotas, custom API-domain configuration, CI, and active TestFlight work). Use [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md) and [beta-preparation.md](./beta-preparation.md) for current priorities. The public-release blocker newly confirmed in code is in-app account deletion plus backend erasure.
 
 **Team assumption:** Small team / solo developer (~15–25 hrs/week). Durations scale linearly with headcount. All week numbers are **calendar weeks from "start now" (W1)**.
 
@@ -130,7 +132,7 @@ Parallel work that does **not** block the critical path: card catalog audit, App
 
 | Area | Tasks | Est. |
 |------|-------|------|
-| **Backend** | Shared rate-limit store (DynamoDB) or CloudFront WAF rate rules (HLD Future §Throttling) | 1–2 wk |
+| **Backend** | ✅ Persistent DynamoDB daily quota and API Gateway throttling shipped; load-test/tune and consider WAF for edge abuse | 1 wk |
 | **Backend** | Restrict guest JWT from Plaid write routes (Security M-6) | 0.5 wk |
 | **Backend** | Alarms: CloudFront 5xx, DynamoDB throttling, Plaid error rate (HLD §Monitoring gap) | 1 wk |
 | **Backend** | Custom domain `api.croe.ai` + ACM (optional polish) | 0.5 wk |
@@ -221,9 +223,9 @@ Assumes **W1 = start now**, solo/small team, Apple Developer enrollment submitte
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| App Store rejection (no Sign in with Apple) | High | Blocks public launch | Enable Apple sign-in before external TestFlight beyond friends-and-family |
+| App Store rejection (no account deletion) | High | Blocks public launch | Add in-app Delete Account and complete backend erasure workflow |
 | Google "Unverified App" scares testers | Medium | Drops sign-in conversion | Publish privacy policy; submit OAuth verification in Phase 1 W2 |
-| API cost abuse via guest mint / Places / Bedrock | Medium | Bill shock | Origin-secret on guest mint (done); add WAF or DynamoDB rate limits before open beta |
+| API cost abuse via guest mint / Places / Bedrock | Medium | Bill shock | Origin secret, API Gateway throttling, reserved concurrency, burst limits, and DynamoDB daily quotas exist; load-test and add cost/dependency alarms |
 | Wrong card recommendations (rotating Q3, Apple Pay) | Medium | Trust erosion | Label beta; quarterly schedule update process; conservative Apple Card default |
 | Plaid sandbox vs production confusion | Medium | Broken bank link in prod | Keep closed beta on sandbox; switch Plaid env only with prod stack |
 | HLD/docs drift (e.g. `/cards` auth badge) | Low | Agent/dev confusion | Fix HLD accordion; treat `hld-dashboard.html` as SoT per AGENTS.md |

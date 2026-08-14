@@ -145,7 +145,7 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <p>The <a href="Croe-Backend.html">Croe-Backend</a> is the backend server for the <a href="Monet-App-Overview.html">Monet-App-Overview</a> application. Built using Node.js and Express in TypeScript, it is responsible for providing all backend logic, serving APIs to the <a href="Monet-iOS-App.html">Monet-iOS-App</a>, handling user authentication via Google Auth, managing data persistence through <a href="Database-Schema.html">Database-Schema</a> in AWS DynamoDB, and powering the <a href="Plaid-Integration.html">Plaid-Integration</a> pipeline for transaction sync, webhook processing, and spending insights.</p>
+                <p>The <a href="Croe-Backend.html">Croe-Backend</a> is Monet's Node.js/Express TypeScript API. It serves the iOS app and PWA, supports guest, Google, Apple, and native email/password authentication, manages 13 production DynamoDB tables, and powers Plaid transaction sync, merchant categorization, recommendations, telemetry, forms, and spending insights. See the <a href="Current-State.html">verified current-state snapshot</a>.</p>
 <h2>Tech Stack</h2>
 <ul>
 <li><strong>Language</strong>: TypeScript (CommonJS / CJS)</li>
@@ -153,7 +153,7 @@
 <li><strong>Framework</strong>: Express.js</li>
 <li><strong>Deployment</strong>: Serverless Framework (AWS Lambda)</li>
 <li><strong>Database</strong>: AWS DynamoDB (via <code>@aws-sdk/client-dynamodb</code> and <code>@aws-sdk/lib-dynamodb</code>)</li>
-<li><strong>Authentication</strong>: Google Auth Library (<code>google-auth-library</code>) &amp; API Gateway JWT Authorizer</li>
+<li><strong>Authentication</strong>: Lambda request authorizer plus Express middleware; guest, Google, Apple, native/custom JWT, and non-production dev-key flows</li>
 <li><strong>Validation</strong>: Zod (<code>zod</code> v4) — request body/query schemas enforced via a <code>validateRequest</code> middleware</li>
 <li><strong>AI / ML</strong>: AWS Bedrock (<code>@aws-sdk/client-bedrock-runtime</code>) — Amazon Nova (<code>amazon.nova-micro-v1:0</code>) for bulk merchant categorization</li>
 <li><strong>External APIs</strong>: Google Places API &amp; Google Knowledge Graph API (merchant categorization), Plaid API (bank account linking &amp; transaction sync)</li>
@@ -162,7 +162,7 @@
 </ul>
 <h2>Infrastructure</h2>
 <ul>
-<li><strong>AWS Profile</strong>: Always use <code>--profile dev</code> for CLI operations.</li>
+<li><strong>AWS Profile</strong>: Serverless defaults to the AWS profile named <code>default</code>; use an explicit <code>--profile</code> when deploying from another profile.</li>
 <li><strong>Region</strong>: <code>us-east-1</code> (default).</li>
 <li><strong>Deployment</strong>: Managed via <code>serverless.yml</code> with scoped IAM permissions for Lambda functions.</li>
 </ul>
@@ -193,7 +193,7 @@
 <tbody><tr>
 <td>Auth</td>
 <td><code>auth/</code></td>
-<td><code>POST /auth/sync</code> — upserts the user record on login; triggers proactive Plaid sync</td>
+<td><code>POST /auth/guest</code>, <code>/auth/signup</code>, <code>/auth/login</code>, verification/reset/refresh routes, and <code>POST /auth/sync</code></td>
 </tr>
 <tr>
 <td>Cards</td>
@@ -241,7 +241,7 @@
 <p>DynamoDB access is organized into a typed repository layer (this replaces the former single <code>dao.ts</code> module):</p>
 <ul>
 <li><code>repository/DynamoRepository.ts</code>: Generic base repository wrapping <code>DynamoDBDocumentClient</code>. Provides <code>get</code>/<code>put</code>/<code>query</code>/<code>queryAll</code>/<code>scanAll</code>/<code>batchWrite</code> helpers with pagination and retry/backoff on <code>UnprocessedItems</code>.</li>
-<li><code>repository/UserRepository.ts</code>: User CRUD with atomic <code>UpdateCommand</code> mutations. Implements <strong>AES-256-CBC</strong> encryption/decryption of Plaid <code>access_token</code>s at rest, and resolves users by Plaid <code>itemId</code>.</li>
+<li><code>repository/UserRepository.ts</code>: User CRUD with atomic <code>UpdateCommand</code> mutations. Writes Plaid <code>access_token</code>s with <strong>AES-256-GCM</strong> and retains a legacy AES-256-CBC read path for migration.</li>
 <li><code>repository/TransactionRepository.ts</code>: Reads/writes the unified <code>MonetTransactions</code> table (paginated queries by user/date).</li>
 <li><code>repository/OverrideRepository.ts</code>: User-defined merchant category overrides.</li>
 <li><code>repository/InsightsCacheRepository.ts</code>: Manages the <code>MonetInsightsCache</code> table (pre-computed analytics with a 24h TTL).</li>
@@ -258,6 +258,7 @@
 <li><code>plaidCategoryMap.ts</code>: Maps Plaid&#39;s <code>primaryPersonalFinanceCategory</code> values to the internal <code>Category</code> enum, with high-value merchant name overrides (Uber, Lyft, Amazon, Whole Foods, streaming services, wholesale clubs).</li>
 </ul>
 <h2>Running the Backend</h2>
+<p><strong>Contract warning:</strong> <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code> are the live route sources. <code>src/api/routeRegistry.ts</code> currently omits several active routes and is not a complete generated API contract.</p>
 <ul>
 <li>Development: <code>npm run dev</code> → <code>tsx watch src/index.ts</code> (hot-reload).</li>
 <li>Database: Local DynamoDB instance on <code>http://127.0.0.1:8000</code>, initialized via <code>npm run init-db</code>.</li>

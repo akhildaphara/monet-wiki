@@ -1479,7 +1479,7 @@
                                         </button>
                                     </div>
                                     <div style="display: flex; gap: var(--space-md);">
-                                        <button class="app-button primary" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Try it out</button>
+                                        <button class="app-button primary" style="min-height: 44px; padding: 8px 16px; font-size: 15px;">Try It Out</button>
                                     </div>
                                 </div>
                                 
@@ -1636,7 +1636,7 @@
                     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
                         <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
                             <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">BUTTONS</span>
-                            <span style="font-size: 15px; color: var(--text-secondary);">Sentence case — "Add a card" not "Add A Card"</span>
+                            <span style="font-size: 15px; color: var(--text-secondary);">Apple title-style capitalization — "Add a Card" and "Sign In with Apple"</span>
                         </div>
                         <div style="display: flex; align-items: baseline; gap: 16px; padding: 12px 16px; background: var(--bg-light); border-radius: 10px; border: 1px solid var(--border-color);">
                             <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; min-width: 90px;">NAV TITLES</span>
@@ -1694,6 +1694,19 @@
                     </div>
                 </div>
 
+                <div class="guideline-card">
+                    <h3>Interaction &amp; Accessibility</h3>
+                    <p>Every flow must remain understandable, operable, and trustworthy across visual, motor, and assistive-technology contexts.</p>
+                    <ul>
+                        <li><strong>One control, one name:</strong> Native controls expose one concise accessible label and their current value or selection state. Never create duplicate VoiceOver targets for one visible control.</li>
+                        <li><strong>Dynamic Type:</strong> User-facing text uses semantic SwiftUI text styles. Fixed font sizes are reserved for decorative marks that do not carry essential information.</li>
+                        <li><strong>Touch targets:</strong> Interactive controls provide at least a 44pt by 44pt hit area, even when the visible symbol is smaller.</li>
+                        <li><strong>Motion:</strong> Motion communicates loading or state change. Decorative loops stop when Reduce Motion is enabled, while content remains fully understandable.</li>
+                        <li><strong>State coverage:</strong> Design and verify default, loading, empty, error, success, disabled, and offline states for each primary task.</li>
+                        <li><strong>Labels beyond color:</strong> Rates, errors, selections, and progress include text or symbols so meaning never depends on color alone.</li>
+                    </ul>
+                </div>
+
             </div>
         </section>
 
@@ -1704,7 +1717,8 @@
                     <h3>UX Writing & Voice</h3>
                     <p><strong>Tone:</strong> Delightfully simple, authentically expert, and highly energetic. Monet makes credit card optimization feel like magic, not accounting.</p>
                     <ul>
-                        <li><strong>Sentence Case:</strong> Always use sentence case for headers, buttons, and list items. (e.g. "Add a card", not "Add A Card").</li>
+                        <li><strong>Button Labels:</strong> Follow Apple's title-style capitalization and begin with a clear action verb when possible (e.g. "Add a Card", "Try Again", "Sign In with Apple").</li>
+                        <li><strong>Sentence Case:</strong> Use sentence case for body copy, ordinary section headings, and non-interactive list labels.</li>
                         <li><strong>Active Voice:</strong> "You earned $5.00" instead of "$5.00 was earned".</li>
                         <li><strong>Contractions:</strong> Use them to sound human. "We're", "You've", "Can't".</li>
                         <li><strong>Conciseness:</strong> Write headlines as if subcopy is illegal. Zero jargon.</li>
@@ -1722,6 +1736,8 @@
                     <ul>
                         <li><strong>Less is More:</strong> Use the default standard weight. Avoid multi-colored or highly complex symbol variants for standard UI.</li>
                         <li><strong>Clarity over Cleverness:</strong> Icons must be universally understood instantly.</li>
+                        <li><strong>Celebration:</strong> Use <code>party.popper</code> for confetti moments. Do not use <code>sparkles</code> as a generic magic or success symbol.</li>
+                        <li><strong>Primary Tabs:</strong> Calculator uses <code>dollarsign.gauge.chart.lefthalf.righthalf</code>, Wallet uses <code>wallet.bifold</code>, and Settings uses the outlined <code>gearshape</code>.</li>
                         <li><strong>Interactive vs. Informational:</strong> Interactive icons use primary or neutral foreground colors; informational icons in lists should be secondary.</li>
                     </ul>
                     <h4>Tapestries & Illustrations</h4>

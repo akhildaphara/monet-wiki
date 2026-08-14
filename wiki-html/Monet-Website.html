@@ -149,7 +149,7 @@
 <h2>Tech Stack</h2>
 <ul>
 <li><strong>Framework</strong>: Astro v5</li>
-<li><strong>Language</strong>: TypeScript</li>
+<li><strong>Language</strong>: Astro templates and JavaScript ES modules</li>
 <li><strong>UI</strong>: Tailwind CSS 4, Vanilla JS &amp; CSS transitions, Lucide HTML paths</li>
 <li><strong>Dev Server</strong>: Runs on port 3001 (<code>astro dev --port 3001</code>)</li>
 </ul>
@@ -163,9 +163,9 @@
 <h2>Page Structure</h2>
 <p>The website is built with these main pages:</p>
 <ol>
-<li><strong>Landing Page (<code>index.astro</code>)</strong>: Single-page layout featuring navigation, theme toggle, hero section, interactive merchant search preview, a waitlist signup card (integrated with Formspree honeypot anti-spam), and waitlist success states.</li>
+<li><strong>Landing Page (<code>index.astro</code>)</strong>: Marketing surface with navigation, theme handling, product preview, and a waitlist form submitted through the Croe <code>/v1/forms/submit</code> endpoint.</li>
 <li><strong>Companion PWA Client (<code>app.astro</code>)</strong>: Interactive web app shell mounted at <code>/app</code> with search, wallet setup, and offline fallback screens. Integrated with geolocation queries and custom theme overrides.</li>
-<li><strong>Contact Page (<code>contact.astro</code>)</strong>: Help form using Formspree asynchronous POST routing.</li>
+<li><strong>Contact Page (<code>contact.astro</code>)</strong>: Help form submitted through the Croe form-ingestion endpoint.</li>
 <li><strong>Privacy &amp; Terms (<code>privacy.astro</code>, <code>terms.astro</code>)</strong>: Privacy and service agreements.</li>
 </ol>
 <h2>Universal Links</h2>
@@ -178,7 +178,9 @@ npm run dev   # → http://localhost:3001
 <ul>
 <li>Hosted in the <code>raw/website</code> directory.</li>
 <li>Deployed via <strong>Firebase Hosting</strong>. The build process runs static export (<code>npm run build</code> outputs to <code>/out</code>) which is deployed to Firebase.</li>
-<li>Current HEAD: <code>d2c7985</code> (Standardized component naming and design system mappings).</li>
+<li>Verified main HEAD (2026-08-05): <code>160d09c3a7ee9edad08ed0beeed22098cbc0641e</code>.</li>
+<li>Current package version: <code>0.5.15</code>. The version is visible only in the <code>/app</code> footer and must match <code>src/utils/version.js</code>.</li>
+<li>There are currently no website lint or test scripts; <code>npm run build</code> is the available automated validation.</li>
 </ul>
 
             </article>

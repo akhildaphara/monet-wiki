@@ -145,14 +145,14 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <p>Monet is a credit card rewards optimizer application that helps users maximize their cashback and rewards based on their purchases. It consists of three main components: the <a href="Monet-iOS-App.html">Monet-iOS-App</a>, which serves as the frontend UI for users to interact with; the <a href="Croe-Backend.html">Croe-Backend</a>, which is the backend server that handles data processing, API requests, and integrations; and the <a href="Monet-Website.html">Monet-Website</a>, a public-facing landing page for the product.</p>
+                <p>Monet is a credit card rewards optimizer with three implementation repositories: the native <a href="Monet-iOS-App.html">iOS app</a>, the <a href="Croe-Backend.html">Croe backend</a>, and an Astro <a href="Monet-Website.html">website</a> that contains both the marketing site and companion PWA. See <a href="Current-State.html">Current State</a> for the verified repository snapshot and open actions.</p>
 <p>The platform uses a <a href="Card-Optimizer.html">Card-Optimizer</a> to determine the best credit card for a given purchase. The <a href="Plaid-Integration.html">Plaid-Integration</a> enables automatic bank account linking, transaction syncing (via the Transactions Sync API and webhooks), and personalized spending insights that compare actual rewards earned against wallet-optimal and globally-optimal strategies. The entire system is built to ensure API efficiency and scalability, while maintaining a top-notch UI/UX for end users. The application also allows users to configure business category overrides, giving them fine-grained control over how their transactions are categorized and which cards are recommended.</p>
 <h2>System Components</h2>
 <ul>
 <li><a href="Monet-iOS-App.html">Monet-iOS-App</a>: A Swift/SwiftUI iOS application with merchant search, spending insights, wallet management, and bank connection management. Hosted in the <code>raw/swift-app</code> directory. Redesigned for standard theme tokens and improved animations.</li>
 <li><a href="Croe-Backend.html">Croe-Backend</a>: A modular Node.js/Express backend running on Node 20 / CJS and deployed via Serverless (AWS Lambda).</li>
 <li><a href="Monet-Website.html">Monet-Website</a>: An Astro landing page with Universal Link support.</li>
-<li><a href="Database-Schema.html">Database-Schema</a>: AWS DynamoDB tables for Users, Overrides, Transactions, and Insights Caching.</li>
+<li><a href="Database-Schema.html">Database-Schema</a>: 13 deployed DynamoDB tables spanning users, credentials, overrides, preferences, feedback, transactions, caches, enrichment/audit, rate limits, Plaid indexing, and form submissions.</li>
 </ul>
 <h2>Core Features</h2>
 <ul>

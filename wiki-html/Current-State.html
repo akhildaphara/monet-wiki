@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current State - Monet Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { 50: '#effdf5', 600: '#16a34a', 700: '#15803d' } } } } };
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+    <div class="min-h-screen flex">
+        <div id="sidebar-placeholder" class="hidden lg:block w-72 shrink-0"></div>
+        <main class="flex-1 overflow-y-auto">
+            <div class="max-w-5xl mx-auto px-6 py-12 lg:px-12 lg:py-16">
+                <article class="prose prose-slate lg:prose-lg max-w-none bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
+                    <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide">Verified 2026-08-05</p>
+                    <h1>Monet Current State</h1>
+                    <p>This is the authoritative wiki snapshot for the local <code>main</code> branches of all three implementation repositories. It is based on executable source and infrastructure configuration, not historical plans. Deployed AWS, Firebase, App Store Connect, and TestFlight state were not independently queried.</p>
+
+                    <h2>Repository snapshot</h2>
+                    <table>
+                        <thead><tr><th>Component</th><th>Commit</th><th>Verified state</th></tr></thead>
+                        <tbody>
+                            <tr><td>Croe backend</td><td><code>beb6b56c1b2fd10c02277137ef1bbfc3760afc5f</code></td><td>Build passed; 52 files / 504 Vitest tests passed.</td></tr>
+                            <tr><td>Swift app</td><td><code>291b8616007bd4de23341d85ecea5aab5d96909b</code></td><td>Source/configuration inspected; no Xcode build run for this documentation-only sync.</td></tr>
+                            <tr><td>Website</td><td><code>160d09c3a7ee9edad08ed0beeed22098cbc0641e</code></td><td>Astro build passed; six static routes generated.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h2>Product surfaces</h2>
+                    <ul>
+                        <li><strong>iOS:</strong> SwiftUI/SwiftData app with Search, Insights, Calculator, Wallet, and Settings tabs; guest, Google, Apple, and native email/password sessions; Plaid Link; cached/offline recommendations; custom rewards; category overrides; MetricKit crash capture; and widget UI.</li>
+                        <li><strong>Website/PWA:</strong> Astro 5 + Tailwind 4 static site with landing, app, app-info, contact, privacy, and terms routes. The <code>/app</code> PWA has a local wallet, guest-token bootstrap, merchant/category recommendation, geolocation-assisted defaults, and category overview.</li>
+                        <li><strong>Backend:</strong> TypeScript/Express on Node 20, wrapped by <code>serverless-http</code> for Lambda. API Gateway and CloudFront front the API; DynamoDB stores product data; Plaid, Google Places/Knowledge Graph, Bedrock Nova Micro, and SES provide integrations.</li>
+                    </ul>
+
+                    <h2>Backend and security</h2>
+                    <ul>
+                        <li>Protected gateway requests pass through a Lambda request authorizer. Express then applies optional, required, or registered-user checks per route.</li>
+                        <li>Supported identities are guest JWT, Google token, Apple token, native/custom JWT, and a non-production dev key. Native auth includes signup, login, email verification, resend, refresh, forgot-password, reset-code verification, and password reset.</li>
+                        <li><code>POST /v1/auth/guest</code>, <code>POST /v1/plaid/webhook</code>, and <code>GET /health</code> have explicit public API Gateway events. The Plaid webhook verifies <code>Plaid-Verification</code> signatures and request-body hashes.</li>
+                        <li>Controls include API Gateway throttling (400 requests/s, burst 200), API Lambda reserved concurrency 20, Express burst limits, and a persistent DynamoDB daily quota for guest/unregistered expensive calls.</li>
+                        <li>Plaid token writes use AES-256-GCM. The repository can read legacy AES-256-CBC ciphertext to support migration.</li>
+                    </ul>
+
+                    <h2>API surface</h2>
+                    <p>The live router in <code>raw/croe/src/api/routes.ts</code> is authoritative. It covers health, forms, crash telemetry, brands, recommendations and feedback, cards, user settings/overrides/preferences, guest and registered auth, and Plaid connection/transaction/insights operations. <code>src/api/routeRegistry.ts</code> is currently incomplete and must not be treated as a generated contract.</p>
+
+                    <h2>Data model</h2>
+                    <p>The backend provisions 13 DynamoDB tables:</p>
+                    <ol>
+                        <li><code>MonetUsers</code></li>
+                        <li><code>MonetCredentials</code></li>
+                        <li><code>MonetOverrides</code></li>
+                        <li><code>MonetRecommendationPreferences</code></li>
+                        <li><code>MonetRecommendationFeedback</code></li>
+                        <li><code>MonetTransactions</code></li>
+                        <li><code>MonetInsightsCache</code></li>
+                        <li><code>MonetBrandCache</code></li>
+                        <li><code>MonetPlaidItemIndex</code></li>
+                        <li><code>MonetMerchantEnrichment</code></li>
+                        <li><code>MonetCategorizationAudit</code></li>
+                        <li><code>MonetRateLimits</code></li>
+                        <li><code>MonetFormSubmissions</code></li>
+                    </ol>
+                    <p>CloudFormation uses on-demand billing. Durable tables use deletion protection and most use point-in-time recovery; audit and rate-limit tables use TTL where appropriate. Local setup creates the same table set except <code>MonetFormSubmissions</code>, which is currently absent from <code>src/init-db.ts</code>.</p>
+
+                    <h2>Rewards model</h2>
+                    <p>The server catalog currently contains 26 supported cards. The shared category taxonomy has 32 raw values including <code>OTHER</code>. Reward structures include flat/category rates, rotating schedules, ranked-spend tiers, caps, custom overrides, and merchant network restrictions. The taxonomy and popular-brand maps remain hand-maintained across repositories.</p>
+
+                    <h2>Most important actions</h2>
+                    <ol>
+                        <li><strong>Implement in-app account deletion and a complete backend erasure workflow</strong> before public App Store submission.</li>
+                        <li><strong>Stop logging email verification codes</strong> on delivery failure.</li>
+                        <li><strong>Rotate/remove the source-visible app-key fallback</strong> and do not treat a key shipped in web/app clients as client attestation; use App Attest/DeviceCheck for stronger proof.</li>
+                        <li><strong>Generate or test the API contract</strong> so the router, route registry, clients, and documentation cannot silently drift.</li>
+                        <li><strong>Expand operational monitoring</strong> to dependency failures, DynamoDB throttles, CloudFront 5xx, and crash-ingestion health.</li>
+                        <li><strong>Automate reward-data freshness</strong> and model payment method before claiming Apple Card's Apple Pay rate as a universal base rate.</li>
+                        <li><strong>Add the missing local FormSubmissions table</strong> or explicitly document why local form tests should use a mocked repository.</li>
+                        <li><strong>Add website lint and browser smoke tests</strong>; today the web project has build/deploy scripts but no lint/test scripts.</li>
+                    </ol>
+
+                    <h2>Related pages</h2>
+                    <p><a href="Croe-Backend.html">Croe Backend</a> · <a href="Database-Schema.html">Database Schema</a> · <a href="Auth.html">Authentication</a> · <a href="Monet-iOS-App.html">iOS App</a> · <a href="Monet-Website.html">Website</a> · <a href="Plaid-Integration.html">Plaid</a> · <a href="hld-dashboard.html">Technical Reference</a></p>
+                </article>
+            </div>
+        </main>
+    </div>
+    <script src="sidebar.js"></script>
+</body>
+</html>

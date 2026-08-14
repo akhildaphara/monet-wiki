@@ -1,5 +1,7 @@
 # UI/UX Top-Notch Suggestions
 
+> Historical ideation, reviewed 2026-08-05. Insights is active, the search flow and haptics are implemented, and the current product priorities are tracked in [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md).
+
 To elevate Monet from a functional utility to a premium financial app, consider the following UI/UX improvements:
 
 ## 1. Card Art and Theming
@@ -16,7 +18,7 @@ When users are standing in a checkout line, they need answers fast.
 
 ## 3. Visualizing Missed Rewards (Plaid Integration)
 
-The `InsightsView.swift` was recently archived/removed to simplify the initial production release, but when Plaid is re-enabled, it's critical to make the data actionable.
+`InsightsView.swift` is active for registered users and already compares actual, wallet-optimal, and global-optimal outcomes using Plaid-backed transaction data.
 
 - **Action**: When the Insights dashboard returns, don't just show what the user earned. Show what they _could have_ earned. Display a metric: "You lost $14.50 this month by using the wrong card at CVS." Loss aversion is a powerful motivator, and it proves the value of the app instantly.
 

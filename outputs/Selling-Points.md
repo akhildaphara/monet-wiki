@@ -1,5 +1,7 @@
 # Monet — Selling Points & Positioning
 
+**Current-state note (2026-08-05):** Product claims below were reconciled against local source. Deployment/TestFlight claims require separate environment verification.
+
 ## Elevator Pitch
 
 Monet is a credit card rewards optimizer that tells you exactly which card to swipe — before you pay. Add your wallet, search any merchant or category, and get an authoritative recommendation backed by a real rewards engine, not guesswork. Connect your bank via Plaid and Monet shows what you actually earned versus what you left on the table, so every purchase earns more next time.
@@ -47,7 +49,7 @@ Monet is a credit card rewards optimizer that tells you exactly which card to sw
 - **Multi-layer merchant resolution** — User overrides → brand rule engine (~100 mapped merchants) → Google Places → AWS Bedrock bulk categorization, with DynamoDB brand cache (365-day TTL for confident hits).
 - **Merchant overrides** — Pin any merchant to a category; overrides sync across devices and take priority on future lookups.
 - **Fuzzy brand matching** — Exact, domain, substring, and Levenshtein-distance rules catch typos and variations ("unietd airlines" → Travel).
-- **Popular brand seed cache** — Edge-cached `GET /v1/popular-categories` plus on-device Places cache for zero-latency lookups on common merchants.
+- **Popular brand seed data** — Synchronized backend/web/iOS brand maps plus on-device Places caching accelerate common merchant lookups; there is no `GET /v1/popular-categories` endpoint.
 
 ### Breadth of Card Data
 
@@ -59,10 +61,10 @@ Monet is a credit card rewards optimizer that tells you exactly which card to sw
 
 ### Privacy & Security
 
-- **Privacy-first architecture** — Plaid access tokens encrypted at rest (AES-256-GCM); secrets in AWS SSM Parameter Store; API origin protected by CloudFront `X-Origin-Secret`.
+- **Privacy-focused architecture** — Plaid access-token writes use AES-256-GCM (with legacy CBC read migration); deployed secrets come from AWS SSM Parameter Store; CloudFront adds an origin secret before API Gateway.
 - **Fail-closed auth** — Lambda authorizer validates Google, Apple, or guest JWT on every protected route; no IDOR on user data.
 - **Guest mode** — Try recommendations without signing in; guest JWT minted via `POST /v1/auth/guest`.
-- **Minimal PII exposure** — Plaid tokens stripped from API responses; public endpoints limited to health, guest auth, card catalog, and popular categories.
+- **Minimal token exposure** — Plaid access tokens are stripped from API responses. Explicit public gateway events are health, guest auth, and the signature-verified Plaid webhook; the catch-all still routes other API requests through the authorizer.
 
 ### Craft & UX
 
@@ -127,7 +129,7 @@ These appear in product ideation or strategy docs but are **not** fully implemen
 - **Bilt 2.0 rent-tier marginal utility** — Sliding-scale rent multipliers based on non-housing spend (Bilt-2.0-Strategy; cards exist, holistic optimizer does not).
 - **Apple Pay detection for Apple Card** — 2% via Apple Pay vs. 1% physical swipe (beta-preparation checklist).
 - **Pay-with-points calculator** — Optimize redemption value, not just earning (Ideas-and-Features).
-- **iOS home screen widget** — Quick lookup without opening the app (CurrentFeature roadmap).
+- **Expanded widget capabilities** — A widget surface and setup guide exist; richer quick-lookup actions remain roadmap work.
 - **Push alerts for quarterly category rotations** — Remind users when 5% categories activate (CurrentFeature roadmap).
 
 ---
@@ -142,5 +144,5 @@ These appear in product ideation or strategy docs but are **not** fully implemen
 | CurrentFeature roadmap: "Add Amex Gold, Citi Double Cash…" | **Already in catalog** — roadmap doc is stale. | Doc stale. |
 | UI-UX-Improvements: "InsightsView archived/removed" | **Stale** — InsightsView is active in `RootTabView` (sign-in required). | Doc stale. |
 | Apple Card 3% at Apple / 2% Apple Pay | Catalog models 2% base + 3% streaming; **Apple Pay vs. physical swipe not distinguished** in optimizer. | Open gap — tracked in HLD §Future Considerations (Payment method). |
-| `GET /v1/cards` auth in HLD API accordion | Was marked "Auth: Required" while Auth section listed it public. | **Fixed** — HLD accordion now matches code (public, edge-cached). |
+| `GET /v1/cards` auth | Express uses optional authentication, but deployed catch-all routing passes it through the Lambda authorizer; it has no dedicated public/edge-cache behavior. | Document the gateway and Express layers separately; do not market it as a public edge-cached catalog. |
 | Security review: missing OAuth `aud` check | `serverless.yml` + `verifyToken.ts` hardened 2026-05-31; SSM-backed client IDs in deployed env. | **Addressed in code** — re-verify on each stage deploy; summary updated. |

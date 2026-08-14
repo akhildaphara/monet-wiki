@@ -451,7 +451,7 @@
         <!-- ARCHITECTURE -->
         <section id="architecture">
             <h2>System Architecture Map</h2>
-            <p>The Monet platform leverages a serverless Node.js/Express Lambda architecture. Clients hit a <strong>CloudFront</strong> distribution (which edge-caches the public card catalog and injects an origin secret) fronting an AWS <strong>HTTP API Gateway</strong>. A dedicated <strong>Lambda authorizer</strong> validates every protected request, and the main API Lambda (29s timeout, 1536&nbsp;MB) reads/writes <strong>DynamoDB</strong>, integrates with <strong>Plaid</strong> for transactions, <strong>Google Places/Knowledge Graph</strong> for merchant resolution, and <strong>AWS Bedrock (Nova Micro)</strong> for AI bulk categorization.</p>
+            <p>The Monet platform uses a serverless Node.js/Express Lambda architecture. Clients hit <strong>CloudFront</strong>, which injects an origin secret, in front of an AWS <strong>HTTP API Gateway</strong>. A dedicated <strong>Lambda authorizer</strong> validates protected gateway requests, and the main API Lambda (29s timeout, 1536&nbsp;MB) reads/writes <strong>DynamoDB</strong>, integrates with <strong>Plaid</strong> for transactions, <strong>Google Places/Knowledge Graph</strong> for merchant resolution, and <strong>AWS Bedrock (Nova Micro)</strong> for AI bulk categorization. The current CloudFront configuration does not define a special card-catalog cache behavior.</p>
             
             <div class="diagram-wrapper">
                 <div class="mermaid">
@@ -888,7 +888,7 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Retrieves the server-driven master catalog of supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). The list is curated and grows over time; iOS caches it (1-hour TTL) so new cards and reward updates can ship without an App Store release. <strong>Authenticated</strong> &mdash; requests are routed through the authorizer to protect the curated catalog structure from public scraping (see Auth section).</p>
+                    <p>Retrieves the server-driven master catalog of 26 supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). Express accepts optional authentication, while the deployed catch-all gateway route still invokes the Lambda authorizer. iOS caches the catalog; there is no dedicated CloudFront card-catalog cache behavior.</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid">
                         <div>
@@ -1240,7 +1240,7 @@
                 </tbody>
             </table>
             <div class="callout warn">
-                <span class="pill pill-warn">Stale</span> <code>docs/ApiDocs.md</code> lists <code>GET /v1/categorize</code>, which no longer exists &mdash; categorization is folded into <code>POST /v1/recommend</code>.
+                <span class="pill pill-warn">Contract drift</span> <code>src/api/routeRegistry.ts</code> omits active native-auth, forms, telemetry, and recommendation routes. The live sources are <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code> until the contract is generated or parity-tested.
             </div>
         </section>
 
@@ -1298,7 +1298,7 @@
             </table>
 
             <div class="callout warn">
-                <span class="pill pill-warn">Watch</span> <strong>No API Gateway / CloudFront throttling is configured</strong> in <code>serverless.yml</code>. The Express limits are the only guardrail, and they reset per cold start and are not shared across concurrent Lambda instances. See <a href="#future">Future Considerations</a>.
+                <span class="pill pill-info">Current controls</span> API Gateway default route settings enforce a 400 requests/s rate and 200-request burst; the API Lambda has reserved concurrency 20; Express applies burst limits; and expensive guest/unregistered calls use a persistent DynamoDB daily quota. Load-test and alarm coverage remain follow-up work.
             </div>
         </section>
 
@@ -1307,7 +1307,7 @@
             <h2>Backend &harr; iOS Contract</h2>
             <p>The backend (<code>croe</code>) and the iOS app (<code>swift-app</code>) share an implicit contract enforced only by matching string keys &mdash; there is <strong>no code generation</strong>. The canonical spending taxonomy lives in <strong>two hand-maintained places</strong> that must stay byte-identical on their raw values:</p>
             <ul class="bullets">
-                <li>Backend: <code>src/resources/categories.ts</code> &mdash; <code>enum Category</code> (29 values incl. <code>OTHER</code>)</li>
+                <li>Backend: <code>src/resources/categories.ts</code> &mdash; <code>enum Category</code> (32 values incl. <code>OTHER</code>)</li>
                 <li>iOS: <code>MonetApp/Models/Category.swift</code> &mdash; <code>String</code>-backed <code>Category</code> enum (raw values = backend keys)</li>
             </ul>
 
@@ -1361,12 +1361,12 @@
                 <tbody>
                     <tr>
                         <td>Throttling</td>
-                        <td>No API Gateway / CloudFront throttling. Express limits are in-memory per warm instance, so real ceilings scale with Lambda concurrency and reset on cold start. Consider a shared store (DynamoDB/Redis) or a usage plan for true global limits.</td>
-                        <td><span class="pill pill-warn">Medium</span></td>
+                        <td>API Gateway, reserved concurrency, Express burst limits, and a DynamoDB daily quota are present. Remaining work is load testing, tuning, and provider/cost-specific alarms rather than adding a first shared limit.</td>
+                        <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
                         <td>Rotating categories</td>
-                        <td>Now data-driven end-to-end: <code>RotatingCategory</code> rewards carry a per-quarter <code>schedule</code> resolved by date on both backend (incl. cap-honoring in <code>/recommend</code> and insights) and iOS, so <code>DISCOVER_IT</code> and <code>CHASE_FREEDOM_FLEX</code> earn the correct current-quarter 5%. Remaining gaps: 2026 Q3/Q4 schedules not yet published by the issuers; no user "activate this quarter" modeling (assumed active); the quarterly cap is per-category, not the issuer's shared pool.</td>
+                        <td>Data-driven quarterly schedules exist for Discover it and Chase Freedom Flex, including 2026 Q1–Q4 data. Remaining gaps: no user “activate this quarter” state, no automated effective-date/source validation, and caps may not model every issuer's shared-pool semantics.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
@@ -1381,8 +1381,8 @@
                     </tr>
                     <tr>
                         <td>Stale docs</td>
-                        <td><code>docs/ApiDocs.md</code> documents <code>GET /v1/categorize</code>, which no longer exists &mdash; categorization is folded into <code>POST /v1/recommend</code>.</td>
-                        <td><span class="pill pill-info">Low</span></td>
+                        <td><code>src/api/routeRegistry.ts</code> is incomplete relative to <code>routes.ts</code> and <code>auth.ts</code>. Generate OpenAPI or enforce route-registry parity in CI.</td>
+                        <td><span class="pill pill-warn">Medium</span></td>
                     </tr>
                     <tr>
                         <td>External resilience</td>
@@ -1401,8 +1401,13 @@
                     </tr>
                     <tr>
                         <td>Security review drift</td>
-                        <td><code>outputs/Security-Review-Summary.md</code> (2026-05-31) predates several fixes in <code>raw/croe/changelog.md</code> (OAuth audience via SSM, guest origin-secret). Treat HLD + code as authoritative; re-audit before public launch.</td>
-                        <td><span class="pill pill-info">Low</span></td>
+                        <td>The native signup error path can log a generated verification code, and a fallback app key is source-visible. Remove OTP logging, rotate/remove production fallback keys, and use App Attest/DeviceCheck if strong client attestation is required.</td>
+                        <td><span class="pill pill-danger">High</span></td>
+                    </tr>
+                    <tr>
+                        <td>Account deletion</td>
+                        <td>Registered users can create accounts and connect Plaid, but there is no in-app Delete Account control or backend erasure endpoint spanning all user-owned tables.</td>
+                        <td><span class="pill pill-danger">High</span></td>
                     </tr>
                 </tbody>
             </table>

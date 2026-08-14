@@ -153,13 +153,13 @@
 <li><strong>UI Framework</strong>: SwiftUI</li>
 <li><strong>Charts</strong>: Swift Charts (native, for Insights visualizations)</li>
 <li><strong>Local Persistence</strong>: SwiftData (centralized models: <code>User</code>, <code>Card</code>, <code>BusinessOverride</code>)</li>
-<li><strong>Authentication</strong>: Google Sign-In SDK</li>
+<li><strong>Authentication</strong>: Guest, Google Sign-In, Sign in with Apple, and native email/password</li>
 <li><strong>Bank Linking</strong>: LinkKit (Plaid iOS SDK)</li>
 <li><strong>Backend Communication</strong>: Custom <code>APIClient</code> communicating with the <a href="Croe-Backend.html">Croe-Backend</a>, orchestrated by <code>DataStore</code>.</li>
 </ul>
 <h2>Core Architecture</h2>
 <ul>
-<li><strong>Centralized DataStore</strong>: The <code>DataStore</code> acts as the single source of truth. It handles all backend synchronization, automatically triggering syncs via <code>NotificationCenter</code> events (<code>.authTokenAvailable</code> and <code>.networkRegained</code>), and enforces a 24-hour background sync throttle. Debouncing prevents API spam.</li>
+<li><strong>Centralized DataStore</strong>: The <code>DataStore</code> owns product state and synchronization. Auth lifecycle hooks are registered directly on <code>APIClient</code>; scene-phase and targeted notifications still handle deep links and selected refresh events.</li>
 <li><strong>Theme &amp; Design Tokens</strong>: All styling is centralized in <code>Theme.swift</code>, defining standard colors, gradients, and spacing used across the app for a unified look and feel.</li>
 <li><strong>APIClient Task Coalescing</strong>: Uses Swift 6 concurrency-safe locking to coalesce concurrent requests to <code>/auth/sync</code> and <code>/health</code>. Implements <strong>automatic JWT refresh</strong> on 401 responses.</li>
 <li><strong>InsightsManager</strong>: Owns the insights lifecycle. Features a <strong>dual-layer cache</strong> with a 24-hour refresh cadence:<ul>
@@ -169,7 +169,7 @@
 </li>
 </ul>
 <h2>Navigation Structure</h2>
-<p>The app uses a <code>RootTabView</code> with four tabs:</p>
+<p>The app defines five tabs. Insights and Calculator are registered-user surfaces; guests see Search, Wallet, and Settings:</p>
 <table>
 <thead>
 <tr>
@@ -189,22 +189,27 @@
 <td>Spending analytics powered by Plaid transaction data</td>
 </tr>
 <tr>
+<td>Calculator</td>
+<td><code>CalculatorView</code></td>
+<td>Compare reward points and cash-value scenarios</td>
+</tr>
+<tr>
 <td>Wallet</td>
 <td><code>WalletView</code></td>
 <td>Manage credit cards and bank connections</td>
 </tr>
 <tr>
-<td>Profile</td>
+<td>Settings</td>
 <td><code>ProfileView</code></td>
-<td>Account settings and developer tools</td>
+<td>Account preferences, app lock, widget guidance, and support</td>
 </tr>
 </tbody></table>
-<h3>Developer Tools</h3>
-<p>A hidden developer menu (accessed via Profile) allows switching between AWS Production and Localhost backend endpoints for testing.</p>
+<h3>Environment selection</h3>
+<p>Debug builds use <code>LOCAL_API_HOST</code>; release builds use <code>CLOUDFRONT_URL</code>. There is no current hidden runtime environment switch in <code>ProfileView</code>.</p>
 <h2>Core Views</h2>
 <h3>Authentication</h3>
 <ul>
-<li><code>LoginView.swift</code>: Google Sign-In flow. Redesigned with an <strong>animated credit card stack</strong> logo, brand gradients, and standard theme components.</li>
+<li><code>OnboardingView.swift</code>, <code>SignInView.swift</code>, <code>SignUpView.swift</code>, and verification/reset views support guest, Google, Apple, and native email/password flows.</li>
 </ul>
 <h3>Search &amp; Categories</h3>
 <ul>
@@ -226,7 +231,7 @@
 <h2>Services</h2>
 <ul>
 <li><code>APIClient.swift</code>: All network requests to the <a href="Croe-Backend.html">Croe-Backend</a>, including Plaid endpoints (<code>createPlaidLinkToken</code>, <code>exchangePlaidPublicToken</code>, <code>fetchPlaidAccounts</code>, <code>fetchInsights</code>, <code>checkPlaidStatus</code>, <code>disconnectPlaid</code>). Task coalescing for auth sync and health checks. Exposes <code>canMakeRequests()</code> helper that gating all view-level fetches.</li>
-<li><code>GoogleSignInService.swift</code>: Manages Google auth state and token refresh.</li>
+<li><code>AuthService.swift</code>: Owns guest, Google, Apple, and native email/password session state and refresh behavior.</li>
 <li><code>InsightsManager.swift</code>: Insights data lifecycle manager (see Architecture section above).</li>
 <li><code>CategorizerService.swift</code> &amp; <code>BusinessSearchService.swift</code>: Client-side merchant categorization utilities.</li>
 </ul>

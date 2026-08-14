@@ -145,7 +145,7 @@
         
         <div class="max-w-4xl mx-auto px-8 py-12 lg:px-12 lg:py-16">
             <article class="prose prose-slate lg:prose-lg bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                <p>The <a href="Database-Schema.html">Database-Schema</a> for the <a href="Monet-App-Overview.html">Monet-App-Overview</a> application is implemented using AWS DynamoDB, managed via the <code>dao.ts</code> and <code>db.ts</code> files in the <a href="Croe-Backend.html">Croe-Backend</a>.</p>
+                <p>Monet uses a typed DynamoDB repository layer under <code>src/dynamo/</code>, table-name selection in <code>src/db.ts</code>, local creation in <code>src/init-db.ts</code>, and deployed CloudFormation definitions in <code>resources/dynamodb.yml</code>. The deployed schema currently contains 13 tables.</p>
 <h2>Setup and Environments</h2>
 <p>The database operates in two modes:</p>
 <ul>
@@ -153,16 +153,18 @@
 <li><strong>Production</strong>: Uses AWS DynamoDB in the <code>us-east-1</code> region.</li>
 </ul>
 <h2>Tables and Data Models</h2>
+<p><strong>Complete deployed inventory:</strong> <code>MonetUsers</code>, <code>MonetCredentials</code>, <code>MonetOverrides</code>, <code>MonetRecommendationPreferences</code>, <code>MonetRecommendationFeedback</code>, <code>MonetTransactions</code>, <code>MonetInsightsCache</code>, <code>MonetBrandCache</code>, <code>MonetPlaidItemIndex</code>, <code>MonetMerchantEnrichment</code>, <code>MonetCategorizationAudit</code>, <code>MonetRateLimits</code>, and <code>MonetFormSubmissions</code>. The detailed sections below focus on core user and transaction tables; consult <code>resources/dynamodb.yml</code> for authoritative keys, indexes, TTL, recovery, and deletion-protection settings.</p>
+<p><strong>Local parity gap:</strong> <code>src/init-db.ts</code> creates 12 tables and currently omits <code>MonetFormSubmissions</code>.</p>
 <h3>1. MonetUsers Table</h3>
 <p>Stores information about the app&#39;s users, their preferences, and Plaid integration data. Updates to this table (e.g., toggling cards or preferences) are performed using atomic DynamoDB <code>UpdateCommand</code> expressions to prevent read-modify-write race conditions.</p>
 <ul>
-<li><strong>Primary Key</strong>: <code>id</code> (String) — Mapped to the user&#39;s Google Auth <code>sub</code> identifier.</li>
+<li><strong>Primary Key</strong>: <code>id</code> (String) — derived from the active Google, Apple, native/custom, or development identity.</li>
 <li><strong>Attributes</strong>:<ul>
 <li><code>selectedCardIds</code> (String Array): The credit cards the user has added to their wallet.</li>
 <li><code>showGlobalBestCard</code> (Boolean): User preference toggle.</li>
 <li><code>customCardRewards</code> (Map): User-defined reward-rate overrides keyed by <code>cardId -&gt; category -&gt; rate</code>.</li>
 <li><code>plaidItems</code> (List of Objects): Array of connected Plaid bank connections. Each item contains:<ul>
-<li><code>accessToken</code> (String): <strong>AES-256-CBC encrypted</strong> Plaid access token.</li>
+<li><code>accessToken</code> (String): Plaid access token written with <strong>AES-256-GCM</strong>; legacy AES-256-CBC ciphertext remains readable for migration.</li>
 <li><code>itemId</code> (String): Plaid&#39;s unique item identifier.</li>
 <li><code>cursor</code> (String, optional): Plaid Transactions Sync cursor for incremental syncing.</li>
 </ul>
@@ -219,7 +221,7 @@
 </ul>
 <h2>Security</h2>
 <ul>
-<li>Plaid access tokens are encrypted at rest using <strong>AES-256-CBC</strong>.</li>
+<li>Plaid access-token writes use <strong>AES-256-GCM</strong>, with a legacy AES-256-CBC read path.</li>
 <li>Sensitive tokens are redacted from application logs.</li>
 <li>AWS Lambda functions run with scoped IAM permissions, limited to the specific DynamoDB tables and external APIs required.</li>
 </ul>

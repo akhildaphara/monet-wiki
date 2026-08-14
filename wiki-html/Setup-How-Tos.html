@@ -255,11 +255,11 @@ java -Djava.library.path=./DynamoDBLocal_lib \
         <p>Note: Docker mode is ephemeral — tables reset on container exit.</p>
 
         <h3>Initialize tables</h3>
-        <p>Once the database is running, create all five tables in a single command:</p>
+        <p>Once the database is running, create the local table set in a single command:</p>
         <pre><code class="language-bash">cd raw/croe
 npm run init-db</code></pre>
 
-        <p>This runs <code>src/init-db.ts</code> which creates the following tables (skipping any that already exist):</p>
+        <p>This runs <code>src/init-db.ts</code>, which currently creates 12 tables (skipping any that already exist). It includes Users, Credentials, Overrides, Recommendation Preferences, Recommendation Feedback, Transactions, Insights Cache, Brand Cache, Plaid Item Index, Merchant Enrichment, Categorization Audit, and Rate Limits. <strong>Known parity gap:</strong> deployed CloudFormation also defines <code>MonetFormSubmissions</code>, which local initialization does not yet create.</p>
 
         <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
         <table>

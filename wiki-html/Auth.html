@@ -126,7 +126,7 @@
         <div class="mb-10">
             <p class="text-xs font-semibold text-brand-500 uppercase tracking-widest mb-1">Security</p>
             <h1 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-0.02em;color:#0f172a;margin:0 0 0.5em">Authentication &amp; Security</h1>
-            <p class="text-lg text-slate-400" style="margin:0">Every request flows through CloudFront → Lambda authorizer → Express. Three token types are accepted (Google, Apple, Guest JWT) plus a dev key. Guests get a real short-lived JWT so all protected routes work without signing in.</p>
+            <p class="text-lg text-slate-400" style="margin:0">Deployed protected requests flow through CloudFront → Lambda authorizer → Express. Guest, Google, Apple, and Monet custom JWTs are accepted, plus a non-production dev key. Public gateway events are declared separately for health, guest bootstrap, and the signature-verified Plaid webhook.</p>
         </div>
 
         <!-- ── Architecture ──────────────────────── -->
@@ -284,7 +284,7 @@
                     <div><span class="text-slate-400">sub</span>  stable Apple user ID</div>
                     <div><span class="text-slate-400">key</span>  Apple public JWKS</div>
                 </div>
-                <p class="text-xs text-slate-400 mt-3"><span class="badge badge-amber">Disabled</span> Requires paid Apple Developer account.</p>
+                <p class="text-xs text-slate-400 mt-3"><span class="badge badge-green">Active</span> Wired through <code class="text-xs">AuthService.handleAppleSignIn</code> and the SwiftUI Sign in with Apple button.</p>
             </div>
 
             <div class="card">
@@ -352,7 +352,7 @@
         </div>
 
         <div class="not-prose bg-amber-50 border border-amber-100 rounded-lg px-4 py-3 text-xs text-amber-800 mb-8">
-            <strong>Card Catalog Security:</strong> The <code>/v1/cards</code> route requires authentication (valid Guest or Registered JWT) and is excluded from edge-caching to prevent public scraping of Monet's highly curated credit card rewards taxonomy.
+            <strong>Card Catalog routing:</strong> Express applies optional authentication to <code>/v1/cards</code>, but the deployed catch-all gateway route still invokes the Lambda authorizer because there is no dedicated public event or edge-cache behavior for the catalog. Document gateway and Express authorization separately.
         </div>
 
         <!-- ── X-Origin-Secret ────────────────────── -->
