@@ -40,7 +40,8 @@
             --space-xl: 24px;
             --space-xxl: 32px;
 
-            /* Shadows */
+            /* Elevation: persistent surfaces stay flat; shadows are transient or illustrative */
+            --shadow-persistent: none;
             --shadow-light: 0 5px 10px rgba(0, 0, 0, 0.08);
             --shadow-dark: 0 5px 10px rgba(0, 0, 0, 0.3);
             --shadow-hero: 0 10px 20px rgba(38, 171, 89, 0.3);
@@ -50,7 +51,7 @@
             --card-bg: var(--card-bg-light);
             --text-primary: #000000;
             --text-secondary: #3c3c43;
-            --card-shadow: var(--shadow-light);
+            --card-shadow: var(--shadow-persistent);
             --border-color: rgba(0, 0, 0, 0.1);
         }
 
@@ -60,7 +61,7 @@
                 --card-bg: var(--card-bg-dark);
                 --text-primary: #ffffff;
                 --text-secondary: #ebebf5;
-                --card-shadow: var(--shadow-dark);
+                --card-shadow: var(--shadow-persistent);
                 --border-color: rgba(255, 255, 255, 0.1);
             }
         }
@@ -71,7 +72,7 @@
             --card-bg: var(--card-bg-dark);
             --text-primary: #ffffff;
             --text-secondary: #ebebf5;
-            --card-shadow: var(--shadow-dark);
+            --card-shadow: var(--shadow-persistent);
             --border-color: rgba(255, 255, 255, 0.1);
         }
         :root.light-mode {
@@ -79,7 +80,7 @@
             --card-bg: var(--card-bg-light);
             --text-primary: #000000;
             --text-secondary: #3c3c43;
-            --card-shadow: var(--shadow-light);
+            --card-shadow: var(--shadow-persistent);
             --border-color: rgba(0, 0, 0, 0.1);
         }
 
@@ -360,7 +361,7 @@
             background: var(--primary-gradient);
             border-radius: var(--radius-hero);
             padding: var(--space-xl);
-            box-shadow: var(--shadow-hero);
+            box-shadow: var(--shadow-persistent);
             color: #ffffff;
             border: none;
         }
@@ -808,7 +809,9 @@
         }
         .text-input-container:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--secondary);
+            outline: 2px solid var(--secondary);
+            outline-offset: 0;
+            box-shadow: none;
         }
         .text-input-icon {
             color: var(--text-secondary);
@@ -1154,19 +1157,19 @@
         </section>
 
         <section>
-            <h2>Elevation / Shadows</h2>
+            <h2>Surface Elevation</h2>
             <div class="elevation-grid">
+                <div class="elevation-card" style="box-shadow: var(--shadow-persistent); border: 1px solid rgba(0, 0, 0, 0.1); background: var(--card-bg-light); color: #000;">
+                    <div class="type-headline">Persistent Surface</div>
+                    <div class="type-caption1" style="color: #3c3c43; margin-top: 4px;">No shadow. Use fill, border, spacing, and separators.</div>
+                </div>
                 <div class="elevation-card" style="box-shadow: var(--shadow-light); background: var(--card-bg-light); color: #000;">
-                    <div class="type-headline">Card Shadow Light</div>
-                    <div class="type-caption1" style="color: #3c3c43; margin-top: 4px;">0 5px 10px rgba(0, 0, 0, 0.08)</div>
+                    <div class="type-headline">Transient Overlay, Light</div>
+                    <div class="type-caption1" style="color: #3c3c43; margin-top: 4px;">Snackbars, menus, and temporary overlays only.</div>
                 </div>
                 <div class="elevation-card" style="box-shadow: var(--shadow-dark); background: var(--card-bg-dark); color: #fff;">
-                    <div class="type-headline">Card Shadow Dark</div>
-                    <div class="type-caption1" style="color: #ebebf5; margin-top: 4px;">0 5px 10px rgba(0, 0, 0, 0.3)</div>
-                </div>
-                <div class="elevation-card" style="box-shadow: var(--shadow-hero); background: var(--primary-gradient); color: #fff;">
-                    <div class="type-headline">Hero Shadow</div>
-                    <div class="type-caption1" style="color: rgba(255, 255, 255, 0.8); margin-top: 4px;">0 10px 20px rgba(38, 171, 89, 0.3)</div>
+                    <div class="type-headline">Transient Overlay, Dark</div>
+                    <div class="type-caption1" style="color: #ebebf5; margin-top: 4px;">Stronger adaptive elevation for temporary dark surfaces.</div>
                 </div>
             </div>
         </section>
@@ -1205,7 +1208,7 @@
                 <div class="card">
                     <div class="type-headline" style="margin-bottom: var(--space-xs);">Standard Card</div>
                     <div class="type-subheadline" style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
-                        Soft & Tactile, continuous curves (16px radius). 20px internal padding.
+                        Flat and structured, with continuous curves (16px radius), a subtle adaptive border, and 20px internal padding.
                     </div>
                     
                     <!-- List Item inside Card -->
@@ -1628,6 +1631,30 @@
                     <p style="font-size: 13px; color: var(--text-secondary); margin-top: 8px;">
                         <strong>Why we differ from Wise:</strong> Wise uses a prominent group header. Monet uses a small, muted caption — visually quiet so the list takes focus, while title case keeps it readable and polished.
                     </p>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Surfaces &amp; Elevation</h3>
+                    <p>Persistent interface surfaces are flat. Structure comes from system backgrounds, adaptive borders, separators, spacing, and continuous corners.</p>
+                    <ul>
+                        <li><strong>Persistent:</strong> Cards, lists, search fields, widgets, and buttons use no drop shadow.</li>
+                        <li><strong>Transient:</strong> Snackbars, menus, and temporary overlays may use adaptive elevation to show that they sit above the current task.</li>
+                        <li><strong>Illustrative:</strong> Tapestry glows and existing card artwork may retain visual depth when the effect is decorative rather than structural.</li>
+                        <li><strong>Boundary:</strong> Standard surfaces use a 0.5pt adaptive separator border; grouped rows use inset dividers.</li>
+                        <li><strong>Focus:</strong> Inputs use a crisp 2pt accent ring without blur, glow, or shadow.</li>
+                    </ul>
+                </div>
+
+                <div class="guideline-card">
+                    <h3>Navigation Hierarchy</h3>
+                    <p>Navigation style follows the scope of the choice. Do not make different navigation levels look interchangeable.</p>
+                    <ul>
+                        <li><strong>Primary destinations:</strong> Use the native bottom <code>TabView</code>.</li>
+                        <li><strong>Short local modes:</strong> Use the shared native segmented control for two to four concise, mutually exclusive views.</li>
+                        <li><strong>Hierarchy:</strong> Use <code>NavigationStack</code> and typed destinations for drill-in screens.</li>
+                        <li><strong>Prohibited:</strong> Do not introduce custom underline tabs when a segmented control expresses the same local choice.</li>
+                        <li><strong>Bottom clearance:</strong> Root tab scroll views add 32pt of scroll-content margin so final actions clear the translucent tab bar.</li>
+                    </ul>
                 </div>
 
                 <div class="guideline-card">

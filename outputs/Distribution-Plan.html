@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monet — Distribution & Launch Plan</title>
+    <style>
+        :root {
+            /* Monet Design System Tokens */
+            --primary: #26ab59;
+            --primary-dark: #196638;
+            --secondary: rgba(38, 171, 89, 0.15);
+            --bg-light: #f2f2f7;
+            --bg-dark: #0d0d0d;
+            --card-bg-light: #ffffff;
+            --card-bg-dark: #1e1e1e;
+            --warning: #f97316;
+            --destructive: #ef4444;
+            --earned: #26ab59;
+            --missed: #f97316;
+
+            /* Radii */
+            --radius-sm: 12px;
+            --radius-card: 16px;
+            --radius-hero: 20px;
+
+            /* Spacing */
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 20px;
+            --space-xl: 24px;
+            --space-xxl: 32px;
+
+            /* Elevation */
+            --shadow-persistent: none;
+
+            /* Theme Defaults (Light) */
+            --bg-color: var(--bg-light);
+            --card-bg: var(--card-bg-light);
+            --card-bg-secondary: #f8f8fb;
+            --text-primary: #000000;
+            --text-secondary: #6e6e73;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --table-header-bg: #ececf2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: var(--bg-dark);
+                --card-bg: var(--card-bg-dark);
+                --card-bg-secondary: #282828;
+                --text-primary: #ffffff;
+                --text-secondary: #8e8e93;
+                --border-color: rgba(255, 255, 255, 0.1);
+                --border-subtle: rgba(255, 255, 255, 0.06);
+                --table-header-bg: #262626;
+            }
+        }
+
+        :root.dark-mode {
+            --bg-color: var(--bg-dark);
+            --card-bg: var(--card-bg-dark);
+            --card-bg-secondary: #282828;
+            --text-primary: #ffffff;
+            --text-secondary: #8e8e93;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --table-header-bg: #262626;
+        }
+
+        :root.light-mode {
+            --bg-color: var(--bg-light);
+            --card-bg: var(--card-bg-light);
+            --card-bg-secondary: #f8f8fb;
+            --text-primary: #000000;
+            --text-secondary: #6e6e73;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --table-header-bg: #ececf2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: var(--space-xxl) var(--space-md);
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .container {
+            max-width: 1040px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .header-main h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .header-sub {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary);
+        }
+
+        /* Meta Bar */
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-xl);
+        }
+
+        .meta-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+        }
+
+        .meta-tag.active {
+            border-color: rgba(38, 171, 89, 0.3);
+            color: var(--primary);
+            background: var(--secondary);
+        }
+
+        /* Overview KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-color);
+            padding: var(--space-lg);
+        }
+
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .kpi-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation Tabs */
+        .nav-bar {
+            display: flex;
+            gap: var(--space-xs);
+            overflow-x: auto;
+            margin-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: var(--space-xs);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: var(--card-bg);
+        }
+
+        .nav-btn.active {
+            color: var(--text-primary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Content Sections */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border-color);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-subtle);
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .section-duration {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: var(--space-lg) 0 var(--space-sm);
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: var(--space-md);
+            line-height: 1.6;
+        }
+
+        /* Clean Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: var(--space-md) 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background: var(--table-header-bg);
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: var(--space-sm) var(--space-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: var(--space-sm) var(--space-md);
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-p0 {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--destructive);
+            font-weight: 600;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .badge-req {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Gate Checklist */
+        .gate-block {
+            background: var(--card-bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: var(--space-lg);
+            margin-top: var(--space-lg);
+        }
+
+        .gate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+
+        .gate-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .gate-count {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: var(--space-sm);
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .check-item input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .check-item input[type="checkbox"]:checked + span {
+            color: var(--text-secondary);
+            text-decoration: line-through;
+        }
+
+        /* Notice / Note Box */
+        .notice-box {
+            background: var(--card-bg-secondary);
+            border-left: 3px solid var(--primary);
+            padding: var(--space-md);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 13px;
+            margin: var(--space-md) 0;
+        }
+
+        .notice-box strong {
+            color: var(--text-primary);
+        }
+
+        /* Timeline Grid */
+        .timeline-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .timeline-row {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: 13px;
+        }
+
+        .timeline-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .timeline-bar-bg {
+            background: var(--card-bg-secondary);
+            border: 1px solid var(--border-subtle);
+            height: 28px;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .timeline-bar-fill.alt {
+            background: #4b5563;
+        }
+
+        /* Budget Grid */
+        .budget-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .budget-card {
+            background: var(--card-bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+        }
+
+        .budget-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .budget-note {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .budget-cost {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Asset Links */
+        .asset-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+        }
+
+        .asset-item {
+            background: var(--card-bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+        }
+
+        .asset-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .asset-file {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 12px;
+            background: var(--card-bg-secondary);
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        footer {
+            margin-top: var(--space-xxl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        @media (max-width: 680px) {
+            body { padding: var(--space-md) var(--space-sm); }
+            .section-card { padding: var(--space-md); }
+            .timeline-row { grid-template-columns: 1fr; gap: 4px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-main">
+                <h1>Monet — Distribution & Launch Plan</h1>
+                <div class="header-sub">Structured 5-phase rollout from TestFlight beta through App Store release and lean acquisition.</div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" type="button">Switch Theme</button>
+        </header>
+
+        <!-- Current Status Strip -->
+        <div class="meta-strip">
+            <span class="meta-tag active">TestFlight Closed Beta Active</span>
+            <span class="meta-tag">Google OAuth Verified</span>
+            <span class="meta-tag">Plaid Disabled for Users</span>
+            <span class="meta-tag">Target Budget: ~$100/mo</span>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Time to App Store</div>
+                <div class="kpi-value">~7 Weeks</div>
+                <div class="kpi-sub">TestFlight validation to live release</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Paid Ads Timing</div>
+                <div class="kpi-value">~12 Weeks</div>
+                <div class="kpi-sub">Only after organic retention gate</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Target Monthly Budget</div>
+                <div class="kpi-value">~$100/mo</div>
+                <div class="kpi-sub">+ Google Ads & student credits</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Monetization</div>
+                <div class="kpi-value">Card Affiliates</div>
+                <div class="kpi-sub">Referrals via market-best cards</div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-bar">
+            <button class="nav-btn active" onclick="scrollToId('parallel')">Parallel: Company & Affiliates</button>
+            <button class="nav-btn" onclick="scrollToId('phase1')">Phase 1: Public TestFlight</button>
+            <button class="nav-btn" onclick="scrollToId('phase2')">Phase 2: App Store</button>
+            <button class="nav-btn" onclick="scrollToId('phase3')">Phase 3: Product Page</button>
+            <button class="nav-btn" onclick="scrollToId('phase4')">Phase 4: Organic Launch</button>
+            <button class="nav-btn" onclick="scrollToId('phase5')">Phase 5: Paid Scale</button>
+            <button class="nav-btn" onclick="scrollToId('timeline')">Timeline</button>
+        </nav>
+
+        <!-- Parallel Track -->
+        <section id="parallel" class="section-card">
+            <div class="section-header">
+                <h2>Parallel Track — Company Registration & Affiliate Setup</h2>
+                <div class="section-duration">Weeks 1–6 (Concurrent)</div>
+            </div>
+            <div class="notice-box">
+                <strong>Prerequisite:</strong> Apple requires a legal entity with a D-U-N-S number for an Organization Developer account. Registering a company also enables application to credit card affiliate networks, creating a native referral revenue stream from Monet's market-best card recommendations.
+            </div>
+
+            <h3>1. Company Registration & Apple Developer Organization</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Step</th>
+                            <th>Description</th>
+                            <th>Estimated Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>LLC Formation & EIN</strong></td>
+                            <td>Form an LLC (Delaware or home state). Obtain federal EIN from IRS.</td>
+                            <td>1–2 weeks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>D-U-N-S Number</strong></td>
+                            <td>Request free D-U-N-S identifier from Dun & Bradstreet for the new company.</td>
+                            <td>1–2 weeks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Apple Organization Enrollment</strong></td>
+                            <td>Transition Apple Developer account to Organization status using D-U-N-S number.</td>
+                            <td>1–2 weeks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Store Connect Verification</strong></td>
+                            <td>Confirm bundle ID <code>akhil.Monet</code> and capabilities under the Organization entity.</td>
+                            <td>1 day</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>2. Credit Card Affiliate Program Setup</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Affiliate Networks</strong></td>
+                            <td>Apply to Commission Junction (CJ), Impact.com, and Rakuten Advertising as the registered entity for card issuer programs (Chase, Amex, Capital One, Citi).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>In-App Referral Links</strong></td>
+                            <td>When Monet highlights a market-best card that the user does not currently hold, include an affiliate referral link.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Compliance Disclosure</strong></td>
+                            <td>Include explicit disclosure on the website and app: <em>"We may receive compensation when you apply through our links. This does not impact our ranking algorithms."</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Phase 1 -->
+        <section id="phase1" class="section-card">
+            <div class="section-header">
+                <h2>Phase 1 — Public TestFlight Beta</h2>
+                <div class="section-duration">Weeks 1–4</div>
+            </div>
+            <p>
+                Open public TestFlight access to external users. Google OAuth is verified and Plaid is disabled for users, focusing feedback directly on core merchant search and card recommendation accuracy.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Priority</th>
+                            <th>Scope</th>
+                            <th>Est. Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>In-App Account Deletion</strong></td>
+                            <td><span class="badge-p0">P0 BLOCKER</span></td>
+                            <td>Add "Delete Account" in <code>ProfileView.swift</code> with double-confirmation prompt (Apple Guideline 5.1.1(v)).</td>
+                            <td>1–2 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Backend Erasure Endpoint</strong></td>
+                            <td><span class="badge-p0">P0 BLOCKER</span></td>
+                            <td>Implement <code>DELETE /v1/account</code> in <code>raw/croe</code> to purge records across DynamoDB tables.</td>
+                            <td>1–2 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rate Limit Verification</strong></td>
+                            <td><span class="badge-req">Required</span></td>
+                            <td>Verify <code>dailyRateLimiter.ts</code> quota handles 100–200 concurrent guest sessions without DynamoDB/Bedrock throttling.</td>
+                            <td>0.5 day</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Public TestFlight Link</strong></td>
+                            <td><span class="badge-req">Required</span></td>
+                            <td>Enable Public Link in App Store Connect TestFlight external group (cap at 1,000 testers).</td>
+                            <td>15 min</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Community Seeding</strong></td>
+                            <td><span class="badge-req">Required</span></td>
+                            <td>Share link with personal network, r/CreditCards discussions, and finance communities.</td>
+                            <td>Ongoing</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="gate-block">
+                <div class="gate-header">
+                    <div class="gate-title">Gate 1 — Exit Criteria for App Store Submission</div>
+                    <div class="gate-count" id="gate1-count">0 / 6 Passed</div>
+                </div>
+                <div class="checklist">
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>≥50 external TestFlight installs</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>Crash-free session rate ≥95% across 14 days</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>Zero P0 bugs (no auth deadlocks, blank wallets, or search hangs)</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>In-app account deletion verified end-to-end</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>≥10 substantive feedback reports received and triaged</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(1)"> <span>Backend operational costs remain within normal baseline</span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section id="phase2" class="section-card">
+            <div class="section-header">
+                <h2>Phase 2 — App Store Submission & Review</h2>
+                <div class="section-duration">Weeks 4–7</div>
+            </div>
+            <p>
+                Finalize App Store metadata, screenshot sets, and submit for App Review under the Organization account.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Specification</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Screenshots</strong></td>
+                            <td>6.7" and 6.9" Displays</td>
+                            <td>Search Result card, Category Picker, Wallet, and Offline Mode.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Listing Metadata</strong></td>
+                            <td>AppStore-Listing.md</td>
+                            <td>Name: <code>Monet: Best Card to Use</code> (23 chars)<br>Subtitle: <code>Maximize every swipe</code> (20 chars)<br>Keywords: 99 chars</td>
+                        </tr>
+                        <tr>
+                            <td><strong>App Preview</strong></td>
+                            <td>15–30s Video</td>
+                            <td>Quick demonstration: Search merchant → Instant card recommendation.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reviewer Notes</strong></td>
+                            <td>App Review Guidelines</td>
+                            <td>Clarify guest mode, Sign in with Apple compliance, and Plaid status.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="gate-block">
+                <div class="gate-header">
+                    <div class="gate-title">Gate 2 — Exit Criteria for Public Marketing</div>
+                    <div class="gate-count" id="gate2-count">0 / 2 Passed</div>
+                </div>
+                <div class="checklist">
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(2)"> <span>App Store status is "Ready for Distribution"</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(2)"> <span>App Store public link is live</span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 3 -->
+        <section id="phase3" class="section-card">
+            <div class="section-header">
+                <h2>Phase 3 — Product Page & Website Polish</h2>
+                <div class="section-duration">Weeks 7–9</div>
+            </div>
+            <p>
+                Update <code>tapmonet.com</code> from beta waitlist messaging to live App Store conversion.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Page / Route</th>
+                            <th>Objective</th>
+                            <th>Target</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Homepage (<code>/</code>)</strong></td>
+                            <td>Replace waitlist email form with "Download on App Store" button and screenshots.</td>
+                            <td>Primary web conversion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Redirect (<code>/download</code>)</strong></td>
+                            <td>Lightweight redirect URL pointing to the live App Store listing.</td>
+                            <td>Clean link for social bios and sharing</td>
+                        </tr>
+                        <tr>
+                            <td><strong><code>/credit-card-rewards-optimizer</code></strong></td>
+                            <td>SEO page explaining rewards mechanics, rotating bonus categories, and caps.</td>
+                            <td>Organic search discovery</td>
+                        </tr>
+                        <tr>
+                            <td><strong><code>/how-monet-calculates-rewards</code></strong></td>
+                            <td>Transparent methodology and calculation trust page.</td>
+                            <td>Financial product credibility</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="gate-block">
+                <div class="gate-header">
+                    <div class="gate-title">Gate 3 — Exit Criteria for Community Launch</div>
+                    <div class="gate-count" id="gate3-count">0 / 3 Passed</div>
+                </div>
+                <div class="checklist">
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(3)"> <span>Website updated with direct App Store CTAs</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(3)"> <span><code>/download</code> redirect tested on iOS</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(3)"> <span>At least 1 SEO landing page published</span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 4 -->
+        <section id="phase4" class="section-card">
+            <div class="section-header">
+                <h2>Phase 4 — Organic Community Launch</h2>
+                <div class="section-duration">Weeks 9–12</div>
+            </div>
+            <p>
+                Launch across organic channels in sequence. Build initial user base and validate retention before spending any ad dollars.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Channel</th>
+                            <th>Action</th>
+                            <th>Goal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Reddit</strong></td>
+                            <td>Post in r/CreditCards and r/churning with a builder story highlighting guest mode & privacy.</td>
+                            <td>100–300 high-intent installs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. X / Twitter</strong></td>
+                            <td>Thread: Problem statement → Demo clip → App Store link. Pin to profile.</td>
+                            <td>Broad reach and feedback</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Product Hunt</strong></td>
+                            <td>Deploy assets from <code>marketing/monet-launch-kit/</code> on a Tuesday morning.</td>
+                            <td>Product discovery & backlink</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. In-App Rating</strong></td>
+                            <td>Trigger <code>SKStoreReviewController</code> after 5 successful merchant searches.</td>
+                            <td>Initial 5★ App Store reviews</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Creators</strong></td>
+                            <td>Reach out to personal finance creators covering card bonus categories.</td>
+                            <td>Organic video coverage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="gate-block">
+                <div class="gate-header">
+                    <div class="gate-title">Gate 4 — Exit Criteria for Paid Ads (Hard Gate)</div>
+                    <div class="gate-count" id="gate4-count">0 / 5 Passed</div>
+                </div>
+                <div class="checklist">
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(4)"> <span>≥500 organic App Store downloads</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(4)"> <span>App Store rating ≥4.0 with ≥15 reviews</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(4)"> <span>Day-7 user retention ≥30%</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(4)"> <span>Measurable organic sharing traction</span></label>
+                    <label class="check-item"><input type="checkbox" onchange="checkGate(4)"> <span>Backend costs remain stable under load</span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 5 -->
+        <section id="phase5" class="section-card">
+            <div class="section-header">
+                <h2>Phase 5 — Lean Paid Acquisition & Free Credits</h2>
+                <div class="section-duration">Weeks 12+</div>
+            </div>
+            <p>
+                Highly targeted acquisition capped at ~$100/month, amplified by free ad credits and startup grants.
+            </p>
+
+            <div class="budget-grid">
+                <div class="budget-card">
+                    <div class="budget-label">Apple Search Ads Basic</div>
+                    <div class="budget-note">Direct App Store search intent</div>
+                    <div class="budget-cost">$50/mo</div>
+                </div>
+                <div class="budget-card">
+                    <div class="budget-label">Reddit Promoted Posts</div>
+                    <div class="budget-note">Target r/CreditCards feed only</div>
+                    <div class="budget-cost">$25/mo</div>
+                </div>
+                <div class="budget-card">
+                    <div class="budget-label">Social Post Boost</div>
+                    <div class="budget-note">Boost top-performing organic post</div>
+                    <div class="budget-cost">$25/mo</div>
+                </div>
+                <div class="budget-card">
+                    <div class="budget-label">Google Ads Match Credit</div>
+                    <div class="budget-note">New advertiser promotional credit</div>
+                    <div class="budget-cost">$500+ Free</div>
+                </div>
+                <div class="budget-card">
+                    <div class="budget-label">Student / Startup Packs</div>
+                    <div class="budget-note">AWS Activate / GitHub Student Pack</div>
+                    <div class="budget-cost">Free Tier</div>
+                </div>
+                <div class="budget-card">
+                    <div class="budget-label">Total Out-of-Pocket Cap</div>
+                    <div class="budget-note">Strict monthly budget limit</div>
+                    <div class="budget-cost">~$100/mo</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section id="timeline" class="section-card">
+            <div class="section-header">
+                <h2>Roadmap Timeline</h2>
+                <div class="section-duration">14-Week Total Plan</div>
+            </div>
+
+            <div class="timeline-grid">
+                <div class="timeline-row">
+                    <div class="timeline-name">Parallel: Company & Affiliates</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill alt" style="left: 0%; width: 42%;">Weeks 1–6</div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-name">Phase 1: Public TestFlight</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill" style="left: 0%; width: 28%;">Weeks 1–4</div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-name">Phase 2: App Store Submission</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill" style="left: 28%; width: 22%;">Weeks 4–7</div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-name">Phase 3: Product Page & SEO</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill" style="left: 50%; width: 14%;">Weeks 7–9</div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-name">Phase 4: Organic Launch</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill" style="left: 64%; width: 21%;">Weeks 9–12</div>
+                    </div>
+                </div>
+                <div class="timeline-row">
+                    <div class="timeline-name">Phase 5: Paid Scale</div>
+                    <div class="timeline-bar-bg">
+                        <div class="timeline-bar-fill" style="left: 85%; width: 15%;">Week 12+</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Existing Assets -->
+        <section class="section-card">
+            <div class="section-header">
+                <h2>Project Assets Reference</h2>
+                <div class="section-duration">Existing Repository Files</div>
+            </div>
+
+            <div class="asset-list">
+                <div class="asset-item">
+                    <div class="asset-name">App Store Listing Metadata</div>
+                    <div class="asset-file">outputs/AppStore-Listing.md</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-name">SEO Strategy Roadmap</div>
+                    <div class="asset-file">outputs/SEO_STRATEGY.md</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-name">Launch Kit Generator</div>
+                    <div class="asset-file">marketing/monet-launch-kit/</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-name">Product Pitch Deck</div>
+                    <div class="asset-file">outputs/Pitch-Deck.html</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div>Monet Distribution Plan · Aligned with Monet Design System</div>
+            <div>Reference: <code>outputs/Distribution-Plan.html</code></div>
+        </footer>
+    </div>
+
+    <script>
+        // Scroll helper
+        function scrollToId(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Gate counter
+        function checkGate(gateNum) {
+            const block = document.querySelectorAll('.gate-block')[gateNum - 1];
+            if (!block) return;
+            const checks = block.querySelectorAll('input[type="checkbox"]');
+            const total = checks.length;
+            const checked = Array.from(checks).filter(c => c.checked).length;
+            const countEl = document.getElementById(`gate${gateNum}-count`);
+            if (countEl) {
+                countEl.textContent = `${checked} / ${total} Passed`;
+                countEl.style.color = checked === total ? 'var(--primary)' : 'var(--text-secondary)';
+            }
+        }
+
+        // Theme Toggle adhering to design-system.html
+        const root = document.documentElement;
+        const toggleBtn = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('monet-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark') {
+            root.classList.add('dark-mode');
+        } else if (savedTheme === 'light') {
+            root.classList.add('light-mode');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            let currentIsDark;
+            if (root.classList.contains('dark-mode')) {
+                currentIsDark = true;
+            } else if (root.classList.contains('light-mode')) {
+                currentIsDark = false;
+            } else {
+                currentIsDark = prefersDark;
+            }
+
+            if (currentIsDark) {
+                root.classList.remove('dark-mode');
+                root.classList.add('light-mode');
+                localStorage.setItem('monet-theme', 'light');
+            } else {
+                root.classList.remove('light-mode');
+                root.classList.add('dark-mode');
+                localStorage.setItem('monet-theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>
