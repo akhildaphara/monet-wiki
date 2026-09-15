@@ -1,6 +1,6 @@
 # Monet Current-State Alignment and Action Items
 
-**Verified:** 2026-08-13
+**Verified:** 2026-09-15
 **Scope:** local `main` branches for `croe`, `swift-app`, and `website`; executable source and infrastructure configuration. Deployed AWS, Firebase, App Store Connect, and TestFlight state were not independently queried.
 
 ## Executive summary
@@ -11,9 +11,9 @@ The documentation had drifted most in four areas: the DynamoDB schema (13 tables
 
 ## Highest-priority action items
 
-### P0 — Public App Store compliance: implement account deletion
+### P0 — Public App Store compliance: account deletion implemented; release verification remains
 
-Registered users can create native accounts and connect Plaid, but there is no in-app Delete Account control and no backend deletion endpoint. Implement an authenticated, re-confirmed deletion workflow that removes credentials, user profile, Plaid items/tokens, transactions, overrides, preferences, feedback associations, cached insights, item-index records, and local app data. Define retention for telemetry and form submissions. This is the clearest release-blocking product gap under [Apple App Review Guideline 5.1.1(v)](https://developer.apple.com/app-store/review/guidelines/) and Apple's [account-deletion guidance](https://developer.apple.com/support/offering-account-deletion-in-your-app/).
+Registered users can delete their account from iOS or the website through authenticated, re-confirmed flows. `DELETE /v1/account` removes credentials, user profiles, linked Plaid items on a best-effort basis, transactions, overrides, preferences, feedback associations, cached insights, and known Plaid item-index records; clients clear local session data after success. Complete a deployed-device/TestFlight verification before public submission under [Apple App Review Guideline 5.1.1(v)](https://developer.apple.com/app-store/review/guidelines/).
 
 ### P0 — Remove verification codes from logs — completed 2026-08-13
 

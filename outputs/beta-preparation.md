@@ -4,7 +4,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 **Legend:** ✅ Done · 🟡 Partial / in-progress · ⬜ Not started
 
-**Last assessed:** 2026-08-05 (Audited & aligned with live TestFlight + `croe-dev` environment)
+**Last assessed:** 2026-09-15 (source-aligned; deployed AWS/TestFlight state not independently re-queried)
 
 ---
 
@@ -28,6 +28,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | ✅ | **Onboarding Flow** | `OnboardingView.swift` implements value-first flow (Welcome → Pick cards → Aha) with guest path; `RootTabView.swift` routes guests seamlessly. Matches `outputs/Onboarding-Plan.md` Phases 1–2. |
 | ✅ | **Empty States & Feedback** | `EmptyStateView.swift` hero animation; `EmptyWalletTapestryView.swift`; `Haptics` service (tap, press, impact, selection, success, warning, error) wired across views and error handlers. |
 | ✅ | **Error Handling UI** | `NetworkMonitor`, `NetworkStatusBanner`, offline search in `SearchView.swift`, `ErrorViewWithReport` with direct feedback sheet and tactile error haptics. |
+| ✅ | **Account Deletion Implementation** | `AccountView.swift` and the website account drawer provide re-confirmed deletion flows; authenticated `DELETE /v1/account` purges account-scoped backend data and best-effort revokes linked Plaid items. End-to-end TestFlight verification remains a release gate. |
 
 ---
 
@@ -35,9 +36,9 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): 26 cards supported; caps, Bilt 2.0, Prime Visa split. Backend tests: 504 passing across 52 test files (verified locally 2026-08-05). Catalog grows via backend deploy. |
+| 🟡 | **Audit Card Catalog** | Curated catalog in `cardRewardsData.ts` (`SUPPORTED_CARDS`): 26 cards supported; caps, Bilt 2.0, Prime Visa split. Backend unit suite: 471 passing across 43 test files (verified locally 2026-08-13). Catalog grows via backend deploy. |
 | ⬜ | **Handle "Apple Pay" Nuances** | `APPLE_CARD` defines explicit `STREAMING` (3%), `ENTERTAINMENT` (2%), and `OTHER` (2%) rates with note on 2% Apple Pay / 1% physical card — payment method intent flag not yet modeled in optimizer engine. |
-| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by the 504-test suite. |
+| ✅ | **Dynamic Rotating Categories** | Full 2026 Q1–Q4 schedule for Discover it (Q4: Amazon & Target) and Chase Freedom Flex (Q4: PayPal & Wholesale Clubs) data-driven and active in `cardRewardsData.ts`. Verified by the 471-test unit suite. |
 
 ---
 
@@ -85,9 +86,9 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 
 | Status | Item | Evidence |
 |--------|------|----------|
-| ✅ | **Backend automated tests** | Vitest suite: 52 test files, 504 tests passing locally on 2026-08-05 (`raw/croe/tests/`). |
+| ✅ | **Backend automated tests** | Vitest unit suite: 43 test files, 471 tests passing locally on 2026-08-13 (`raw/croe/tests/`). |
 | ✅ | **iOS automated tests** | 11 `AppTests` targets + `UITests` (`APIClientTests`, `DataStoreTests`, `SecureStorageTests`, etc.). |
-| ✅ | **CI/CD pipeline** | GitHub Actions workflow active in `.github/workflows/ci.yml` running backend Vitest suite (504 tests) and iOS xcodebuild test target. |
+| ✅ | **CI/CD pipeline** | GitHub Actions workflow active in `.github/workflows/ci.yml`; local unit verification is 471 tests, while the CI workflow should be checked for its current test command/count. |
 
 ---
 

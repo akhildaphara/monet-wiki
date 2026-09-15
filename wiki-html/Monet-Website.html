@@ -167,6 +167,7 @@
 <li><strong>Companion PWA Client (<code>app.astro</code>)</strong>: Interactive web app shell mounted at <code>/app</code> with search, wallet setup, and offline fallback screens. Integrated with geolocation queries and custom theme overrides.</li>
 <li><strong>Contact Page (<code>contact.astro</code>)</strong>: Help form submitted through the Croe form-ingestion endpoint.</li>
 <li><strong>Privacy &amp; Terms (<code>privacy.astro</code>, <code>terms.astro</code>)</strong>: Privacy and service agreements.</li>
+<li><strong>Account management</strong>: Authenticated users can permanently delete their account through the account drawer, calling <code>DELETE /v1/account</code> and clearing local wallet/session state after success.</li>
 </ol>
 <h2>Universal Links</h2>
 <p>The website hosts the <code>/.well-known/apple-app-site-association</code> file, enabling <strong>Universal Links</strong> support.</p>
@@ -178,8 +179,8 @@ npm run dev   # → http://localhost:3001
 <ul>
 <li>Hosted in the <code>raw/website</code> directory.</li>
 <li>Deployed via <strong>Firebase Hosting</strong>. The build process runs static export (<code>npm run build</code> outputs to <code>/out</code>) which is deployed to Firebase.</li>
-<li>Verified main HEAD (2026-08-05): <code>160d09c3a7ee9edad08ed0beeed22098cbc0641e</code>.</li>
-<li>Current package version: <code>0.5.15</code>. The version is visible only in the <code>/app</code> footer and must match <code>src/utils/version.js</code>.</li>
+<li>Verified main HEAD (2026-09-15): <code>d314a4a978160c09cdce37032387f0e922814f5c</code>.</li>
+<li>Current package version: <code>0.7.2</code>. The version is visible only in the <code>/app</code> footer and must match <code>src/utils/version.js</code>.</li>
 <li>There are currently no website lint or test scripts; <code>npm run build</code> is the available automated validation.</li>
 </ul>
 

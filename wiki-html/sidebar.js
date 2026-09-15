@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="p-4 border-t border-slate-100 bg-slate-50">
                 <div class="text-xs text-slate-500 flex items-center justify-between">
                     <span>Generated automatically</span>
-                    <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-[10px]">2026-08-05</span>
+                    <span class="font-mono bg-slate-200 px-1.5 py-0.5 rounded text-[10px]">2026-09-15</span>
                 </div>
             </div>
         </aside>

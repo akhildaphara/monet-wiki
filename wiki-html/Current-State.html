@@ -15,7 +15,7 @@
         <main class="flex-1 overflow-y-auto">
             <div class="max-w-5xl mx-auto px-6 py-12 lg:px-12 lg:py-16">
                 <article class="prose prose-slate lg:prose-lg max-w-none bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide">Verified 2026-08-05</p>
+                    <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide">Verified 2026-09-15</p>
                     <h1>Monet Current State</h1>
                     <p>This is the authoritative wiki snapshot for the local <code>main</code> branches of all three implementation repositories. It is based on executable source and infrastructure configuration, not historical plans. Deployed AWS, Firebase, App Store Connect, and TestFlight state were not independently queried.</p>
 
@@ -23,9 +23,9 @@
                     <table>
                         <thead><tr><th>Component</th><th>Commit</th><th>Verified state</th></tr></thead>
                         <tbody>
-                            <tr><td>Croe backend</td><td><code>beb6b56c1b2fd10c02277137ef1bbfc3760afc5f</code></td><td>Build passed; 52 files / 504 Vitest tests passed.</td></tr>
-                            <tr><td>Swift app</td><td><code>291b8616007bd4de23341d85ecea5aab5d96909b</code></td><td>Source/configuration inspected; no Xcode build run for this documentation-only sync.</td></tr>
-                            <tr><td>Website</td><td><code>160d09c3a7ee9edad08ed0beeed22098cbc0641e</code></td><td>Astro build passed; six static routes generated.</td></tr>
+                            <tr><td>Croe backend</td><td><code>f316167b3fdf81efd2e39b3763bbe22ff63de576</code></td><td>Account deletion endpoint and user-data purge are implemented; build/lint and 43 files / 471 unit tests were previously verified.</td></tr>
+                            <tr><td>Swift app</td><td><code>ff3bd04f988be31c4413611510c98cbdf314d1a1</code></td><td>Account deletion UI and API flow are implemented; no Xcode build run for this documentation sync.</td></tr>
+                            <tr><td>Website</td><td><code>d314a4a978160c09cdce37032387f0e922814f5c</code></td><td>Account deletion UI and API flow are implemented; Astro build was previously verified with six static routes.</td></tr>
                         </tbody>
                     </table>
 
@@ -43,6 +43,7 @@
                         <li><code>POST /v1/auth/guest</code>, <code>POST /v1/plaid/webhook</code>, and <code>GET /health</code> have explicit public API Gateway events. The Plaid webhook verifies <code>Plaid-Verification</code> signatures and request-body hashes.</li>
                         <li>Controls include API Gateway throttling (400 requests/s, burst 200), API Lambda reserved concurrency 20, Express burst limits, and a persistent DynamoDB daily quota for guest/unregistered expensive calls.</li>
                         <li>Plaid token writes use AES-256-GCM. The repository can read legacy AES-256-CBC ciphertext to support migration.</li>
+                        <li>Registered users can delete their account through <code>DELETE /v1/account</code>; the backend removes account-scoped records and best-effort revokes linked Plaid items, while clients clear local session data after success.</li>
                     </ul>
 
                     <h2>API surface</h2>
@@ -72,7 +73,7 @@
 
                     <h2>Most important actions</h2>
                     <ol>
-                        <li><strong>Implement in-app account deletion and a complete backend erasure workflow</strong> before public App Store submission.</li>
+                        <li><strong>Verify account deletion end-to-end</strong> on a release/TestFlight build, including local cleanup and linked-provider data removal.</li>
                         <li><strong>Verify the deployed build</strong> includes the backend fix that removed email verification codes from production logs.</li>
                         <li><strong>Rotate/remove the source-visible app-key fallback</strong> and do not treat a key shipped in web/app clients as client attestation; use App Attest/DeviceCheck for stronger proof.</li>
                         <li><strong>Keep the API contract parity test current</strong> as routes are added; it now fails when the live router and route registry diverge.</li>

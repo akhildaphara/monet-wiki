@@ -149,10 +149,11 @@
 
                 <h2>Pre-Launch Requirements Checklist</h2>
 
-                <h3>1. In-App User Account Deletion (CRITICAL)</h3>
+                <h3>1. In-App User Account Deletion (IMPLEMENTED — VERIFY ON TESTFLIGHT)</h3>
                 <ul>
-                    <li>[ ] Add a prominent "Delete Account" button in <code>ProfileView.swift</code>.</li>
-                    <li>[ ] Implement the corresponding data-wipe backend endpoint in <code>croe</code> to erase all user transaction records, Plaid credentials, and overrides from DynamoDB.</li>
+                    <li>[x] Add a prominent "Delete Account" action in <code>AccountView.swift</code> with two-step confirmation.</li>
+                    <li>[x] Implement authenticated <code>DELETE /v1/account</code> in <code>croe</code> to erase account-scoped records, credentials, Plaid indexes, and linked-provider items on a best-effort basis.</li>
+                    <li>[ ] Verify the complete flow on the deployed/TestFlight build, including local state cleanup and retry behavior when provider revocation fails.</li>
                     <li><strong>Why</strong>: Apple Guideline 5.1.1(v) mandates that any app supporting account creation must also offer user-initiated in-app account deletion.</li>
                 </ul>
 

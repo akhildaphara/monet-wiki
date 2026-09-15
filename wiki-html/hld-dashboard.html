@@ -430,6 +430,7 @@
             <a href="#api-auth" class="nav-link">Auth & Health</a>
             <a href="#api-cards" class="nav-link">Cards Management</a>
             <a href="#api-user" class="nav-link">User Profile & Overrides</a>
+            <a href="#api-account" class="nav-link">Account & Privacy</a>
             <a href="#api-recommend" class="nav-link">Recommendations</a>
             <a href="#api-plaid" class="nav-link">Plaid Integration</a>
         </div>
@@ -503,7 +504,8 @@
             <p>These bypass the authorizer by design and are registered ahead of the catch-all:</p>
             <ul class="bullets">
                 <li><code>GET /health</code> &mdash; liveness ping.</li>
-                <li><code>POST /v1/auth/guest</code> &mdash; the only public client-facing endpoint; mints a guest JWT.</li>
+                <li><code>POST /v1/auth/guest</code> &mdash; mints a guest JWT and requires <code>X-Monet-App-Key</code>.</li>
+                <li><code>POST /v1/telemetry/install</code> &mdash; registers a deduplicated first launch for install metrics and an admin email; requires <code>X-Monet-App-Key</code> and is rate limited.</li>
                 <li><code>POST /v1/plaid/webhook</code> &mdash; Plaid verifies via its own payload signature, not a user token.</li>
             </ul>
             <div class="callout">
@@ -582,7 +584,34 @@
                 </div>
             </div>
 
-            <h3>4. Client Request Execution & Failure Recovery</h3>
+            <h3>4. Account Deletion & Data Erasure</h3>
+            <p>Registered users can permanently remove their account from either the Astro website or the Swift iOS app. The endpoint treats provider-linked identities sharing the authenticated email as one account and removes their user-scoped data together.</p>
+            <div class="diagram-wrapper">
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant Client as 📱 Web / iOS Client
+                        participant API as ⚡ Backend (/account)
+                        participant Plaid as 🏦 Plaid
+                        participant DB as 🗄️ DynamoDB
+
+                        Client->>API: DELETE /v1/account (Bearer token)
+                        API->>DB: Resolve linked user IDs by authenticated email
+                        API->>DB: Load linked users and collect itemIds
+                        loop For each linked Plaid item
+                            API->>Plaid: itemRemove(access_token)
+                            Plaid-->>API: Success or provider error
+                        end
+                        API->>DB: Delete users, overrides, transactions, caches, preferences
+                        API->>DB: Delete feedback, credentials, and known Plaid index entries
+                        API-->>Client: { success: true }
+                        Client->>Client: Clear session and local wallet data
+                </div>
+            </div>
+            <div class="callout">
+                <span class="pill pill-ok">Erasure behavior</span> Plaid removal is best-effort so an invalid provider item cannot block deletion of local records. Known <code>PlaidItemIndex</code> entries are deleted by <code>itemId</code>; recommendation feedback is scanned once for all linked user IDs. On a failed request, clients retain their local session and data so the user can retry.
+            </div>
+
+            <h3>5. Client Request Execution & Failure Recovery</h3>
             <p>The client-side API execution path in <code>APIClient.swift</code> which orchestrates retries, token refresh handshakes, rate limiting backoffs (dropping to offline <code>LocalRecommender</code> calculations), and server health checking loops.</p>
             <div class="diagram-wrapper">
                 <div class="mermaid">
@@ -619,6 +648,9 @@
         <section id="schema">
             <h2>DynamoDB Schema Map</h2>
             <p>The application follows a normalized repository pattern with multiple user-scoped tables, logically linked by a consistent partition key (<code>userId</code>).</p>
+            <div class="callout">
+                <span class="pill pill-info">Deletion scope</span> Account deletion covers the primary user plus provider-linked user IDs sharing the authenticated email. It removes records from user, override, transaction, insights-cache, recommendation-preference, recommendation-feedback, credentials, and Plaid item-index stores; the global card catalog and merchant/brand caches are not user-owned and are retained.
+            </div>
             
             <h3>MonetUsers</h3>
             <table>
@@ -834,10 +866,13 @@
         "nickname": "string?",
         "last4": "string?",
         "cycleStartDate": "string?",
-        "customRewards": { "categoryId": 1.5 }
+        "customRewards": { "categoryId": 1.5 },
+        "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
       }
     },
+    "plaidEnabled": "boolean",
     "plaidItems": [{ "itemId": "string" }],
+    "plaidCardMappings": { "account_id": "card_id" },
     "isNewUser": "boolean?"
   },
   "overrides": ["OverrideRecord"],
@@ -921,7 +956,7 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Modifies nicknames, last 4 digits, cycle dates, or reward multipliers for existing cards in the user's wallet.</p>
+                    <p>Modifies nicknames, last 4 digits, cycle dates, or reward multipliers for existing cards in the user's wallet. Custom reward expirations accept either an ISO-8601 timestamp or a <code>YYYY-MM-DD</code> date, with date-only values active through the end of that UTC day.</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid two-col">
                         <div>
@@ -932,7 +967,8 @@
       "nickname": "string?",
       "last4": "string?",
       "cycleStartDate": "string?",
-      "customRewards": { "Dining": 3 }
+      "customRewards": { "Dining": 3 },
+      "customRewardExpirations": { "Dining": "2026-10-01T03:59:59.999Z" }
     }
   }
 }</pre>
@@ -996,6 +1032,36 @@
   "error": "string?"
 }</pre>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="api-account">Account & Privacy</h3>
+
+            <div class="api-endpoint">
+                <div class="api-header" onclick="toggleEndpoint(this)">
+                    <span class="api-method method-delete">DELETE</span>
+                    <span class="api-path">/v1/account</span>
+                    <span class="api-summary">Permanently deletes the authenticated account and user-owned data.</span>
+                    <span class="api-expand-icon">▼</span>
+                </div>
+                <div class="api-body">
+                    <p>Requires a registered authenticated user. Resolves linked provider identities sharing the authenticated email, attempts to remove every linked Plaid item, and deletes all associated user-scoped records. This operation is irreversible.</p>
+                    <span class="api-auth-badge required">Auth: Registered user required</span>
+                    <div class="api-details-grid two-col">
+                        <div>
+                            <div class="api-section-title">Request</div>
+                            <pre>No request body</pre>
+                        </div>
+                        <div>
+                            <div class="api-section-title">Response (200 OK)</div>
+                            <pre>{
+  "success": true
+}</pre>
+                        </div>
+                    </div>
+                    <div class="callout">
+                        <span class="pill pill-info">Client behavior</span> The website uses an inline progressive confirmation. iOS uses two native destructive confirmations. After a successful response both clients clear local authentication and wallet state; a failed response leaves the session available for retry.
                     </div>
                 </div>
             </div>
@@ -1132,7 +1198,8 @@
       "nickname": "string?",
       "last4": "string?",
       "cycleStartDate": "string?",
-      "customRewards": { "categoryId": 1.5 }
+      "customRewards": { "categoryId": 1.5 },
+      "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
     }
   },
   "days": "number?"
@@ -1229,9 +1296,12 @@
                 </thead>
                 <tbody>
                     <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/telemetry/install</code></td><td>Deduplicate an iOS installation, emit an install metric, and notify the admin (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/telemetry/crash</code></td><td>Ingest bounded iOS MetricKit summaries and breadcrumbs; emits client diagnostics metrics and alerts.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven. Bypasses edge cache to protect catalog content.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/user/settings</code></td><td>Toggle <code>showGlobalBestCard</code>.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>DELETE</code></td><td><code>/v1/account</code></td><td>Permanently erase the registered account, linked identities, Plaid items, and user-owned data.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/plaid/webhook</code></td><td>Plaid-initiated sync trigger; verified by Plaid signature, not a user token (public).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/plaid/sync-transactions</code></td><td>Pull latest transactions for the user.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/plaid/status</code></td><td>Connection / item health.</td><td><span class="pill pill-ok">Req</span></td></tr>
@@ -1241,7 +1311,7 @@
                 </tbody>
             </table>
             <div class="callout warn">
-                <span class="pill pill-ok">Contract parity</span> <code>src/api/routeRegistry.ts</code> now covers the live native-auth, forms, telemetry, recommendation, Plaid, and catalog routes. <code>tests/unit/routeRegistry.test.ts</code> compares the registry with <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code>; generate OpenAPI separately if a machine-readable external contract is needed.
+                <span class="pill pill-ok">Contract parity</span> <code>src/api/routeRegistry.ts</code> covers the live native-auth, forms, telemetry, recommendation, account deletion, Plaid, and catalog routes. <code>tests/unit/routeRegistry.test.ts</code> compares the registry with <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code>; generate OpenAPI separately if a machine-readable external contract is needed.
             </div>
         </section>
 
@@ -1261,7 +1331,7 @@
                     <tr><td><code>PlaidFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Provider degradation in Plaid link, account, transaction, and connection operations.</td></tr>
                     <tr><td><code>GoogleFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Google Places/Knowledge Graph dependency degradation.</td></tr>
                     <tr><td><code>BedrockFailureRateAlarm</code></td><td>&ge;10% failures in 5&nbsp;min with at least 10 requests</td><td>Bedrock categorization dependency degradation.</td></tr>
-                    <tr><td><code>DynamoCoreThrottleAlarm</code> + <code>DynamoAuxThrottleAlarm</code></td><td>Any throttled request in 5&nbsp;min</td><td>Covers all 13 Monet tables; split into two alarms to stay within CloudWatch metric-math limits.</td></tr>
+                    <tr><td><code>DynamoCoreThrottleAlarm</code> + <code>DynamoAuxThrottleAlarm</code></td><td>Any throttled request in 5&nbsp;min</td><td>Covers all 14 Monet tables, including installation deduplication; split into two alarms to stay within CloudWatch metric-math limits.</td></tr>
                     <tr><td><code>CloudFront5xxAlarm</code></td><td>5xx rate &gt;1% in 5&nbsp;min</td><td>Edge/API delivery failures.</td></tr>
                 </tbody>
             </table>
@@ -1282,9 +1352,10 @@
                 </thead>
                 <tbody>
                     <tr><td><code>globalRateLimiter</code></td><td>120 / min</td><td>Every request (<code>app.use</code>). <code>/health</code> is registered first and stays unthrottled.</td></tr>
-                    <tr><td><code>recommendRateLimiter</code></td><td>40 / min</td><td><code>POST /v1/recommend</code></td></tr>
-                    <tr><td><code>brandSearchRateLimiter</code></td><td>30 / min</td><td><code>GET /v1/brands/search</code></td></tr>
-                    <tr><td><code>guestTokenRateLimiter</code></td><td>10 / min</td><td><code>POST /v1/auth/guest</code></td></tr>
+                    <tr><td><code>recommendRateLimiter</code></td><td>200 / hr</td><td><code>POST /v1/recommend</code></td></tr>
+                    <tr><td><code>brandSearchRateLimiter</code></td><td>800 / hr</td><td><code>GET /v1/brands/search</code></td></tr>
+                    <tr><td><code>guestTokenRateLimiter</code></td><td>30 / hr</td><td><code>POST /v1/auth/guest</code></td></tr>
+                    <tr><td><code>installTelemetryRateLimiter</code></td><td>10 / hr</td><td><code>POST /v1/telemetry/install</code></td></tr>
                     <tr><td><code>loginRateLimiter</code></td><td>10 / 15 min</td><td><code>POST /v1/auth/login</code></td></tr>
                     <tr><td><code>signupRateLimiter</code></td><td>5 / hr</td><td><code>POST /v1/auth/signup</code></td></tr>
                 </tbody>
@@ -1412,8 +1483,8 @@
                     </tr>
                     <tr>
                         <td>Account deletion</td>
-                        <td>Registered users can create accounts and connect Plaid, but there is no in-app Delete Account control or backend erasure endpoint spanning all user-owned tables.</td>
-                        <td><span class="pill pill-danger">High</span></td>
+                        <td>Implemented through <code>DELETE /v1/account</code>. The backend resolves linked identities by email, removes Plaid items best-effort, deletes user-owned records across the relevant tables, and the website/iOS clients clear local state after success. Keep future provider/table additions in this erasure path.</td>
+                        <td><span class="pill pill-ok">Implemented</span></td>
                     </tr>
                 </tbody>
             </table>

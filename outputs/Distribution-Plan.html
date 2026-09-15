@@ -691,15 +691,15 @@
                     <tbody>
                         <tr>
                             <td><strong>In-App Account Deletion</strong></td>
-                            <td><span class="badge-p0">P0 BLOCKER</span></td>
-                            <td>Add "Delete Account" in <code>ProfileView.swift</code> with double-confirmation prompt (Apple Guideline 5.1.1(v)).</td>
-                            <td>1–2 days</td>
+                            <td><span class="badge-req">IMPLEMENTED</span></td>
+                            <td><code>AccountView.swift</code> provides the double-confirmation prompt and calls authenticated account deletion (Apple Guideline 5.1.1(v)). Verify on TestFlight.</td>
+                            <td>Verification</td>
                         </tr>
                         <tr>
-                            <td><strong>Backend Erasure Endpoint</strong></td>
-                            <td><span class="badge-p0">P0 BLOCKER</span></td>
-                            <td>Implement <code>DELETE /v1/account</code> in <code>raw/croe</code> to purge records across DynamoDB tables.</td>
-                            <td>1–2 days</td>
+                            <td><strong>Backend Erasure Endpoint — implemented</strong></td>
+                            <td><span class="badge-req">IMPLEMENTED</span></td>
+                            <td><code>DELETE /v1/account</code> purges account-scoped records, removes known Plaid indexes, and best-effort revokes linked Plaid items. Verify deployed behavior.</td>
+                            <td>Verification</td>
                         </tr>
                         <tr>
                             <td><strong>Rate Limit Verification</strong></td>

@@ -1,10 +1,10 @@
 # Monet Launch Plan & Timeline
 
-**Prepared:** 2026-05-31 · **Current-state review:** 2026-08-05
+**Prepared:** 2026-05-31 · **Current-state review:** 2026-09-15
 **Baseline:** [beta-preparation.md](./beta-preparation.md) (annotated checklist)  
 **Architecture source of truth:** [wiki-html/hld-dashboard.html](../wiki-html/hld-dashboard.html)
 
-> Historical plan: several milestones below have shipped since preparation (including Sign in with Apple, persistent daily quotas, custom API-domain configuration, CI, and active TestFlight work). Use [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md) and [beta-preparation.md](./beta-preparation.md) for current priorities. The public-release blocker newly confirmed in code is in-app account deletion plus backend erasure.
+> Historical plan: several milestones below have shipped since preparation (including Sign in with Apple, persistent daily quotas, custom API-domain configuration, CI, account deletion, and active TestFlight work). Use [CURRENT_STATE_ACTIONS.md](./CURRENT_STATE_ACTIONS.md) and [beta-preparation.md](./beta-preparation.md) for current priorities. Account deletion is implemented; deployed-device verification remains a release gate.
 
 **Team assumption:** Small team / solo developer (~15–25 hrs/week). Durations scale linearly with headcount. All week numbers are **calendar weeks from "start now" (W1)**.
 
@@ -223,7 +223,7 @@ Assumes **W1 = start now**, solo/small team, Apple Developer enrollment submitte
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|------------|--------|------------|
-| App Store rejection (no account deletion) | High | Blocks public launch | Add in-app Delete Account and complete backend erasure workflow |
+| App Store rejection (account deletion not verified end-to-end) | High | Blocks public launch | Verify the iOS/website deletion flows, backend purge, Plaid revocation behavior, and local cleanup on the deployed/TestFlight build |
 | Google "Unverified App" scares testers | Medium | Drops sign-in conversion | Publish privacy policy; submit OAuth verification in Phase 1 W2 |
 | API cost abuse via guest mint / Places / Bedrock | Medium | Bill shock | Origin secret, API Gateway throttling, reserved concurrency, burst limits, DynamoDB daily quotas, and dependency alarms exist; load-test and verify alert delivery |
 | Wrong card recommendations (rotating Q3, Apple Pay) | Medium | Trust erosion | Label beta; quarterly schedule update process; conservative Apple Card default |
@@ -300,7 +300,7 @@ Use this gate **before inviting external TestFlight testers** (Phase 1).
 
 ## Beta Data & Observability (gap analysis — 2026-05-31)
 
-**Backend (croe):** Strong *operational* logging — structured JSON w/ correlationId, Lambda failure + error-rate alarms, ERROR-log metric filter, SNS email. **Missing:** product/funnel metrics (guest mints, sign-in conversion, /recommend count + latency, search terms, Plaid success rate), latency/DynamoDB-throttle/CloudFront-5xx alarms, and a CloudWatch dashboard.
+**Backend (croe):** Strong *operational* logging — structured JSON w/ correlationId, Lambda failure + error-rate alarms, dependency failure-rate metrics, DynamoDB throttle alarms, CloudFront 5xx monitoring, ERROR-log metric filter, and SNS email. **Missing:** product/funnel metrics (guest mints, sign-in conversion, /recommend count + latency, search terms), deployed alert verification, crash-ingestion health checks, and a CloudWatch dashboard.
 
 **iOS (swift-app):** Only `CrashReporter` (MetricKit). All other instrumentation is `print()`, invisible from TestFlight devices. **Action before external TestFlight:** add a product-analytics layer (TelemetryDeck recommended for privacy-first iOS, or PostHog).
 
@@ -316,7 +316,7 @@ Use this gate **before inviting external TestFlight testers** (Phase 1).
 | **Qualitative** | In-app "Send Feedback" emails, TestFlight feedback screenshots, "what to test" responses |
 
 ### Suggested next implementation tasks
-1. Backend EMF custom metrics + CloudWatch dashboard + latency/throttle/5xx alarms.
+1. Verify deployed dependency/throttle/5xx alarms, then add a CloudWatch dashboard and product/funnel metrics.
 2. iOS analytics SDK (TelemetryDeck/PostHog) wired to key events: search, recommend, sign-in, plaid_link, wrong_rec_report.
 3. App icon: remove AI watermark, export clean 1024px master.
 4. Screenshots: 6.7"/6.9" sets via simulator + Fastlane frameit (see `ios-simulator` skill).

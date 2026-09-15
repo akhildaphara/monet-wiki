@@ -1,13 +1,13 @@
 # Bug Hunt & Code Improvements
 
-**Revalidated:** 2026-08-13 against local `main` branches.
-**Verification:** backend build and lint passed; 43 files / 471 unit tests passed; website build was previously verified. This is static/local evidence, not a deployed-environment audit.
+**Revalidated:** 2026-09-15 against local `main` branches.
+**Verification:** account-deletion source and focused tests were inspected; backend build/lint and 43 files / 471 unit tests were previously verified. This is static/local evidence, not a deployed-environment audit.
 
 ## Highest-impact open findings
 
-### 1. No registered-user account deletion flow (release blocker)
+### 1. Account deletion — implementation complete; end-to-end release verification open
 
-The iOS Settings/Profile UI offers sign-out but no Delete Account action, and the backend exposes no account-erasure endpoint. A complete workflow must remove credentials, the user profile, Plaid connections and tokens, transactions, overrides, recommendation preferences/feedback associations, insights cache, Plaid item indexes, and local data. Retention rules are also needed for telemetry and form submissions.
+The iOS Account screen and website account drawer provide re-confirmed deletion flows, and the backend exposes authenticated `DELETE /v1/account`. Focused tests cover user-scoped deletion, linked identities, best-effort Plaid revocation, and failure handling. Verify the deployed/TestFlight flow and provider/data erasure behavior before public launch.
 
 ### 2. Verification-code logging — resolved 2026-08-13
 
