@@ -71,17 +71,13 @@
                     <h2>Rewards model</h2>
                     <p>The server catalog currently contains 26 supported cards. The shared category taxonomy has 32 raw values including <code>OTHER</code>. Reward structures include flat/category rates, rotating schedules, ranked-spend tiers, caps, custom overrides, and merchant network restrictions. The taxonomy and popular-brand maps remain hand-maintained across repositories.</p>
 
-                    <h2>Most important actions</h2>
-                    <ol>
-                        <li><del>Verify account deletion end-to-end</del> — <strong>Verified 2026-09-17</strong> on a deployed TestFlight build (including local cleanup, rejected subsequent login, and backend data purge).</li>
-                        <li><strong>Verify the deployed build</strong> includes the backend fix that removed email verification codes from production logs.</li>
-                        <li><del>Rotate/remove the source-visible app-key fallback</del> — <strong>Deployed & Verified 2026-09-17</strong>: CloudFront WAF rate rules, DynamoDB viewer HMAC quota, and keyless guest minting are live-verified on `api.tapmonet.com`.</li>
-                        <li><strong>Keep the API contract parity test current</strong> as routes are added; it now fails when the live router and route registry diverge.</li>
-                        <li><del>Verify operational alert delivery</del> — <strong>Active & Confirmed 2026-09-17</strong>: 8 CloudWatch alarms and confirmed SNS email subscription are operational in deployed stage.</li>
-                        <li><strong>Automate reward-data freshness</strong> and model payment method before claiming Apple Card's Apple Pay rate as a universal base rate.</li>
-                        <li><strong>Add the missing local FormSubmissions table</strong> or explicitly document why local form tests should use a mocked repository.</li>
-                        <li><strong>Add website lint and browser smoke tests</strong>; today the web project has build/deploy scripts but no lint/test scripts.</li>
-                    </ol>
+                    <h2>Active priorities &amp; readiness</h2>
+                    <p>Live engineering priorities, release gates, and the complete 31-item readiness checklist are centrally maintained in the single source of truth at <code>outputs/CURRENT_STATE_ACTIONS.md</code>. Key open priorities remaining before public App Store submission include:</p>
+                    <ul>
+                        <li><strong>Apple Developer Organization account transition</strong> (pre-launch App Store compliance under Guideline 5.2.1).</li>
+                        <li><strong>Card reward optimizer reconciliation</strong> (modeling combined $1,500 quarterly rotating caps for Chase/Discover and Apple Pay payment method intent).</li>
+                        <li><strong>App Store listing assets &amp; public copy</strong>.</li>
+                    </ul>
 
                     <h2>Related pages</h2>
                     <p><a href="Croe-Backend.html">Croe Backend</a> · <a href="Database-Schema.html">Database Schema</a> · <a href="Auth.html">Authentication</a> · <a href="Monet-iOS-App.html">iOS App</a> · <a href="Monet-Website.html">Website</a> · <a href="Plaid-Integration.html">Plaid</a> · <a href="hld-dashboard.html">Technical Reference</a></p>

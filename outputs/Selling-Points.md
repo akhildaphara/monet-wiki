@@ -127,7 +127,7 @@ These appear in product ideation or strategy docs but are **not** fully implemen
 - **Household / shared wallet** — Optimize across a couple's combined card pool (Ideas-and-Features).
 - **Annual fee vs. value dashboard** — Justify or downgrade premium cards based on actual spend (Ideas-and-Features).
 - **Bilt 2.0 rent-tier marginal utility** — Sliding-scale rent multipliers based on non-housing spend (Bilt-2.0-Strategy; cards exist, holistic optimizer does not).
-- **Apple Pay detection for Apple Card** — 2% via Apple Pay vs. 1% physical swipe (beta-preparation checklist).
+- **Apple Pay detection for Apple Card** — 2% via Apple Pay vs. 1% physical swipe (action tracker).
 - **Pay-with-points calculator** — Optimize redemption value, not just earning (Ideas-and-Features).
 - **Expanded widget capabilities** — A widget surface and setup guide exist; richer quick-lookup actions remain roadmap work.
 - **Push alerts for quarterly category rotations** — Remind users when 5% categories activate (CurrentFeature roadmap).
