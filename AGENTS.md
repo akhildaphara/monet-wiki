@@ -17,7 +17,7 @@
 - Consult `wiki-html/hld-dashboard.html` before architecture, API-contract, rate-limit, or backend↔iOS changes. If it conflicts with code, stop and surface the discrepancy.
 - Consult `design-system.html` before UI work. Website UI uses the child website instructions, including the 16px `rounded-card` standard radius.
 - UI text across both website and app must not be truncated or cut off with ellipsis (`...`); ensure text wraps and containers accommodate full content display.
-- Website code changes require synchronized semver updates to `raw/website/package.json` and `raw/website/src/utils/version.js`; the visible version is intentionally restricted to the `/app` footer.
+- DO NOT bump website version for landing/marketing or static page edits (e.g., `index.astro`, `contact.astro`, `privacy.astro`, `terms.astro`, `app-info.astro`). Version bumps (`raw/website/package.json` and `raw/website/src/utils/version.js`) are STRICTLY RESERVED for functional changes to the PWA web app itself (`/app`, `src/pages/app.astro`, or `src/scripts/`).
 - Any new request header must also be added to `raw/croe/src/app.ts`'s `Access-Control-Allow-Headers`; after changing it, tell the user that `sls deploy` is required.
 - Any code change in a submodule requires a root-level entry in that submodule's `changelog.md`, using its existing timestamp/title plus numbered-list format.
 - Never stage, commit or push without explicit user permission.
