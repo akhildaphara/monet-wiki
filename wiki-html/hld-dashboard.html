@@ -504,7 +504,7 @@
             <p>These bypass the authorizer by design and are registered ahead of the catch-all:</p>
             <ul class="bullets">
                 <li><code>GET /health</code> &mdash; liveness ping.</li>
-                <li><code>POST /v1/auth/guest</code> &mdash; mints a guest JWT and requires <code>X-Monet-App-Key</code>.</li>
+                <li><code>POST /v1/auth/guest</code> &mdash; mints a guest JWT after CloudFront origin-secret validation and burst limiting; no public client key is required.</li>
                 <li><code>POST /v1/telemetry/install</code> &mdash; registers a deduplicated first launch for install metrics and an admin email; requires <code>X-Monet-App-Key</code> and is rate limited.</li>
                 <li><code>POST /v1/plaid/webhook</code> &mdash; Plaid verifies via its own payload signature, not a user token.</li>
             </ul>
@@ -601,8 +601,9 @@
                             API->>Plaid: itemRemove(access_token)
                             Plaid-->>API: Success or provider error
                         end
-                        API->>DB: Delete users, overrides, transactions, caches, preferences
-                        API->>DB: Delete feedback, credentials, and known Plaid index entries
+                        API->>DB: Delete overrides, transactions, caches, preferences, feedback
+                        API->>DB: Delete all linked Plaid index rows and same-email forms
+                        API->>DB: Delete linked user profiles, then credentials
                         API-->>Client: { success: true }
                         Client->>Client: Clear session and local wallet data
                 </div>
@@ -1295,7 +1296,7 @@
                     <tr><th>Method</th><th>Path</th><th>Purpose</th><th>Auth</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (CloudFront origin-secret and burst-limit controls).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/telemetry/install</code></td><td>Deduplicate an iOS installation, emit an install metric, and notify the admin (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/telemetry/crash</code></td><td>Ingest bounded iOS MetricKit summaries and breadcrumbs; emits client diagnostics metrics and alerts.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven. Bypasses edge cache to protect catalog content.</td><td><span class="pill pill-ok">Req</span></td></tr>
@@ -1343,7 +1344,7 @@
         <!-- RATE LIMITS -->
         <section id="rate-limits">
             <h2>Rate Limits & Throttling</h2>
-            <p>Throttling today lives entirely in the Express layer (<code>src/middleware/rateLimit.ts</code>). Limits are <strong>per client IP</strong> on a <strong>60-second window</strong> and stored <strong>in-memory per warm Lambda instance</strong> &mdash; so effective ceilings scale with concurrency and are not globally shared. Exceeding a limit returns <code>429</code> with a <code>Retry-After: 60</code> header. Disabled when <code>NODE_ENV=test</code> or <code>DISABLE_RATE_LIMIT=true</code>.</p>
+            <p>Express burst limits in <code>src/middleware/rateLimit.ts</code> remain in-memory per warm Lambda instance; they are supplementary, not globally shared. Guest mint and query limits in <code>RateLimits</code> are shared across instances and fail closed if the quota store or trusted viewer identity is unavailable. The local CloudFront template also defines a path-scoped WAF burst rule. These changes have not been deployed or live-verified.</p>
 
             <h3>Application Limiters</h3>
             <table>
@@ -1355,6 +1356,9 @@
                     <tr><td><code>recommendRateLimiter</code></td><td>200 / hr</td><td><code>POST /v1/recommend</code></td></tr>
                     <tr><td><code>brandSearchRateLimiter</code></td><td>800 / hr</td><td><code>GET /v1/brands/search</code></td></tr>
                     <tr><td><code>guestTokenRateLimiter</code></td><td>30 / hr</td><td><code>POST /v1/auth/guest</code></td></tr>
+                    <tr><td><code>guestMintQuota</code></td><td>100 / UTC day / viewer</td><td>Shared DynamoDB limit for <code>POST /v1/auth/guest</code>.</td></tr>
+                    <tr><td><code>dailyRateLimiter</code></td><td>20 / UTC day / guest ID; 200 / UTC day / viewer</td><td>Expensive guest and anonymous requests. Signed-in users bypass.</td></tr>
+                    <tr><td>CloudFront WAF</td><td>60 / 5 min / IP</td><td><code>POST /v1/auth/guest</code> path burst rule (local infrastructure template).</td></tr>
                     <tr><td><code>installTelemetryRateLimiter</code></td><td>10 / hr</td><td><code>POST /v1/telemetry/install</code></td></tr>
                     <tr><td><code>loginRateLimiter</code></td><td>10 / 15 min</td><td><code>POST /v1/auth/login</code></td></tr>
                     <tr><td><code>signupRateLimiter</code></td><td>5 / hr</td><td><code>POST /v1/auth/signup</code></td></tr>
@@ -1375,7 +1379,7 @@
             </table>
 
             <div class="callout warn">
-                <span class="pill pill-info">Current controls</span> API Gateway default route settings enforce a 400 requests/s rate and 200-request burst; the API Lambda has reserved concurrency 20; Express applies burst limits; and expensive guest/unregistered calls use a persistent DynamoDB daily quota. Load-test and alarm coverage remain follow-up work.
+                <span class="pill pill-info">Rollout status</span> API Gateway default route settings target 400 requests/s and 200-request burst; API Lambda reserved concurrency is 20. Local source adds a durable guest mint quota, a second viewer query ceiling that cannot be reset by minting another UUID, and a WAF edge rule. Viewer keys use a server-side HMAC of CloudFront's generated address, not user-supplied forwarding headers. Shared networks can share the quota. Deploy backend/WAF first and validate CloudFront headers, IPv4/IPv6, WAF costs, and both clients before website rollout. The deployed dev distribution had no WAF ACL on 2026-09-17.
             </div>
         </section>
 
@@ -1468,22 +1472,22 @@
                     </tr>
                     <tr>
                         <td>Monitoring coverage</td>
-                        <td>Dependency failure-rate alarms, split core/auxiliary DynamoDB throttle alarms covering all 13 tables, and CloudFront 5xx monitoring are defined. Verify SNS delivery and add a second escalation subscriber before public launch.</td>
+                        <td>Dependency failure-rate alarms, split core/auxiliary DynamoDB throttle alarms covering all 14 tables, and CloudFront 5xx monitoring are defined. Verify SNS delivery and add a second escalation subscriber before public launch.</td>
                         <td><span class="pill pill-info">Medium</span></td>
                     </tr>
                     <tr>
                         <td>Payment method</td>
-                        <td><code>APPLE_CARD</code> earns 2% via Apple Pay vs. 1% on physical swipe; the optimizer uses a flat 2% base rate with a note — no payment-method intent flag in <code>/recommend</code> yet.</td>
+                        <td><code>APPLE_CARD</code> earns 2% via Apple Pay vs. 1% on physical swipe; the catalog now conservatively uses a 1% base rate. There is still no payment-method intent flag in <code>/recommend</code>, so the 2% Apple Pay opportunity is not modeled.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
                         <td>Security review drift</td>
-                        <td>Verification-code logging was removed from the native signup error path. The fallback app key remains source-visible; rotate/remove production fallback keys and use App Attest/DeviceCheck if strong client attestation is required.</td>
+                        <td>Verification-code logging was removed from the native signup error path. Guest minting no longer relies on the extractable app key, and source fallbacks were removed. Rotate the deployed key with TestFlight compatibility planning; the remaining install-telemetry key is only an abuse signal. Use App Attest/DeviceCheck with server verification if strong client attestation is required.</td>
                         <td><span class="pill pill-danger">High</span></td>
                     </tr>
                     <tr>
                         <td>Account deletion</td>
-                        <td>Implemented through <code>DELETE /v1/account</code>. The backend resolves linked identities by email, removes Plaid items best-effort, deletes user-owned records across the relevant tables, and the website/iOS clients clear local state after success. Keep future provider/table additions in this erasure path.</td>
+                        <td>Implemented locally through <code>DELETE /v1/account</code>. The backend resolves linked identities by email, removes Plaid items best-effort, deletes all account-owned records including orphaned Plaid indexes and same-email forms, then identity rows. Installation and global cache/audit/rate-limit rows lack account linkage. A deployed table-by-table erasure check and installed-device test remain release gates.</td>
                         <td><span class="pill pill-ok">Implemented</span></td>
                     </tr>
                 </tbody>
