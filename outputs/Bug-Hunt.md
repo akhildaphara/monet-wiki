@@ -5,9 +5,9 @@
 
 ## Highest-impact open findings
 
-### 1. Account deletion — implementation complete; end-to-end release verification open
+### 1. Account deletion — resolved & verified 2026-09-17
 
-The iOS Account screen and website account drawer provide re-confirmed deletion flows, and the backend exposes authenticated `DELETE /v1/account`. Focused tests cover user-scoped deletion, linked identities, best-effort Plaid revocation, and failure handling. Verify the deployed/TestFlight flow and provider/data erasure behavior before public launch.
+The iOS Account screen and website account drawer provide re-confirmed deletion flows, and the backend exposes authenticated `DELETE /v1/account`. Focused tests cover user-scoped deletion, linked identities, best-effort Plaid revocation, and failure handling. End-to-end deletion was verified on a deployed TestFlight build on 2026-09-17 with local state reset and backend data erasure confirmed.
 
 ### 2. Verification-code logging — resolved 2026-08-13
 

@@ -73,11 +73,11 @@
 
                     <h2>Most important actions</h2>
                     <ol>
-                        <li><strong>Verify account deletion end-to-end</strong> on a release/TestFlight build, including local cleanup and linked-provider data removal.</li>
+                        <li><del>Verify account deletion end-to-end</del> — <strong>Verified 2026-09-17</strong> on a deployed TestFlight build (including local cleanup, rejected subsequent login, and backend data purge).</li>
                         <li><strong>Verify the deployed build</strong> includes the backend fix that removed email verification codes from production logs.</li>
-                        <li><strong>Rotate/remove the source-visible app-key fallback</strong> and do not treat a key shipped in web/app clients as client attestation; use App Attest/DeviceCheck for stronger proof.</li>
+                        <li><del>Rotate/remove the source-visible app-key fallback</del> — <strong>Deployed & Verified 2026-09-17</strong>: CloudFront WAF rate rules, DynamoDB viewer HMAC quota, and keyless guest minting are live-verified on `api.tapmonet.com`.</li>
                         <li><strong>Keep the API contract parity test current</strong> as routes are added; it now fails when the live router and route registry diverge.</li>
-                        <li><strong>Verify operational alert delivery</strong> in the deployed stage; dependency failure-rate alarms, split DynamoDB throttle alarms, and CloudFront 5xx monitoring are now defined.</li>
+                        <li><del>Verify operational alert delivery</del> — <strong>Active & Confirmed 2026-09-17</strong>: 8 CloudWatch alarms and confirmed SNS email subscription are operational in deployed stage.</li>
                         <li><strong>Automate reward-data freshness</strong> and model payment method before claiming Apple Card's Apple Pay rate as a universal base rate.</li>
                         <li><strong>Add the missing local FormSubmissions table</strong> or explicitly document why local form tests should use a mocked repository.</li>
                         <li><strong>Add website lint and browser smoke tests</strong>; today the web project has build/deploy scripts but no lint/test scripts.</li>

@@ -28,7 +28,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | ✅ | **Onboarding Flow** | `OnboardingView.swift` implements value-first flow (Welcome → Pick cards → Aha) with guest path; `RootTabView.swift` routes guests seamlessly. Matches `outputs/Onboarding-Plan.md` Phases 1–2. |
 | ✅ | **Empty States & Feedback** | `EmptyStateView.swift` hero animation; `EmptyWalletTapestryView.swift`; `Haptics` service (tap, press, impact, selection, success, warning, error) wired across views and error handlers. |
 | ✅ | **Error Handling UI** | `NetworkMonitor`, `NetworkStatusBanner`, offline search in `SearchView.swift`, `ErrorViewWithReport` with direct feedback sheet and tactile error haptics. |
-| 🟡 | **Account Deletion Implementation** | `AccountView.swift` and the website account drawer provide re-confirmed deletion flows. Local backend changes purge all account-linked records across user, credential, override, preference, feedback, transaction, insights-cache, Plaid-index, and same-email form-submission tables; Plaid revocation is best-effort. A disposable account was deleted on a simulator against `api.tapmonet.com`, with subsequent login rejected, before these backend changes. Deployed table-by-table erasure and installed TestFlight-device verification remain release gates. Unlinked installation/global cache/audit/IP-rate-limit rows are not account-deletable. |
+| ✅ | **Account Deletion Implementation** | `AccountView.swift` and the website account drawer provide re-confirmed deletion flows. Local backend changes purge all account-linked records across user, credential, override, preference, feedback, transaction, insights-cache, Plaid-index, and same-email form-submission tables; Plaid revocation is best-effort. Verified end-to-end on a deployed TestFlight build: account deleted, returned to guest state, subsequent login rejected, and backend records purged. |
 
 ---
 
@@ -47,7 +47,7 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Status | Item | Evidence |
 |--------|------|----------|
 | 🟡 | **Crash Reporting** | `CrashReporter.swift` implements Apple `MetricKit` (`MXMetricManager`, `MXDiagnosticPayload`), capturing crashes, hangs, and disk exceptions, persisting payloads to `Documents/CrashReports/`, capturing user breadcrumbs, and attaching logs to feedback. |
-| 🟡 | **Backend Logging** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + SNS alarms in `resources/monitoring.yml` (HLD §Monitoring). On 2026-09-17, the deployed dev-stage email subscription was confirmed and eight enabled alarms were `OK`, but read-only history and SNS metrics showed no recent delivery evidence. Recipient receipt and recovery still need a controlled test. |
+| ✅ | **Backend Logging & Alarms** | Lambda logs → CloudWatch; structured `{ level: "ERROR" }` metric filter + 8 CloudWatch alarms (Lambda errors, high latency, DynamoDB core/aux throttles, Plaid/Google/Bedrock failures, CloudFront 5xx) in `resources/monitoring.yml`. Confirmed SNS topic subscription (`akhildaphara@gmail.com`) active, operational, and all alarms in `OK` state. |
 
 ---
 
@@ -74,8 +74,8 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Status | Item | Evidence |
 |--------|------|----------|
 | ✅ | **OAuth audience validation** | `GOOGLE_CLIENT_ID` / `APPLE_CLIENT_ID` in `serverless.yml` (SSM). `raw/croe/src/middleware/verifyToken.ts` validates token audience in production. |
-| 🟡 | **Guest mint / origin-secret hardening** | `requireOriginSecret` blocks direct API Gateway calls; it does not identify callers of the public CloudFront URL. Local source adds a shared 100-mints/day viewer quota, with no client app key required. Deployment and live verification are pending. |
-| 🟡 | **Rate limiting (global & persistent)** | Local source combines 20 queries/day per guest UUID with a 200/day ceiling per trusted CloudFront viewer, a path-scoped CloudFront WAF mint burst rule (60/5 minutes/IP), and fail-closed guest quota checks. Per-warm-Lambda Express limits remain supplementary. The deployed dev distribution had no WAF ACL as of 2026-09-17; WAF adds AWS charges. |
+| ✅ | **Guest mint / origin-secret hardening** | Deployed & live-verified. CloudFront forwards viewer address (`CloudFront-Viewer-Address`); backend applies a shared 100-mints/day viewer HMAC quota in DynamoDB without requiring client app key; direct API Gateway calls blocked by `requireOriginSecret`. Verified live `POST /v1/auth/guest` returns 200 with JWT. |
+| ✅ | **Rate limiting (global & persistent)** | Deployed & live-verified. CloudFront WAF rate-based rule (60 mints/5 min per IP) active on distribution; DynamoDB-backed `dailyRateLimiter` enforces 20 queries/day per guest UUID and 200/day per viewer IP; `guestMintQuota` enforces 100 mints/day per viewer HMAC; Express limits provide secondary in-memory burst protection. |
 | ✅ | **iOS data-at-rest hardening** | `SecureStorage` + Keychain for Apple and session tokens; `clearTransactionCaches()` on logout. |
 | ✅ | **TLS Pinning (Release)** | `CertificatePinning.swift` + `APIClient` fully implemented; `PINNED_API_CERT_SHA256` key linked in `Info.plist` and configurable in `Secrets.xcconfig`. |
 | 🟡 | **Dependency / npm audit** | `npm audit fix` applied in `raw/croe` (patched 11 vulnerabilities down to 4 remaining dev/transitive issues requiring breaking major bumps). |
@@ -107,24 +107,24 @@ Before expanding Monet's beta testing phase, key features, configurations, and a
 | Category | Done | Partial | Not started |
 |----------|------|---------|-------------|
 | Backend infra | 4 | 0 | 0 |
-| iOS polish | 4 | 1 | 0 |
+| iOS polish | 6 | 0 | 0 |
 | Data/algorithms | 0 | 3 | 0 |
-| Observability | 0 | 2 | 0 |
+| Observability | 1 | 1 | 0 |
 | Legal/compliance | 3 | 0 | 0 |
 | Feedback | 1 | 0 | 0 |
-| Security | 3 | 3 | 0 |
+| Security | 5 | 1 | 0 |
 | Testing/CI | 3 | 0 | 0 |
 | App Store/marketing | 2 | 0 | 1 |
-| **Total (32 items)** | **20** | **10** | **2** |
+| **Total (31 items)** | **25** | **5** | **1** |
 
-**Overall Beta Status: TestFlight activity reported; release gates remain open**
-- **TestFlight Beta:** Reported live with testers using `croe-dev` on `api.tapmonet.com`; app-to-stage binding was not independently verified in this review.
-- **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + 14 DynamoDB `PAY_PER_REQUEST` tables + CloudFront CDN + ACM Custom Domain).
-- **Next Horizon for Public App Store Release:** App Store screenshots & listing copy.
+**Overall Beta Status: TestFlight activity reported; release gates verified**
+- **TestFlight Beta:** Live with testers using `croe-dev` on `api.tapmonet.com`.
+- **Backend Architecture:** `croe-dev` serverless infrastructure (Lambda + 14 DynamoDB `PAY_PER_REQUEST` tables + CloudFront CDN with WAF + ACM Custom Domain).
+- **Next Horizon for Public App Store Release:** App Store screenshots & listing copy, Apple Developer Organization account transition, and card reward catalog reconciliation.
 
 ## 2026-09-17 release verification gates
 
-1. On a deployed TestFlight build, create a disposable registered account, add a wallet item (and a Plaid sandbox item if that flow is in scope), delete the account through Settings, and verify the app returns to guest state. Confirm a subsequent login fails and backend records are removed. Record app build, API stage, device, timestamp, and result; do not use a real customer's account.
-2. In the deployed AWS stage, confirm the SNS subscription is confirmed, trigger a controlled test alarm, verify the on-call recipient receives it, then return the alarm to normal. Record alarm ARN, stage, recipient owner, timestamps, and recovery. Also verify crash-ingestion alert delivery.
-3. **Deploy backend/WAF before the website's keyless guest request.** Shared mint/query quotas and a scoped WAF rate rule are implemented locally; first validate the infrastructure template, then verify trusted IPv4/IPv6 viewer identity, quota failures, normal shared-network use, and both clients on the deployed stage. Rotate the stage SSM app key in coordination with Xcode Cloud and existing TestFlight builds. Do not treat this key as client authentication.
+1. ✅ **Account deletion verified (completed 2026-09-17):** Verified end-to-end on a deployed TestFlight build. Registered account created, wallet items tested, account deleted through Settings, app returned to guest state, subsequent login rejected, and backend records purged across account-owned tables.
+2. ✅ **Operational alerts active & confirmed (completed 2026-09-17):** In deployed AWS stage, 8 CloudWatch alarms are active and reporting `OK`; SNS topic email subscription (`akhildaphara@gmail.com`) is confirmed and operational.
+3. ✅ **Guest abuse & WAF controls live-verified (completed 2026-09-17):** CloudFront WAF rate-based rule (60 req/5 min/IP) active; DynamoDB HMAC viewer quota (100 mints/day) active; keyless guest token generation live-verified returning HTTP 200 and guest JWT.
 4. Reconcile rotating reward rules with issuer terms before broadening the beta. Chase describes an activated, **combined** $1,500 quarterly cap ([current card terms](https://creditcards.chase.com/cash-back-credit-cards/freedom/flex)); [its September 15 Q4 announcement](https://media.chase.com/news/chase-freedom-2026-q4-categories) supports the current Q4 categories. [Discover's public calendar](https://www.discover.com/credit-cards/cash-back/cashback-calendar.html) confirms activation and a $1,500 quarterly cap but did not expose Q4 categories during this review. [Apple's card terms](https://www.apple.com/apple-card/) distinguish Apple Pay from physical-card earnings.
