@@ -1,3 +1,8 @@
+---
+name: ios-simulator
+description: Interact with, control, and automate iOS applications using xcrun simctl and xcodebuild XCUITests in the iOS Simulator.
+---
+
 # iOS Simulator & Automation Skill
 
 This skill provides instructions for AI agents on how to interact with, control, and automate iOS applications using the iOS Simulator and `xcodebuild` from the command line.
