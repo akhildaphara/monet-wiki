@@ -23,8 +23,8 @@
                     <table>
                         <thead><tr><th>Component</th><th>Commit</th><th>Verified state</th></tr></thead>
                         <tbody>
-                            <tr><td>Croe backend</td><td><code>96611354da2a2b97debac92479f8dc8f757de697</code></td><td>Node.js 24 runtime, shared quarterly reward pools, per-card <code>cardSpendSnapshot</code> caching, <code>rotatingActivations</code>, and <code>paymentMethod: "applePay"</code> support (local changes pending commit); lint, build, Vitest unit, and DynamoDB integration suites verified.</td></tr>
-                            <tr><td>Swift app</td><td><code>3703203b420cff5dd697a792affa74d88512578a</code></td><td>UTC quarter alignment, same-day wallet overview cache reuse, Card Details activation recording, and Apple Pay search intent (local changes pending commit); <code>MonetRelease</code> simulator build verified.</td></tr>
+                            <tr><td>Croe backend</td><td><code>96611354da2a2b97debac92479f8dc8f757de697</code></td><td>Node.js 24 runtime, shared quarterly reward pools, and per-card <code>cardSpendSnapshot</code> caching (local changes pending commit); lint, build, Vitest unit, and DynamoDB integration suites verified.</td></tr>
+                            <tr><td>Swift app</td><td><code>3703203b420cff5dd697a792affa74d88512578a</code></td><td>UTC quarter alignment, same-day wallet overview cache reuse, and catalog notes in Card Details (local changes pending commit); <code>MonetRelease</code> simulator build verified.</td></tr>
                             <tr><td>Website</td><td><code>2562504031c6c02ffa4a948b476572aa75fdb09f</code></td><td>PWA 0.7.5; ESLint, Vitest unit suite, Chrome browser smoke suite, and Astro static build verified.</td></tr>
                         </tbody>
                     </table>
@@ -76,7 +76,7 @@
                     <p>Live engineering priorities, release gates, and the readiness checklist are centrally maintained in the single source of truth at <code>outputs/CURRENT_STATE_ACTIONS.md</code> (and release revisions in <code>outputs/RELEASE_MANIFEST.md</code>). Key open priorities remaining before public App Store submission include:</p>
                     <ul>
                         <li><strong>Apple Developer Organization account transition</strong> (pre-launch App Store compliance under Guideline 5.2.1).</li>
-                        <li><strong>Deploy &amp; verify local optimizer/activation/Apple Pay changes</strong> (shared $1,500 quarterly caps, <code>rotatingActivations</code>, <code>cardSpendSnapshot</code>, and <code>paymentMethod: "applePay"</code> are implemented locally; <code>dev</code>/<code>prod</code> deployment confirmation pending).</li>
+                        <li><strong>Deploy &amp; verify local rewards changes</strong> (shared $1,500 quarterly caps, per-card spend snapshots, and Card Details notes are implemented locally; <code>dev</code>/<code>prod</code> deployment confirmation pending).</li>
                         <li><strong>App Store launch finalization</strong> (iPhone listing, privacy questionnaire, and 6.3"/6.9" screenshots drafted; iPad 13" screenshots if targeting iPad, archive privacy check, and App Store Connect upload pending).</li>
                     </ul>
 

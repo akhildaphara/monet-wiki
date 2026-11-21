@@ -883,7 +883,6 @@
         "nickname": "string?",
         "last4": "string?",
         "cycleStartDate": "string?",
-        "rotatingActivations": { "YYYY-Q1": "YYYY-MM-DD | inactive" },
       "customRewards": { "categoryId": 1.5 },
         "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
       }
@@ -1108,8 +1107,6 @@
   "merchantKey": "string?",
   "includeMarketBest": "boolean?",
   "cardIds": ["string"],
-  "paymentMethod": "applePay?",
-  "rotatingActivations": { "cardId": { "YYYY-Q1": "YYYY-MM-DD | inactive" } },
   "location": {
     "city": "string?",
     "state": "string?",
@@ -1139,7 +1136,7 @@
 }</pre>
                         </div>
                     </div>
-                    <p>The optional <code>cardIds</code> list lets clients submit a local wallet. Its latest activation values can be sent with the optional <code>rotatingActivations</code> field. <code>paymentMethod: "applePay"</code> requests the Apple Card 2% estimate. A signed-in request without that list, or with an empty list, uses the stored wallet. <code>bestCard</code> is the highest eligible wallet rate. The server returns a saved merchant choice as <code>preferredCard</code> and uses it to break ties at the highest rate. Location-aware merchant searches provide MapKit latitude/longitude and an address when available. Coordinates or an exact street address identify a branch; city/state only bias text search and never unlock a context-dependent merchant. Only <code>categoryScope: global</code> results may enter a name-only cache.</p>
+                    <p>The optional <code>cardIds</code> list lets clients submit a local wallet. A signed-in request without that list, or with an empty list, uses the stored wallet. <code>bestCard</code> is the highest eligible wallet rate. The server returns a saved merchant choice as <code>preferredCard</code> and uses it to break ties at the highest rate. Location-aware merchant searches provide MapKit latitude/longitude and an address when available. Coordinates or an exact street address identify a branch; city/state only bias text search and never unlock a context-dependent merchant. Only <code>categoryScope: global</code> results may enter a name-only cache.</p>
                 </div>
             </div>
 
@@ -1222,7 +1219,6 @@
       "nickname": "string?",
       "last4": "string?",
       "cycleStartDate": "string?",
-      "rotatingActivations": { "YYYY-Q1": "YYYY-MM-DD | inactive" },
       "customRewards": { "categoryId": 1.5 },
       "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
     }
@@ -1448,12 +1444,12 @@
             </table>
 
             <h3>Rotating and quarterly categories</h3>
-            <p><code>RotatingCategory</code> rules in <code>cardRewardsData.ts</code> define the UTC calendar-quarter schedule. Discover it and Chase Freedom Flex each use one $1,500 spend pool across the quarter’s eligible categories. Chase’s eligible quarterly merchant offers share that pool, and eligible category bonuses can stack on top of the card’s standard rates. Wallet recommendations require a user-recorded activation for the current UTC quarter. Market card estimates show the advertised rate with activation assumed. Discover counts eligible spend from the recorded activation date onward. Confirmed Chase activation applies to eligible purchases throughout the quarter. An overlapping merchant and category purchase counts once.</p>
+            <p><code>RotatingCategory</code> rules in <code>cardRewardsData.ts</code> define the UTC calendar-quarter schedule. Discover it and Chase Freedom Flex each use one $1,500 spend pool across the quarter’s eligible categories. Chase’s eligible quarterly merchant offers share that pool, and eligible category bonuses can stack on top of the card’s standard rates. Estimates assume the cardholder has activated with the issuer. Linked-card totals count an overlapping merchant and category purchase once. Discover estimates include eligible spend throughout the quarter because the issuer activation date is unavailable to Monet.</p>
 
             <h3>Per-card spend and recommendation cache</h3>
-            <p>On an Insights cache miss, <code>syncInsights.ts</code> builds category and promotion-merchant spend by Plaid-mapped card. It writes a server-owned <code>cardSpendSnapshot</code> to the user record with the computation time, account mappings, and statement days. <code>/recommend</code> and <code>/wallet-overview</code> read those cached buckets through <code>getUserOptimizerContext()</code> without scanning transactions. The user-wide category ranking drives dynamic tier assignment. Cap evaluation uses only the card’s own spend.</p>
-            <p>Expired monthly, quarterly, and annual buckets are discarded independently. Monthly buckets follow the card’s configured statement day, or the UTC calendar month when no day is configured. The engine skips a card’s snapshot if its mapped accounts have changed, and skips that card’s monthly bucket if the statement day has changed. Guests, unlinked cards, and older records awaiting a fresh Insights calculation have unknown spend, so estimated rates assume cap room. Linked spend depends on transaction freshness and merchant classification. Historical Insights estimates use the current cap state and do not reconstruct the full reward ledger for earlier quarters.</p>
-            <p>iOS uses the same UTC quarter and Freedom Flex stacking rule for local estimates. Search and category browsing can reuse a same-day server wallet overview for the best card. The device calculates uncached rates from the catalog, with no local spend-cap calculation. Card Details lets users record or clear their issuer activation. Discover users can edit the activation date. Guests keep their selections on-device, and signed-in wallets sync through <code>/v1/user/cards</code>.</p>
+            <p>On an Insights cache miss, <code>syncInsights.ts</code> builds category, promotion-merchant, and shared quarterly pool spend by Plaid-mapped card. It writes a server-owned <code>cardSpendSnapshot</code> to the user record with the computation time, account mappings, and statement days. <code>/recommend</code> and <code>/wallet-overview</code> read those cached buckets through <code>getUserOptimizerContext()</code> without scanning transactions. The user-wide category ranking drives dynamic tier assignment. Cap evaluation uses only the card’s own spend.</p>
+            <p>Expired monthly, quarterly, and annual buckets are discarded independently. Monthly buckets follow the card’s configured statement day, or the UTC calendar month when no day is configured. The engine skips a card’s snapshot if its mapped accounts have changed, and skips that card’s monthly bucket if the statement day has changed. Guests and unlinked cards have unknown spend, so estimates assume cap room. Older snapshots use category and merchant totals until Insights computes the exact shared pool. Linked spend depends on transaction freshness and merchant classification. Historical Insights estimates use the current cap state and do not reconstruct the full reward ledger for earlier quarters.</p>
+            <p>iOS uses the same UTC quarter and Freedom Flex stacking rule for local estimates. Search and category browsing can reuse a same-day server wallet overview for the best card. The device calculates uncached rates from the catalog, with no local spend-cap calculation. Card Details displays catalog notes, including issuer activation reminders and Apple Card payment terms.</p>
         </section>
 
         <!-- FUTURE CONSIDERATIONS -->
@@ -1473,7 +1469,7 @@
                     </tr>
                     <tr>
                         <td>Rotating categories</td>
-                        <td>Discover it and Chase Freedom Flex use manually recorded activation dates and a shared quarterly cap per mapped card. Remaining work includes issuer-specific exclusions and schedule update alerts.</td>
+                        <td>Discover it and Chase Freedom Flex use a shared quarterly cap per mapped card. Issuer activation tracking, issuer-specific exclusions, and schedule alerts remain open.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
@@ -1503,7 +1499,7 @@
                     </tr>
                     <tr>
                         <td>Payment method</td>
-                        <td><code>APPLE_CARD</code> defaults to 1%. iOS Search can opt into the 2% Apple Pay estimate through <code>paymentMethod: "applePay"</code>. This is a recommendation input. Merchant acceptance and 3% partner eligibility are outside the calculation.</td>
+                        <td><code>APPLE_CARD</code> defaults to 1%. Card Details explains the 2% Apple Pay and 3% eligible partner rates. Recommendations use the catalog baseline because merchant acceptance and partner eligibility are outside the calculation.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>

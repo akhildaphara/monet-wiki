@@ -17,13 +17,13 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 * **Action:** Apple routinely rejects third-party card recommendation and personal banking aggregators linking live banking data (via Plaid) if submitted under an Individual developer account. Transition or register the developer portal under an Organization account (requires a D-U-N-S number) before final public App Store submission.
 * **Reference:** `wiki-html/Apple-Developer-Org-Registration.html`
 
-### P1 — Reconcile Rotating Category Caps & Payment Method Intent
+### P1 — Reconcile Rotating Category Caps & Card Terms
 * **Status:** 🟡 Addressed locally (deployment & minor edge cases remaining)
 * **Context:** `raw/croe/src/resources/cardRewardsData.ts`, `raw/croe/src/optimizer.ts`, and `raw/swift-app`
 * **Action:**
   1. ✅ **Combined Quarterly Caps:** The local backend now evaluates one $1,500 pool per card across the quarter’s bonus categories, including Chase’s qualifying merchant offers. It uses linked per-card spend and existing cached totals (`cardSpendSnapshot`), expires spend buckets by period, and ignores remapped accounts. iOS now applies Freedom Flex stacking in its catalog estimates and uses cached server wallet winners only on the day they were fetched. *(Remaining: client-only estimates still lack spend tracking.)*
-  2. ✅ **Activation State:** iOS users can record the current quarter’s issuer activation (`rotatingActivations`) in Card Details. Wallet recommendations apply the same recorded state online and offline.
-  3. ✅ **Payment Method Intent:** iOS Search accepts Apple Pay intent (`paymentMethod: "applePay"`). Apple Card earns a 2% estimate when selected and otherwise uses the 1% catalog baseline. *(Remaining: merchant acceptance and 3% partner eligibility remain outside the calculation.)*
+  2. ⬜ **Activation State:** Tracking is deferred. Estimates assume activation, and Card Details reminds users to activate with their issuer.
+  3. ✅ **Apple Card Terms:** Card Details explains 1% with the physical card, 2% with Apple Pay and 3% at eligible partners. Recommendations use the 1% catalog baseline.
   4. ✅ **Issuer Terms Freshness:** Discover confirmed restaurants, qualifying entertainment and utilities for Q4 2026. Added Chase’s announced Q1 2027 schedule for select streaming and groceries, excluding Walmart and Target. *(Remaining: Monet’s generic categories approximate issuer-specific exclusions.)* [Discover calendar](https://www.discover.com/credit-cards/cash-back/cashback-calendar.html) · [Chase announcement](https://media.chase.com/news/chase-freedom-flex-more-travel-value)
 
 ### P2 — App Store Public Launch Assets
@@ -80,8 +80,8 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 | **iOS Polish** | ✅ | Empty States & Haptics | Hero animations, empty wallet tapestry, tactile haptics across views. |
 | **iOS Polish** | ✅ | Error Handling UI | Network status banners, offline search, direct error feedback sheet. |
 | **iOS Polish** | ✅ | Account Deletion | Full in-app flow verified end-to-end on TestFlight (Apple 5.1.1(v)). |
-| **Data & Rewards** | 🟡 | Audit Card Catalog | Backend shared caps and user-recorded activation implemented locally. |
-| **Data & Rewards** | 🟡 | Apple Pay Nuances | Apple Pay intent is available in iOS Search and uses a 2% Apple Card estimate. |
+| **Data & Rewards** | 🟡 | Audit Card Catalog | Backend shared caps implemented locally. Issuer activation tracking is deferred. |
+| **Data & Rewards** | 🟡 | Apple Pay Nuances | Apple Card payment terms appear in iOS Card Details. |
 | **Data & Rewards** | 🟡 | Rotating Categories | Discover Q4 verified against the issuer. Chase Q1 2027 categories added locally. |
 | **Observability** | 🟡 | Crash Reporting | MetricKit (`MXMetricManager`) active on iOS; App Store telemetry pending public launch. |
 | **Observability** | ✅ | Backend Logging & Alarms | CloudWatch structured logs, 8 active alarms in `OK`, confirmed SNS email. |
