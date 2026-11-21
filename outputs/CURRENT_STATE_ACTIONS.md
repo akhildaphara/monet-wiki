@@ -5,7 +5,7 @@
 
 ## Executive summary
 
-Monet is a working three-client system: an Astro 5 marketing site and installable PWA, a SwiftUI iOS app, and a Node 20/Express API on Lambda. The backend compiles and the current unit suite passes (43 files / 471 tests); the website previously produced all six static routes. The iOS app has five tabs (Search, Insights, Calculator, Wallet, Settings), guest/Google/Apple/native email authentication, Plaid-backed insights, offline recommendation behavior, MetricKit telemetry, and a widget surface.
+Monet is a working three-client system: an Astro 5 marketing site and installable PWA, a SwiftUI iOS app, and a Node.js 24/Express API on Lambda. The backend compiles and passes its unit and DynamoDB integration suites, and the website passes lint, unit, browser smoke, and static build checks. The iOS app has five tabs (Search, Insights, Calculator, Wallet, Settings), guest/Google/Apple/native email authentication, Plaid-backed insights, offline recommendation behavior, MetricKit telemetry, and a widget surface.
 
 The documentation had drifted most in four areas: the DynamoDB schema (14 tables, not four or five), authentication and endpoint coverage, iOS navigation/features, and infrastructure controls. Historical output files remain useful as design context, but this report and `wiki-html/Current-State.html` are the current snapshot.
 
@@ -18,24 +18,25 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 * **Reference:** `wiki-html/Apple-Developer-Org-Registration.html`
 
 ### P1 — Reconcile Rotating Category Caps & Payment Method Intent
-* **Status:** 🟡 Partial / in-progress
-* **Context:** `raw/croe/src/resources/cardRewardsData.ts` and recommendation engine
+* **Status:** 🟡 Addressed locally (deployment & minor edge cases remaining)
+* **Context:** `raw/croe/src/resources/cardRewardsData.ts`, `raw/croe/src/optimizer.ts`, and `raw/swift-app`
 * **Action:**
-  1. **Combined Quarterly Caps:** The local backend now evaluates one $1,500 pool per card across the quarter’s bonus categories, including Chase’s qualifying merchant offers. It uses linked per-card spend and existing cached totals. The server snapshot expires spend buckets by period and ignores remapped accounts. iOS now applies Freedom Flex stacking in its catalog estimates and uses cached server wallet winners only on the day they were fetched. Client-only estimates still lack spend tracking.
-  2. **Activation State:** iOS users can record the current quarter’s issuer activation in Card Details. Wallet recommendations apply the same recorded state online and offline.
-  3. **Payment Method Intent:** iOS Search accepts Apple Pay intent. Apple Card earns a 2% estimate when selected and otherwise uses the 1% catalog baseline. Merchant acceptance and 3% partner eligibility remain outside the calculation.
-  4. **Issuer Terms Freshness:** Discover confirmed restaurants, qualifying entertainment and utilities for Q4 2026. Added Chase’s announced Q1 2027 schedule for select streaming and groceries, excluding Walmart and Target. Monet’s generic categories approximate issuer-specific exclusions. [Discover calendar](https://www.discover.com/credit-cards/cash-back/cashback-calendar.html) · [Chase announcement](https://media.chase.com/news/chase-freedom-flex-more-travel-value)
+  1. ✅ **Combined Quarterly Caps:** The local backend now evaluates one $1,500 pool per card across the quarter’s bonus categories, including Chase’s qualifying merchant offers. It uses linked per-card spend and existing cached totals (`cardSpendSnapshot`), expires spend buckets by period, and ignores remapped accounts. iOS now applies Freedom Flex stacking in its catalog estimates and uses cached server wallet winners only on the day they were fetched. *(Remaining: client-only estimates still lack spend tracking.)*
+  2. ✅ **Activation State:** iOS users can record the current quarter’s issuer activation (`rotatingActivations`) in Card Details. Wallet recommendations apply the same recorded state online and offline.
+  3. ✅ **Payment Method Intent:** iOS Search accepts Apple Pay intent (`paymentMethod: "applePay"`). Apple Card earns a 2% estimate when selected and otherwise uses the 1% catalog baseline. *(Remaining: merchant acceptance and 3% partner eligibility remain outside the calculation.)*
+  4. ✅ **Issuer Terms Freshness:** Discover confirmed restaurants, qualifying entertainment and utilities for Q4 2026. Added Chase’s announced Q1 2027 schedule for select streaming and groceries, excluding Walmart and Target. *(Remaining: Monet’s generic categories approximate issuer-specific exclusions.)* [Discover calendar](https://www.discover.com/credit-cards/cash-back/cashback-calendar.html) · [Chase announcement](https://media.chase.com/news/chase-freedom-flex-more-travel-value)
 
 ### P2 — App Store Public Launch Assets
 * **Status:** 🟡 In progress
-* **Assets:** [listing copy](../marketing/app-store-launch/Listing.md), [privacy questionnaire](../marketing/app-store-launch/Privacy-Questionnaire.md), and [6.9-inch and 6.3-inch screenshots](../marketing/app-store-launch/Screenshots.md). Verify the final archive’s data collection and upload the approved assets in App Store Connect.
+* **Assets:** [listing copy](../marketing/app-store-launch/Listing.md), [privacy questionnaire](../marketing/app-store-launch/Privacy-Questionnaire.md), and [6.9-inch and 6.3-inch screenshots](../marketing/app-store-launch/Screenshots.md).
+* **Remaining:** Capture 13-inch iPad screenshots (if targeting iPad), verify the final archive’s data collection, and upload the approved assets in App Store Connect.
 
 ### P2 — Engineering Hygiene & Stability
-* **Status:** 🟡 Partial
+* **Status:** ✅ Addressed locally (deployed-stage confirmation in release manifest)
 * **Action:**
-  1. **Local DB Parity:** `raw/croe/src/init-db.ts` already defines all 14 local tables. Verified on an isolated DynamoDB Local instance that initialization creates `MonetFormSubmissions` with both indexes.
-  2. **Website Testing:** Added ESLint and browser smoke coverage for `/`, `/app`, offline wallet persistence after the service worker has cached the app, and the guest fallback when the API is unavailable.
-  3. **Release Manifest:** The [release manifest](RELEASE_MANIFEST.md) records the local revisions and build, separates `dev` from `prod`, and identifies the deployment records to verify.
+  1. ✅ **Local DB Parity:** `raw/croe/src/init-db.ts` defines all 14 local tables. Verified on an isolated DynamoDB Local instance that initialization creates `MonetFormSubmissions` with both indexes.
+  2. ✅ **Website Testing:** Added ESLint, Vitest unit tests, and Chrome browser smoke coverage for `/`, `/app`, offline wallet persistence after the service worker has cached the app, and the guest fallback when the API is unavailable.
+  3. ✅ **Release Manifest:** The [release manifest](RELEASE_MANIFEST.md) records the local revisions and build, separates `dev` from `prod`, and identifies the deployment records to verify.
 
 ## 3. Completed & Verified Milestones
 
@@ -94,7 +95,7 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 | **Security** | ✅ | Data-at-Rest Hardening | Keychain storage for tokens, cache purge on logout. |
 | **Security** | ✅ | TLS Pinning | Implemented in iOS `APIClient` via `CertificatePinning.swift`. |
 | **Security** | 🟡 | Dependency Audit | See the current audit results in the [release manifest](RELEASE_MANIFEST.md). |
-| **Testing/CI** | ✅ | Backend Unit Tests | Vitest suite: 43 test files, 471 tests passing. |
+| **Testing/CI** | ✅ | Backend Unit Tests | Vitest unit and isolated DynamoDB integration suites passing. |
 | **Testing/CI** | ✅ | iOS Automated Tests | Unit and UI test targets configured in Xcode project. |
 | **Testing/CI** | ✅ | CI/CD Pipeline | GitHub Actions workflow active for backend verification. |
 | **Marketing** | 🟡 | App Store Listing Assets | Both iPhone screenshot sizes prepared. Listing and privacy responses drafted. iPad assets and submission pending. |
@@ -107,13 +108,13 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 
 | Area | Deployed Implementation |
 |---|---|
-| **Backend** | TypeScript/Express on Node 20, Lambda via `serverless-http`, API Gateway HTTP API, CloudFront, 14 DynamoDB tables, Plaid, Google Places/KG, Bedrock Nova Micro, SES. |
+| **Backend** | TypeScript/Express on Node.js 24, Lambda via `serverless-http`, API Gateway HTTP API, CloudFront, 14 DynamoDB tables, Plaid, Google Places/KG, Bedrock Nova Micro, SES. |
 | **API Protection** | Lambda authorizer, CloudFront WAF rate limiting, viewer HMAC quotas, DynamoDB daily rate limiting, origin secret verification. |
 | **Data Stores** | 14 DynamoDB tables (`MonetUsers`, `MonetCredentials`, `MonetAppInstallations`, `MonetOverrides`, `MonetRecommendationPreferences`, `MonetRecommendationFeedback`, `MonetTransactions`, `MonetInsightsCache`, `MonetBrandCache`, `MonetPlaidItemIndex`, `MonetMerchantEnrichment`, `MonetCategorizationAudit`, `MonetRateLimits`, `MonetFormSubmissions`). |
 | **iOS Client** | SwiftUI/SwiftData, 5 tabs, guest/Google/Apple/email auth, Plaid Link & Insights, offline recommender, Calculator, widgets, MetricKit telemetry. |
 | **Web Client** | Astro 5 + Tailwind 4, 6 routes, Firebase static hosting, PWA guest flow, local wallet persistence, category overview. |
 | **Card Catalog** | 26 supported cards, 32 category taxonomy values. |
-| **Test Verification** | 43 backend test files / 471 unit tests passing; iOS unit/UI test targets; Astro static build verified. |
+| **Test Verification** | Backend Vitest unit & DynamoDB integration suites; website ESLint, unit, browser smoke, and Astro build; iOS unit/UI test targets. |
 
 ---
 

@@ -153,7 +153,8 @@
 <li><strong>Reward Calculation</strong>: Uses the <code>getCashback(cardKey, categoryKey, userCustomRewards)</code> function. This calculation evaluates multipliers in strict precedence:<ol>
 <li><strong>User Custom/Dynamic Rewards</strong>: Overrides static values based on user configuration.</li>
 <li><strong>Dynamic Potential</strong>: Highest potential rate if no specific override exists.</li>
-<li><strong>Special Rewards</strong>: Fixed promotional or quarterly bonus categories.</li>
+<li><strong>Special Rewards</strong>: Fixed promotional, ranked-spend tiers, or quarterly rotating bonus categories. Discover it and Chase Freedom Flex evaluate a shared $1,500 quarterly spend pool per card (using <code>cardSpendSnapshot</code> per-card spend on the server) and respect user-recorded <code>rotatingActivations</code> for the current UTC quarter.</li>
+<li><strong>Payment Method Intent</strong>: Optional <code>paymentMethod: "applePay"</code> input on <code>POST /v1/recommend</code> enables the 2% Apple Card estimate instead of the 1% baseline.</li>
 <li><strong>Standard Rewards</strong>: Base category multiplier with fallback logic (e.g., <code>HOTEL</code> and <code>CAR_RENTAL</code> fall back to general <code>TRAVEL</code>).</li>
 <li><strong>Base Rate</strong>: <code>OTHER</code> category rate fallback.</li>
 </ol>

@@ -4,9 +4,9 @@
 
 | Component | Checked-out commit | Version / target |
 | --- | --- | --- |
-| Croe API | `37c7899ca2a3a44675a91df18a16a00f32a42fd9` | Package 1.0.0. Local changes pending commit. |
-| Website/PWA | `359a2d4ad5f2b0704cee116527907caab3d39b90` | PWA 0.7.5. Local tooling changes pending commit. Firebase project `monet-3d69d`. |
-| iOS | `433c118417356ee3eb46b11f717f62dc55bd22df` | `MonetRelease`, `akhil.Monet`, 0.8.0 (local build 1). App Store Connect and TestFlight build numbers remain unverified. |
+| Croe API | `96611354da2a2b97debac92479f8dc8f757de697` | Package 1.0.0. Local changes pending commit. |
+| Website/PWA | `2562504031c6c02ffa4a948b476572aa75fdb09f` | PWA 0.7.5. Firebase project `monet-3d69d`. |
+| iOS | `3703203b420cff5dd697a792affa74d88512578a` | `MonetRelease`, `akhil.Monet`, 0.8.0 (local build 1). Local changes pending commit. App Store Connect and TestFlight build numbers remain unverified. |
 
 These commits identify the local checkout. Record the final immutable commit, archive version/build, and destination from the deployment or Xcode Cloud record when promoting a release.
 
@@ -37,6 +37,6 @@ Reproduce from each submodule with `npm audit` and `npm audit --omit=dev`.
 
 ## Verification
 
-- Croe lint and TypeScript build passed. The standard suite passed 651 tests and the isolated DynamoDB suite passed 66 tests. A clean DynamoDB Local instance created all 14 tables, and a schema query confirmed the forms table’s primary key and both indexes. Re-running initialization preserved the tables and printed an already-enabled TTL warning for the categorization audit table.
-- Website lint, static build, 57 unit tests, and three Chrome browser smoke tests passed. The offline smoke test uses a warmed service-worker cache.
+- Croe lint, TypeScript build, standard Vitest suite, and isolated DynamoDB suite passed. A clean DynamoDB Local instance created all 14 tables, and a schema query confirmed the forms table’s primary key and both indexes. Re-running initialization preserved the tables and printed an already-enabled TTL warning for the categorization audit table.
+- Website lint, static build, unit test suite, and Chrome browser smoke suite passed. The offline smoke test uses a warmed service-worker cache.
 - The iOS `MonetRelease` simulator build passed for iPhone 18 Pro. Live guest entry could not be verified because the build could not reach the configured API from this environment. The screenshot set uses local demo data in the current interface.

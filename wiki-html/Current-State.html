@@ -15,7 +15,7 @@
         <main class="flex-1 overflow-y-auto">
             <div class="max-w-5xl mx-auto px-6 py-12 lg:px-12 lg:py-16">
                 <article class="prose prose-slate lg:prose-lg max-w-none bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-100">
-                    <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide">Verified 2026-09-15</p>
+                    <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide">Verified 2026-11-21</p>
                     <h1>Monet Current State</h1>
                     <p>This is the authoritative wiki snapshot for the local <code>main</code> branches of all three implementation repositories. It is based on executable source and infrastructure configuration, not historical plans. Deployed AWS, Firebase, App Store Connect, and TestFlight state were not independently queried.</p>
 
@@ -23,9 +23,9 @@
                     <table>
                         <thead><tr><th>Component</th><th>Commit</th><th>Verified state</th></tr></thead>
                         <tbody>
-                            <tr><td>Croe backend</td><td><code>f316167b3fdf81efd2e39b3763bbe22ff63de576</code></td><td>Account deletion endpoint and user-data purge are implemented; build/lint and 43 files / 471 unit tests were previously verified.</td></tr>
-                            <tr><td>Swift app</td><td><code>ff3bd04f988be31c4413611510c98cbdf314d1a1</code></td><td>Account deletion UI and API flow are implemented; no Xcode build run for this documentation sync.</td></tr>
-                            <tr><td>Website</td><td><code>d314a4a978160c09cdce37032387f0e922814f5c</code></td><td>Account deletion UI and API flow are implemented; Astro build was previously verified with six static routes.</td></tr>
+                            <tr><td>Croe backend</td><td><code>96611354da2a2b97debac92479f8dc8f757de697</code></td><td>Node.js 24 runtime, shared quarterly reward pools, per-card <code>cardSpendSnapshot</code> caching, <code>rotatingActivations</code>, and <code>paymentMethod: "applePay"</code> support (local changes pending commit); lint, build, Vitest unit, and DynamoDB integration suites verified.</td></tr>
+                            <tr><td>Swift app</td><td><code>3703203b420cff5dd697a792affa74d88512578a</code></td><td>UTC quarter alignment, same-day wallet overview cache reuse, Card Details activation recording, and Apple Pay search intent (local changes pending commit); <code>MonetRelease</code> simulator build verified.</td></tr>
+                            <tr><td>Website</td><td><code>2562504031c6c02ffa4a948b476572aa75fdb09f</code></td><td>PWA 0.7.5; ESLint, Vitest unit suite, Chrome browser smoke suite, and Astro static build verified.</td></tr>
                         </tbody>
                     </table>
 
@@ -33,7 +33,7 @@
                     <ul>
                         <li><strong>iOS:</strong> SwiftUI/SwiftData app with Search, Insights, Calculator, Wallet, and Settings tabs; guest, Google, Apple, and native email/password sessions; Plaid Link; cached/offline recommendations; custom rewards; category overrides; MetricKit crash capture; and widget UI.</li>
                         <li><strong>Website/PWA:</strong> Astro 5 + Tailwind 4 static site with landing, app, app-info, contact, privacy, and terms routes. The <code>/app</code> PWA has a local wallet, guest-token bootstrap, merchant/category recommendation, geolocation-assisted defaults, and category overview.</li>
-                        <li><strong>Backend:</strong> TypeScript/Express on Node 20, wrapped by <code>serverless-http</code> for Lambda. API Gateway and CloudFront front the API; DynamoDB stores product data; Plaid, Google Places/Knowledge Graph, Bedrock Nova Micro, and SES provide integrations.</li>
+                        <li><strong>Backend:</strong> TypeScript/Express on Node.js 24, wrapped by <code>serverless-http</code> for Lambda. API Gateway and CloudFront front the API; DynamoDB stores product data; Plaid, Google Places/Knowledge Graph, Bedrock Nova Micro, and SES provide integrations.</li>
                     </ul>
 
                     <h2>Backend and security</h2>
@@ -50,10 +50,11 @@
                     <p>The live router in <code>raw/croe/src/api/routes.ts</code> is authoritative. It covers health, forms, crash telemetry, brands, recommendations and feedback, cards, user settings/overrides/preferences, guest and registered auth, and Plaid connection/transaction/insights operations. <code>src/api/routeRegistry.ts</code> now covers the live route set and has a unit-test parity check against the Express routers; it remains a hand-maintained contract description rather than generated OpenAPI.</p>
 
                     <h2>Data model</h2>
-                    <p>The backend provisions 13 DynamoDB tables:</p>
+                    <p>The backend provisions 14 DynamoDB tables:</p>
                     <ol>
                         <li><code>MonetUsers</code></li>
                         <li><code>MonetCredentials</code></li>
+                        <li><code>MonetAppInstallations</code></li>
                         <li><code>MonetOverrides</code></li>
                         <li><code>MonetRecommendationPreferences</code></li>
                         <li><code>MonetRecommendationFeedback</code></li>
@@ -72,11 +73,11 @@
                     <p>The server catalog currently contains 26 supported cards. The shared category taxonomy has 32 raw values including <code>OTHER</code>. Reward structures include flat/category rates, rotating schedules, ranked-spend tiers, caps, custom overrides, and merchant network restrictions. The taxonomy and popular-brand maps remain hand-maintained across repositories.</p>
 
                     <h2>Active priorities &amp; readiness</h2>
-                    <p>Live engineering priorities, release gates, and the complete 31-item readiness checklist are centrally maintained in the single source of truth at <code>outputs/CURRENT_STATE_ACTIONS.md</code>. Key open priorities remaining before public App Store submission include:</p>
+                    <p>Live engineering priorities, release gates, and the readiness checklist are centrally maintained in the single source of truth at <code>outputs/CURRENT_STATE_ACTIONS.md</code> (and release revisions in <code>outputs/RELEASE_MANIFEST.md</code>). Key open priorities remaining before public App Store submission include:</p>
                     <ul>
                         <li><strong>Apple Developer Organization account transition</strong> (pre-launch App Store compliance under Guideline 5.2.1).</li>
-                        <li><strong>Card reward optimizer reconciliation</strong> (modeling combined $1,500 quarterly rotating caps for Chase/Discover and Apple Pay payment method intent).</li>
-                        <li><strong>App Store listing assets &amp; public copy</strong>.</li>
+                        <li><strong>Deploy &amp; verify local optimizer/activation/Apple Pay changes</strong> (shared $1,500 quarterly caps, <code>rotatingActivations</code>, <code>cardSpendSnapshot</code>, and <code>paymentMethod: "applePay"</code> are implemented locally; <code>dev</code>/<code>prod</code> deployment confirmation pending).</li>
+                        <li><strong>App Store launch finalization</strong> (iPhone listing, privacy questionnaire, and 6.3"/6.9" screenshots drafted; iPad 13" screenshots if targeting iPad, archive privacy check, and App Store Connect upload pending).</li>
                     </ul>
 
                     <h2>Related pages</h2>
