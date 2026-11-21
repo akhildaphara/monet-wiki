@@ -452,7 +452,7 @@
         <!-- ARCHITECTURE -->
         <section id="architecture">
             <h2>System Architecture Map</h2>
-            <p>The Monet platform uses a serverless Node.js/Express Lambda architecture. Clients hit <strong>CloudFront</strong>, which injects an origin secret, in front of an AWS <strong>HTTP API Gateway</strong>. A dedicated <strong>Lambda authorizer</strong> validates protected gateway requests, and the main API Lambda (29s timeout, 1536&nbsp;MB) reads/writes <strong>DynamoDB</strong>, integrates with <strong>Plaid</strong> for transactions, <strong>Google Places/Knowledge Graph</strong> for merchant resolution, and <strong>AWS Bedrock (Nova Micro)</strong> for AI bulk categorization. The current CloudFront configuration does not define a special card-catalog cache behavior.</p>
+            <p>The Monet platform uses a serverless Node.js 24 / Express Lambda architecture. Clients hit <strong>CloudFront</strong>, which injects an origin secret, in front of an AWS <strong>HTTP API Gateway</strong>. A dedicated <strong>Lambda authorizer</strong> validates protected gateway requests, and the main API Lambda (29s timeout, 1536&nbsp;MB) reads/writes <strong>DynamoDB</strong>, integrates with <strong>Plaid</strong> for transactions, <strong>Google Places/Knowledge Graph</strong> for merchant resolution, and <strong>AWS Bedrock (Nova Micro)</strong> for AI bulk categorization. The current CloudFront configuration does not define a special card-catalog cache behavior.</p>
             
             <div class="diagram-wrapper">
                 <div class="mermaid">
@@ -549,37 +549,38 @@
                         participant DB as 🗄️ DynamoDB
                         
                         Client->>API: POST /v1/recommend {name, category}
-                        opt Name provided without explicit category
-                            API->>Places: Query Places API
-                            Places-->>API: Merchant Category Resolution
+                        opt Signed-in request
+                            API->>DB: Read wallet and cached per-card spend
                         end
-                        API->>DB: Get User Rewards & Overrides
-                        API->>API: Evaluate Deck & Calculate Max Reward
-                        API-->>Client: { bestCard, preferredCard, allRates, marketBest }
+                        opt Merchant category needs provider lookup
+                            API->>Places: Query Places API
+                            Places-->>API: Merchant category resolution
+                        end
+                        API->>API: Rank eligible cards using current spend buckets
+                        API-->>Client: { bestCard, preferredCard, allRates, marketBestCard }
                 </div>
             </div>
 
             <h3>3. Plaid Insights Processing</h3>
-            <p>A heavy computational background sync for downloading transactions, categorizing them, and generating historical spending insights and missed rewards.</p>
+            <p>Transaction import and Insights calculation are separate operations. Recommendations use the latest stored spend snapshot and do not invoke either operation.</p>
             <div class="diagram-wrapper">
                 <div class="mermaid">
                     sequenceDiagram
                         participant Client as 📱 Client
-                        participant API as ⚡ Backend (/insights/sync)
+                        participant API as ⚡ Backend
                         participant Plaid as 🏦 Plaid
                         participant DB as 🗄️ DynamoDB
-                        
-                        Client->>API: POST insights/sync
-                        API->>Plaid: Fetch recent transactions
-                        Plaid-->>API: Sync Updates
-                        API->>DB: Persist new transactions
-                        
-                        loop For each transaction
-                            API->>API: Calculate actual earnings
-                            API->>API: Calculate optimal (missed) earnings
-                            API->>API: Aggregate by category
+
+                        Client->>API: POST /v1/plaid/sync-transactions
+                        API->>Plaid: Request transaction changes
+                        Plaid-->>API: Transaction updates
+                        API->>DB: Store transaction changes
+                        Client->>API: POST /v1/plaid/insights/sync
+                        API->>DB: Read cached insights or query stored transactions
+                        opt Insights cache miss
+                            API->>API: Compute per-card spend buckets and earnings estimates
+                            API->>DB: Write Insights and the spend snapshot
                         end
-                        
                         API-->>Client: { summary, categories, transactions }
                 </div>
             </div>
@@ -666,7 +667,7 @@
                     <tr>
                         <td><code>id</code></td>
                         <td>String (PK)</td>
-                        <td>Google OAuth subject identifier.</td>
+                        <td>Monet user identifier for the authenticated identity.</td>
                     </tr>
                     <tr>
                         <td><code>showGlobalBestCard</code></td>
@@ -680,8 +681,23 @@
                     </tr>
                     <tr>
                         <td><code>plaidItems</code></td>
+                        <td>Map</td>
+                        <td>Bank connections keyed by Plaid item ID. The stored values include the encrypted access token and sync cursor.</td>
+                    </tr>
+                    <tr>
+                        <td><code>plaidCardMappings</code></td>
+                        <td>Map</td>
+                        <td>Links a Plaid account ID to the wallet card used for its transactions.</td>
+                    </tr>
+                    <tr>
+                        <td><code>userTopCategories</code></td>
                         <td>List</td>
-                        <td>Array of bank connections (itemId, encrypted accessToken, sync cursor).</td>
+                        <td>User-wide category ranking used for dynamic rewards.</td>
+                    </tr>
+                    <tr>
+                        <td><code>cardSpendSnapshot</code></td>
+                        <td>Map</td>
+                        <td>Server-owned cache of per-card category and merchant spend, with the snapshot time, account mappings, and statement days.</td>
                     </tr>
                 </tbody>
             </table>
@@ -867,7 +883,8 @@
         "nickname": "string?",
         "last4": "string?",
         "cycleStartDate": "string?",
-        "customRewards": { "categoryId": 1.5 },
+        "rotatingActivations": { "YYYY-Q1": "YYYY-MM-DD | inactive" },
+      "customRewards": { "categoryId": 1.5 },
         "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
       }
     },
@@ -890,11 +907,11 @@
                 <div class="api-header" onclick="toggleEndpoint(this)">
                     <span class="api-method method-post">POST</span>
                     <span class="api-path">/v1/cards/add</span>
-                    <span class="api-summary">Adds cards to user's wallet.</span>
+                    <span class="api-summary">Calculates category rates for submitted cards.</span>
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Attaches newly selected global cards into the user's specific wallet configuration.</p>
+                    <p>Evaluates submitted card IDs and returns best-card rates by category. <code>POST /v1/user/cards</code> saves wallet changes.</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid two-col">
                         <div>
@@ -916,6 +933,9 @@
 ]</pre>
                         </div>
                     </div>
+                </div>
+            </div>
+
             <div class="api-endpoint">
                 <div class="api-header" onclick="toggleEndpoint(this)">
                     <span class="api-method method-get">GET</span>
@@ -924,8 +944,8 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Retrieves the server-driven master catalog of 26 supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). Express accepts optional authentication, while the deployed catch-all gateway route still invokes the Lambda authorizer. iOS caches the catalog; there is no dedicated CloudFront card-catalog cache behavior.</p>
-                    <span class="api-auth-badge required">Auth: Required</span>
+                    <p>Retrieves the server-driven master catalog of 26 supported credit cards (<code>SUPPORTED_CARDS</code> in <code>cardRewardsData.ts</code>). iOS caches the catalog on-device.</p>
+                    <span class="api-auth-badge">Auth: Optional</span>
                     <div class="api-details-grid">
                         <div>
                             <div class="api-section-title">Response (200 OK)</div>
@@ -1087,6 +1107,9 @@
   "category": "string?",
   "merchantKey": "string?",
   "includeMarketBest": "boolean?",
+  "cardIds": ["string"],
+  "paymentMethod": "applePay?",
+  "rotatingActivations": { "cardId": { "YYYY-Q1": "YYYY-MM-DD | inactive" } },
   "location": {
     "city": "string?",
     "state": "string?",
@@ -1116,7 +1139,7 @@
 }</pre>
                         </div>
                     </div>
-                    <p><code>bestCard</code> remains the engine's highest eligible wallet rate. A signed-in user's explicit merchant choice is returned separately as <code>preferredCard</code>; it never mutates the global card catalog. Location-aware merchant searches provide MapKit latitude/longitude and an address when available. Coordinates or an exact street address identify a branch; city/state only bias text search and never unlock a context-dependent merchant. Only <code>categoryScope: global</code> results may enter a name-only cache.</p>
+                    <p>The optional <code>cardIds</code> list lets clients submit a local wallet. Its latest activation values can be sent with the optional <code>rotatingActivations</code> field. <code>paymentMethod: "applePay"</code> requests the Apple Card 2% estimate. A signed-in request without that list, or with an empty list, uses the stored wallet. <code>bestCard</code> is the highest eligible wallet rate. The server returns a saved merchant choice as <code>preferredCard</code> and uses it to break ties at the highest rate. Location-aware merchant searches provide MapKit latitude/longitude and an address when available. Coordinates or an exact street address identify a branch; city/state only bias text search and never unlock a context-dependent merchant. Only <code>categoryScope: global</code> results may enter a name-only cache.</p>
                 </div>
             </div>
 
@@ -1154,14 +1177,14 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Returns a consolidated overview of recommendations for all categories based strictly on the user's current wallet.</p>
+                    <p>Returns the best card in the signed-in user’s wallet for each category. It uses the same cached per-card spend context as <code>/recommend</code>.</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid">
                         <div>
                             <div class="api-section-title">Response (200 OK)</div>
                             <pre>{
   "categoryRecommendations": {
-    "Dining": {
+    "DINING": {
       "bestCard": {
         "cardId": "string",
         "cardName": "string",
@@ -1185,7 +1208,7 @@
                     <span class="api-expand-icon">▼</span>
                 </div>
                 <div class="api-body">
-                    <p>Syncs transactions and computes complex spending insights, missed rewards, and optimal alternative cards based on history.</p>
+                    <p>Computes spending insights, missed rewards, and alternative cards from stored transactions. Requires a registered account with Plaid enabled.</p>
                     <span class="api-auth-badge required">Auth: Required</span>
                     <div class="api-details-grid two-col">
                         <div>
@@ -1199,6 +1222,7 @@
       "nickname": "string?",
       "last4": "string?",
       "cycleStartDate": "string?",
+      "rotatingActivations": { "YYYY-Q1": "YYYY-MM-DD | inactive" },
       "customRewards": { "categoryId": 1.5 },
       "customRewardExpirations": { "categoryId": "2026-09-30T03:59:59.999Z" }
     }
@@ -1298,21 +1322,21 @@
                 <tbody>
                     <tr><td><code>POST</code></td><td><code>/v1/auth/guest</code></td><td>Mint a guest JWT (CloudFront origin-secret and burst-limit controls).</td><td><span class="pill pill-info">Public</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/telemetry/install</code></td><td>Deduplicate an iOS installation, emit an install metric, and notify the admin (requires <code>X-Monet-App-Key</code>).</td><td><span class="pill pill-info">Public</span></td></tr>
-                    <tr><td><code>POST</code></td><td><code>/v1/telemetry/crash</code></td><td>Ingest bounded iOS MetricKit summaries and breadcrumbs; emits client diagnostics metrics and alerts.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven. Bypasses edge cache to protect catalog content.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/telemetry/crash</code></td><td>Ingest bounded iOS MetricKit summaries and breadcrumbs; emits client diagnostics metrics and alerts.</td><td><span class="pill pill-info">Optional</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/cards</code></td><td>Master card catalog (<code>cardRewardsData.ts</code>); curated, server-driven.</td><td><span class="pill pill-info">Optional</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/brands/search?q=</code></td><td>Knowledge Graph brand autocomplete (no category in response).</td><td><span class="pill pill-info">Optional</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/user/settings</code></td><td>Toggle <code>showGlobalBestCard</code>.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>DELETE</code></td><td><code>/v1/account</code></td><td>Permanently erase the registered account, linked identities, Plaid items, and user-owned data.</td><td><span class="pill pill-ok">Req</span></td></tr>
                     <tr><td><code>POST</code></td><td><code>/v1/plaid/webhook</code></td><td>Plaid-initiated sync trigger; verified by Plaid signature, not a user token (public).</td><td><span class="pill pill-info">Public</span></td></tr>
-                    <tr><td><code>POST</code></td><td><code>/v1/plaid/sync-transactions</code></td><td>Pull latest transactions for the user.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/plaid/status</code></td><td>Connection / item health.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/plaid/accounts</code></td><td>Linked accounts list.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>GET</code></td><td><code>/v1/plaid/transactions</code></td><td>Stored transactions.</td><td><span class="pill pill-ok">Req</span></td></tr>
-                    <tr><td><code>DELETE</code></td><td><code>/v1/plaid/connection/:itemId</code></td><td>Unlink a bank item.</td><td><span class="pill pill-ok">Req</span></td></tr>
+                    <tr><td><code>POST</code></td><td><code>/v1/plaid/sync-transactions</code></td><td>Pull latest transactions for the user.</td><td><span class="pill pill-ok">Registered, Plaid enabled</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/status</code></td><td>Connection / item health.</td><td><span class="pill pill-ok">Registered, Plaid enabled</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/accounts</code></td><td>Linked accounts list.</td><td><span class="pill pill-ok">Registered, Plaid enabled</span></td></tr>
+                    <tr><td><code>GET</code></td><td><code>/v1/plaid/transactions</code></td><td>Stored transactions.</td><td><span class="pill pill-ok">Registered, Plaid enabled</span></td></tr>
+                    <tr><td><code>DELETE</code></td><td><code>/v1/plaid/connection/:itemId</code></td><td>Unlink a bank item.</td><td><span class="pill pill-ok">Registered, Plaid enabled</span></td></tr>
                 </tbody>
             </table>
             <div class="callout warn">
-                <span class="pill pill-ok">Contract parity</span> <code>src/api/routeRegistry.ts</code> covers the live native-auth, forms, telemetry, recommendation, account deletion, Plaid, and catalog routes. <code>tests/unit/routeRegistry.test.ts</code> compares the registry with <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code>; generate OpenAPI separately if a machine-readable external contract is needed.
+                <span class="pill pill-ok">Contract parity</span> <code>src/api/routeRegistry.ts</code> covers the live native-auth, forms, telemetry, recommendation, account deletion, Plaid, and catalog routes. <code>tests/unit/routeRegistry.test.ts</code> checks methods, paths, authentication, and Plaid feature guards against <code>src/api/routes.ts</code> and <code>src/api/auth.ts</code>; generate OpenAPI separately if a machine-readable external contract is needed.
             </div>
         </section>
 
@@ -1344,7 +1368,7 @@
         <!-- RATE LIMITS -->
         <section id="rate-limits">
             <h2>Rate Limits & Throttling</h2>
-            <p>Express burst limits in <code>src/middleware/rateLimit.ts</code> remain in-memory per warm Lambda instance; they are supplementary, not globally shared. Guest mint and query limits in <code>RateLimits</code> are shared across instances and fail closed if the quota store or trusted viewer identity is unavailable. The local CloudFront template also defines a path-scoped WAF burst rule. These changes have not been deployed or live-verified.</p>
+            <p>Express burst limits in <code>src/middleware/rateLimit.ts</code> remain in-memory per warm Lambda instance; they are supplementary, not globally shared. Guest mint and query limits in <code>RateLimits</code> are shared across instances and fail closed if the quota store or trusted viewer identity is unavailable. The CloudFront template also defines a path-scoped WAF burst rule. The release manifest tracks which stage is deployed and verified.</p>
 
             <h3>Application Limiters</h3>
             <table>
@@ -1379,7 +1403,7 @@
             </table>
 
             <div class="callout warn">
-                <span class="pill pill-info">Rollout status</span> API Gateway default route settings target 400 requests/s and 200-request burst; API Lambda reserved concurrency is 20. Local source adds a durable guest mint quota, a second viewer query ceiling that cannot be reset by minting another UUID, and a WAF edge rule. Viewer keys use a server-side HMAC of CloudFront's generated address, not user-supplied forwarding headers. Shared networks can share the quota. Deploy backend/WAF first and validate CloudFront headers, IPv4/IPv6, WAF costs, and both clients before website rollout. The deployed dev distribution had no WAF ACL on 2026-09-17.
+                <span class="pill pill-info">Rollout status</span> API Gateway default route settings target 400 requests/s and 200-request burst; API Lambda reserved concurrency is 20. The source defines a durable guest mint quota, a viewer query ceiling, and a WAF rate rule. Viewer keys use a server-side HMAC of CloudFront’s generated address. Devices behind the same public address can share the viewer quota.
             </div>
         </section>
 
@@ -1423,11 +1447,13 @@
                 </tbody>
             </table>
 
-            <h3>Rotating / quarterly categories</h3>
-            <p>Three <code>SpecialReward</code> shapes live in <code>cardRewardsData.ts</code>: <code>RankedSpend</code> rewards (e.g. Citi Custom Cash, Venmo, Zolve) carry <code>allowedCategories</code> + ranked <code>tiers</code>, with the <em>applied</em> tier resolved from the user's actual spend via Plaid insights (<code>POST /v1/plaid/insights/sync</code> &rarr; iOS <code>InsightsManager.dynamicCardInsights</code>); <code>CategorySpecial</code> rewards are fixed elevated rates with optional caps; and <code>RotatingCategory</code> rewards (Discover it, Freedom Flex) carry a per-quarter <code>schedule</code> that the optimizer resolves to the <strong>current calendar quarter by date</strong> (<code>OptimizerContext.now</code> overrides the date in tests). The quarterly cap is honored in both <code>/recommend</code> and insights &mdash; <code>syncInsights.ts</code> now populates <code>OptimizerContext.categorySpend</code> from calendar-period spend so capped rates demote correctly. iOS mirrors the type: <code>SpecialReward.rotatingCategory</code> decodes the schedule and <code>activeCategories(on:)</code> / <code>Card.flattenedRotatingRewards</code> resolve the current quarter for local calc and display. Remaining approximation: bonuses are optimistic re: activation (assumed active until the cap is hit), and the cap is tracked per-category rather than as the issuer's shared per-quarter pool.</p>
+            <h3>Rotating and quarterly categories</h3>
+            <p><code>RotatingCategory</code> rules in <code>cardRewardsData.ts</code> define the UTC calendar-quarter schedule. Discover it and Chase Freedom Flex each use one $1,500 spend pool across the quarter’s eligible categories. Chase’s eligible quarterly merchant offers share that pool, and eligible category bonuses can stack on top of the card’s standard rates. Wallet recommendations require a user-recorded activation for the current UTC quarter. Market card estimates show the advertised rate with activation assumed. Discover counts eligible spend from the recorded activation date onward. Confirmed Chase activation applies to eligible purchases throughout the quarter. An overlapping merchant and category purchase counts once.</p>
 
-            <h3>Spend-cap evaluation (RankedSpend bypass + per-card spend)</h3>
-            <p>All cap-bearing rewards now demote correctly in insights. Previously the <code>autoRewards</code> short-circuit in <code>optimizer.ts</code> returned the resolved RankedSpend tier (e.g. Citi Custom Cash 5%) <em>without</em> checking its cap; the optimizer now consults <code>rankedSpendCapFor()</code> in that branch and falls back to the base rate once the cap is reached. Caps are also evaluated <strong>per-card</strong> when possible: <code>OptimizerContext.cardCategorySpend</code> carries each linked card's own period-to-date spend (built in <code>syncInsights.ts</code> from <code>plaidCardMappings</code>), so a cap on a signed-in user's linked card is measured against that card's spend rather than the global category aggregate. Unlinked cards fall back to the global <code>categorySpend</code>. iOS decodes <code>cap</code> on base + special rewards (<code>RewardCap</code>) and <code>CardDetailsView</code> shows a faded disclaimer: caps are tracked from the card's linked transactions when linked, otherwise estimated from total category spending. Remaining gap: <code>/recommend</code> still uses the global aggregate (its fast cached path has no per-card spend).</p>
+            <h3>Per-card spend and recommendation cache</h3>
+            <p>On an Insights cache miss, <code>syncInsights.ts</code> builds category and promotion-merchant spend by Plaid-mapped card. It writes a server-owned <code>cardSpendSnapshot</code> to the user record with the computation time, account mappings, and statement days. <code>/recommend</code> and <code>/wallet-overview</code> read those cached buckets through <code>getUserOptimizerContext()</code> without scanning transactions. The user-wide category ranking drives dynamic tier assignment. Cap evaluation uses only the card’s own spend.</p>
+            <p>Expired monthly, quarterly, and annual buckets are discarded independently. Monthly buckets follow the card’s configured statement day, or the UTC calendar month when no day is configured. The engine skips a card’s snapshot if its mapped accounts have changed, and skips that card’s monthly bucket if the statement day has changed. Guests, unlinked cards, and older records awaiting a fresh Insights calculation have unknown spend, so estimated rates assume cap room. Linked spend depends on transaction freshness and merchant classification. Historical Insights estimates use the current cap state and do not reconstruct the full reward ledger for earlier quarters.</p>
+            <p>iOS uses the same UTC quarter and Freedom Flex stacking rule for local estimates. Search and category browsing can reuse a same-day server wallet overview for the best card. The device calculates uncached rates from the catalog, with no local spend-cap calculation. Card Details lets users record or clear their issuer activation. Discover users can edit the activation date. Guests keep their selections on-device, and signed-in wallets sync through <code>/v1/user/cards</code>.</p>
         </section>
 
         <!-- FUTURE CONSIDERATIONS -->
@@ -1447,7 +1473,7 @@
                     </tr>
                     <tr>
                         <td>Rotating categories</td>
-                        <td>Data-driven quarterly schedules exist for Discover it and Chase Freedom Flex, including 2026 Q1–Q4 data. Remaining gaps: no user “activate this quarter” state, no automated effective-date/source validation, and caps may not model every issuer's shared-pool semantics.</td>
+                        <td>Discover it and Chase Freedom Flex use manually recorded activation dates and a shared quarterly cap per mapped card. Remaining work includes issuer-specific exclusions and schedule update alerts.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>
@@ -1477,7 +1503,7 @@
                     </tr>
                     <tr>
                         <td>Payment method</td>
-                        <td><code>APPLE_CARD</code> earns 2% via Apple Pay vs. 1% on physical swipe; the catalog now conservatively uses a 1% base rate. There is still no payment-method intent flag in <code>/recommend</code>, so the 2% Apple Pay opportunity is not modeled.</td>
+                        <td><code>APPLE_CARD</code> defaults to 1%. iOS Search can opt into the 2% Apple Pay estimate through <code>paymentMethod: "applePay"</code>. This is a recommendation input. Merchant acceptance and 3% partner eligibility are outside the calculation.</td>
                         <td><span class="pill pill-info">Low</span></td>
                     </tr>
                     <tr>

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-05-06T02:28:00Z",
+  "generatedAt": "2026-11-21T19:30:00Z",
   "title": "Design System: Monet",
   "extensions": {
     "colorMeta": {
@@ -30,7 +30,7 @@
       "kind": "card",
       "refersTo": "card",
       "description": "Standard container for recommendations and data.",
-      "css": ".ds-card { background: #ffffff; border-radius: 20px; padding: 20px; box-shadow: 0 5px 10px rgba(0,0,0,0.08); }"
+      "css": ".ds-card { background: #ffffff; border-radius: 16px; padding: 20px; box-shadow: none; }"
     },
     {
       "name": "Hero Result Card",

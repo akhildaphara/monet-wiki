@@ -259,7 +259,7 @@ java -Djava.library.path=./DynamoDBLocal_lib \
         <pre><code class="language-bash">cd raw/croe
 npm run init-db</code></pre>
 
-        <p>This runs <code>src/init-db.ts</code>, which currently creates 12 tables (skipping any that already exist). It includes Users, Credentials, Overrides, Recommendation Preferences, Recommendation Feedback, Transactions, Insights Cache, Brand Cache, Plaid Item Index, Merchant Enrichment, Categorization Audit, and Rate Limits. <strong>Known parity gap:</strong> deployed CloudFormation also defines <code>MonetFormSubmissions</code>, which local initialization does not yet create.</p>
+        <p>This runs <code>src/init-db.ts</code>, which creates all 14 tables and skips tables that already exist. The local schema includes <code>MonetAppInstallations</code> and <code>MonetFormSubmissions</code>. Form submissions use <code>id</code> as the primary key and include <code>FormTypeIndex</code> and <code>EmailIndex</code>.</p>
 
         <div class="not-prose overflow-x-auto rounded-xl border border-slate-200 mb-6">
         <table>

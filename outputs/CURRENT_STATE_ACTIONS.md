@@ -1,6 +1,6 @@
 # Monet Current-State Alignment and Action Items
 
-**Original source review:** 2026-09-15 · **Priority-item update:** 2026-09-17
+**Original source review:** 2026-09-15 · **Priority-item update:** 2026-11-21
 **Scope:** local `croe`, `swift-app`, and `website` source, focused tests, and read-only dev-stage AWS alarm inspection. Firebase, App Store Connect, and TestFlight behavior were not independently verified.
 
 ## Executive summary
@@ -21,21 +21,21 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 * **Status:** 🟡 Partial / in-progress
 * **Context:** `raw/croe/src/resources/cardRewardsData.ts` and recommendation engine
 * **Action:**
-  1. **Combined Quarterly Caps:** Chase Freedom Flex and Discover 5% rotating quarterly categories currently model caps per-category instead of against the issuer's **combined $1,500 quarterly limit**. Update the optimizer to track against the shared quarterly pool.
-  2. **Activation State:** Model category activation requirements rather than assuming rotating categories are unconditionally active.
-  3. **Payment Method Intent:** Apple Card fallback was conservatively set to 1% physical rate. Incorporate payment method intent (Apple Pay vs. physical card swipe) so 2% can be surfaced when Apple Pay is applicable.
-  4. **Issuer Terms Freshness:** Validate Q4 Discover schedule once exposed on Discover's public calendar.
+  1. **Combined Quarterly Caps:** The local backend now evaluates one $1,500 pool per card across the quarter’s bonus categories, including Chase’s qualifying merchant offers. It uses linked per-card spend and existing cached totals. The server snapshot expires spend buckets by period and ignores remapped accounts. iOS now applies Freedom Flex stacking in its catalog estimates and uses cached server wallet winners only on the day they were fetched. Client-only estimates still lack spend tracking.
+  2. **Activation State:** iOS users can record the current quarter’s issuer activation in Card Details. Wallet recommendations apply the same recorded state online and offline.
+  3. **Payment Method Intent:** iOS Search accepts Apple Pay intent. Apple Card earns a 2% estimate when selected and otherwise uses the 1% catalog baseline. Merchant acceptance and 3% partner eligibility remain outside the calculation.
+  4. **Issuer Terms Freshness:** Discover confirmed restaurants, qualifying entertainment and utilities for Q4 2026. Added Chase’s announced Q1 2027 schedule for select streaming and groceries, excluding Walmart and Target. Monet’s generic categories approximate issuer-specific exclusions. [Discover calendar](https://www.discover.com/credit-cards/cash-back/cashback-calendar.html) · [Chase announcement](https://media.chase.com/news/chase-freedom-flex-more-travel-value)
 
 ### P2 — App Store Public Launch Assets
-* **Status:** ⬜ Not started
-* **Action:** Prepare public App Store screenshots (6.9" and 6.3" display sizes), promotional copy, keywords, and App Store Connect privacy questionnaire responses.
+* **Status:** 🟡 In progress
+* **Assets:** [listing copy](../marketing/app-store-launch/Listing.md), [privacy questionnaire](../marketing/app-store-launch/Privacy-Questionnaire.md), and [6.9-inch and 6.3-inch screenshots](../marketing/app-store-launch/Screenshots.md). Verify the final archive’s data collection and upload the approved assets in App Store Connect.
 
 ### P2 — Engineering Hygiene & Stability
 * **Status:** 🟡 Partial
 * **Action:**
-  1. **Local DB Parity:** Add `MonetFormSubmissions` table definition into `raw/croe/src/init-db.ts` to match the deployed 14-table schema locally.
-  2. **Website Testing:** Add linting and browser smoke tests for the Astro site (verifying `/`, `/app`, offline wallet persistence, and guest fallback).
-  3. **Release Manifest:** Stop referring to `croe-dev` as "production" in planning documents; establish a release manifest documenting commit hashes, app build numbers, and API stages.
+  1. **Local DB Parity:** `raw/croe/src/init-db.ts` already defines all 14 local tables. Verified on an isolated DynamoDB Local instance that initialization creates `MonetFormSubmissions` with both indexes.
+  2. **Website Testing:** Added ESLint and browser smoke coverage for `/`, `/app`, offline wallet persistence after the service worker has cached the app, and the guest fallback when the API is unavailable.
+  3. **Release Manifest:** The [release manifest](RELEASE_MANIFEST.md) records the local revisions and build, separates `dev` from `prod`, and identifies the deployment records to verify.
 
 ## 3. Completed & Verified Milestones
 
@@ -79,9 +79,9 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 | **iOS Polish** | ✅ | Empty States & Haptics | Hero animations, empty wallet tapestry, tactile haptics across views. |
 | **iOS Polish** | ✅ | Error Handling UI | Network status banners, offline search, direct error feedback sheet. |
 | **iOS Polish** | ✅ | Account Deletion | Full in-app flow verified end-to-end on TestFlight (Apple 5.1.1(v)). |
-| **Data & Rewards** | 🟡 | Audit Card Catalog | 26 cards supported; combined quarterly caps and activation pending. |
-| **Data & Rewards** | 🟡 | Apple Pay Nuances | Apple Card defaults to 1% physical rate; payment intent pending. |
-| **Data & Rewards** | 🟡 | Rotating Categories | Chase Q4 schedule updated; Discover Q4 calendar verification pending. |
+| **Data & Rewards** | 🟡 | Audit Card Catalog | Backend shared caps and user-recorded activation implemented locally. |
+| **Data & Rewards** | 🟡 | Apple Pay Nuances | Apple Pay intent is available in iOS Search and uses a 2% Apple Card estimate. |
+| **Data & Rewards** | 🟡 | Rotating Categories | Discover Q4 verified against the issuer. Chase Q1 2027 categories added locally. |
 | **Observability** | 🟡 | Crash Reporting | MetricKit (`MXMetricManager`) active on iOS; App Store telemetry pending public launch. |
 | **Observability** | ✅ | Backend Logging & Alarms | CloudWatch structured logs, 8 active alarms in `OK`, confirmed SNS email. |
 | **Compliance** | ✅ | Privacy Policy & Terms | Hosted live at `/privacy` and `/terms`, linked in app auth views. |
@@ -93,11 +93,11 @@ The documentation had drifted most in four areas: the DynamoDB schema (14 tables
 | **Security** | ✅ | Rate Limiting | CloudFront WAF burst rule, 20/day guest query limit, 200/day viewer ceiling. |
 | **Security** | ✅ | Data-at-Rest Hardening | Keychain storage for tokens, cache purge on logout. |
 | **Security** | ✅ | TLS Pinning | Implemented in iOS `APIClient` via `CertificatePinning.swift`. |
-| **Security** | 🟡 | Dependency Audit | Patched vulnerabilities; 4 minor dev-transitive issues remain. |
+| **Security** | 🟡 | Dependency Audit | See the current audit results in the [release manifest](RELEASE_MANIFEST.md). |
 | **Testing/CI** | ✅ | Backend Unit Tests | Vitest suite: 43 test files, 471 tests passing. |
 | **Testing/CI** | ✅ | iOS Automated Tests | Unit and UI test targets configured in Xcode project. |
 | **Testing/CI** | ✅ | CI/CD Pipeline | GitHub Actions workflow active for backend verification. |
-| **Marketing** | ⬜ | App Store Listing Assets | Screenshots, keywords, and description pending public launch. |
+| **Marketing** | 🟡 | App Store Listing Assets | Both iPhone screenshot sizes prepared. Listing and privacy responses drafted. iPad assets and submission pending. |
 | **Marketing** | ✅ | Custom API Domain | CloudFront distribution with ACM certificate for `api.tapmonet.com`. |
 | **Marketing** | ✅ | Marketing Website | Astro 5 landing page live on Firebase Hosting (`monet-3d69d.web.app`). |
 

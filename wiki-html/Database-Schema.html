@@ -154,7 +154,7 @@
 </ul>
 <h2>Tables and Data Models</h2>
 <p><strong>Complete deployed inventory:</strong> <code>MonetUsers</code>, <code>MonetCredentials</code>, <code>MonetOverrides</code>, <code>MonetRecommendationPreferences</code>, <code>MonetRecommendationFeedback</code>, <code>MonetTransactions</code>, <code>MonetInsightsCache</code>, <code>MonetBrandCache</code>, <code>MonetPlaidItemIndex</code>, <code>MonetMerchantEnrichment</code>, <code>MonetCategorizationAudit</code>, <code>MonetRateLimits</code>, and <code>MonetFormSubmissions</code>. The detailed sections below focus on core user and transaction tables; consult <code>resources/dynamodb.yml</code> for authoritative keys, indexes, TTL, recovery, and deletion-protection settings.</p>
-<p><strong>Local parity gap:</strong> <code>src/init-db.ts</code> creates 12 tables and currently omits <code>MonetFormSubmissions</code>.</p>
+<p><strong>Local schema:</strong> <code>src/init-db.ts</code> creates all 14 tables. <code>MonetFormSubmissions</code> includes both <code>FormTypeIndex</code> and <code>EmailIndex</code>.</p>
 <h3>1. MonetUsers Table</h3>
 <p>Stores information about the app&#39;s users, their preferences, and Plaid integration data. Updates to this table (e.g., toggling cards or preferences) are performed using atomic DynamoDB <code>UpdateCommand</code> expressions to prevent read-modify-write race conditions.</p>
 <ul>

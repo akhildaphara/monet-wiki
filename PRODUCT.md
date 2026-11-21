@@ -1,8 +1,10 @@
 # Product
 
-## Register
+<!-- impeccable:product-schema 1 -->
 
-product
+## Platform
+
+adaptive
 
 ## Users
 
@@ -12,6 +14,29 @@ product
 
 ## Product Purpose
 Monet is a credit card rewards optimizer application that helps users maximize their cashback and rewards based on their purchases. It provides correct and best card recommendations to remove the guesswork from point optimization.
+
+## Positioning
+Monet delivers an instant, authoritative single-card recommendation at checkout and pairs it with transaction-aware earned-vs.-missed cashback insights across both a native iOS app and a web PWA.
+
+## Operating Context
+- **Native iOS app (`raw/swift-app`):** SwiftUI app used at checkout and for monthly Insights reviews.
+- **Web PWA (`raw/website`):** Astro v5 web application (`/app`) sharing the same design language and backend.
+- **Backend (`raw/croe`):** Express/Lambda API powering card rewards data, categorization, and insights.
+
+## Capabilities and Constraints
+- Supports multi-card reward optimization, merchant/category lookup, and connected-account transaction insights.
+- Design system is defined in `design-system.html` (referenced by `DESIGN.md`); persistent cards use a 16px standard radius (`--radius-card`) on web and continuous curves on iOS, with no text truncation (`...`).
+
+## Evidence on Hand
+- Design system specification: `design-system.html`
+- Brand voice & copy examples below; no external testimonials or benchmarks are claimed.
+
+## Product Principles
+1. **Expert Confidence**: Provide recommendations with absolute clarity and authority, building trust immediately.
+2. **Clarity over Clutter**: Focus on the optimal recommendation; avoid overwhelming the user with spreadsheet-like data.
+3. **Impeccable Craft**: Every interaction, margin, and typography choice should feel deliberately crafted by experts, not generated.
+4. **Frictionless Utility**: Point maximization should feel effortless, respecting the Doherty Threshold with instantaneous UI or clear analyzing states.
+5. **Invisible Architecture**: Error states, empty screens, and transitions are as polished as the main dashboard.
 
 ## Brand Personality
 Modern, Privacy-First, Authoritative.

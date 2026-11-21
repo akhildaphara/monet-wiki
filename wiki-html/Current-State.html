@@ -66,7 +66,7 @@
                         <li><code>MonetRateLimits</code></li>
                         <li><code>MonetFormSubmissions</code></li>
                     </ol>
-                    <p>CloudFormation uses on-demand billing. Durable tables use deletion protection and most use point-in-time recovery; audit and rate-limit tables use TTL where appropriate. Local setup creates the same table set except <code>MonetFormSubmissions</code>, which is currently absent from <code>src/init-db.ts</code>.</p>
+                    <p>CloudFormation uses on-demand billing. Durable tables use deletion protection and most use point-in-time recovery; audit and rate-limit tables use TTL where appropriate. Local setup creates the same 14-table set with unsuffixed table names.</p>
 
                     <h2>Rewards model</h2>
                     <p>The server catalog currently contains 26 supported cards. The shared category taxonomy has 32 raw values including <code>OTHER</code>. Reward structures include flat/category rates, rotating schedules, ranked-spend tiers, caps, custom overrides, and merchant network restrictions. The taxonomy and popular-brand maps remain hand-maintained across repositories.</p>
